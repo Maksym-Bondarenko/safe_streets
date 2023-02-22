@@ -1,6 +1,12 @@
 # safe_streets
 
-A new Flutter project.
+SafeStreets - application that selects for you the safest and most beautiful road!
+
+## Description
+
+## Technologies used
+
+## Authors
 
 ## Getting Started
 
