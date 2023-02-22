@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>721653983645-582ttjthr7c48o5pb80mb5u741j0qhum.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.721653983645-582ttjthr7c48o5pb80mb5u741j0qhum</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDSzvrlojWLf8_aSwNTCiJnmTvdRTD8GIw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>721653983645</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.safeStreets</string>
+	<key>PROJECT_ID</key>
+	<string>safestreets-7f994</string>
+	<key>STORAGE_BUCKET</key>
+	<string>safestreets-7f994.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:721653983645:ios:91894abebe8edd290c6774</string>
+</dict>
+</plist>

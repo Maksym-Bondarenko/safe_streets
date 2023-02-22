@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "721653983645",
+    "project_id": "safestreets-7f994",
+    "storage_bucket": "safestreets-7f994.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721653983645:android:48adff0befd024620c6774",
+        "android_client_info": {
+          "package_name": "com.example.google_maps_in_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "721653983645-tf0jcvomt95vakv9o6h8fome21d414bp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_-MG_TwsK1E0rZqEY24BTXZwv1vgfr6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "721653983645-tf0jcvomt95vakv9o6h8fome21d414bp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "721653983645-582ttjthr7c48o5pb80mb5u741j0qhum.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.safeStreets"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:721653983645:android:7e161de10ebb9d500c6774",
+        "android_client_info": {
+          "package_name": "com.example.safe_streets"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "721653983645-tf0jcvomt95vakv9o6h8fome21d414bp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_-MG_TwsK1E0rZqEY24BTXZwv1vgfr6o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "721653983645-tf0jcvomt95vakv9o6h8fome21d414bp.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "721653983645-582ttjthr7c48o5pb80mb5u741j0qhum.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.safeStreets"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
