@@ -20,32 +20,32 @@ class _StartPage extends State<StartPage> {
   
   @override
   Widget build(BuildContext context) {
-    // return MaterialApp(
-    //   theme: ThemeData(
-    //     useMaterial3: true,
-    //     colorSchemeSeed: Colors.green[700],
-    //   ),
-    //   home: Scaffold(
-    //     appBar: AppBar(
-    //       title: const Text('Safe Streets Maps'),
-    //       elevation: 2,
-    //     ),
-    //     body: GoogleMap(
-    //       onMapCreated: _onMapCreated,
-    //       initialCameraPosition: CameraPosition(
-    //         target: _center,
-    //         zoom: 11.0,
-    //       ),
-    //     ),
-    //   ),
-    // );
-
-    return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.all(20),
-        child: const Placeholder(color: Colors.orangeAccent),
+    return MaterialApp(
+      theme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: Colors.green[700],
+      ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Safe Streets Maps'),
+          elevation: 2,
+        ),
+        body: GoogleMap(
+          onMapCreated: _onMapCreated,
+          initialCameraPosition: CameraPosition(
+            target: _center,
+            zoom: 11.0,
+          ),
+        ),
       ),
     );
+
+    // return Scaffold(
+    //   body: Container(
+    //     padding: const EdgeInsets.all(20),
+    //     child: const Placeholder(color: Colors.orangeAccent),
+    //   ),
+    // );
   }
   
 }
