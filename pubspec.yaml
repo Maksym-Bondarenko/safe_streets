@@ -41,6 +41,9 @@ dependencies:
   google_sign_in: ^5.4.4
   google_maps_flutter: ^2.2.3
   google_maps_flutter_web: ^0.4.0+5
+  http: ^0.13.5
+  json_serializable: ^6.6.1
+  json_annotation: ^4.8.0
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +55,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  build_runner: ^2.3.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -70,6 +74,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
 
   assets:
+    - lib/assets/locations.json
     - lib/assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see

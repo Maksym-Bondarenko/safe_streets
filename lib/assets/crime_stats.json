@@ -1,0 +1,229 @@
+{
+  "2021": {
+    "Altstadt - Lehel": {
+      "total offences": 5356,
+      "crimes against life": 1,
+      "sexual offences": 84,
+      "crimes of violence": 752,
+      "petty theft": 1369,
+      "aggravated theft": 343,
+      "overall crime rate": 5293
+    },
+    "Ludwigsvorstadt - Isarvorstadt": {
+      "total offences": 8568,
+      "crimes against life": 5,
+      "sexual offences": 117,
+      "crimes of violence": 950,
+      "petty theft": 1175,
+      "aggravated theft": 538,
+      "overall crime rate": 7269
+    },
+    "Maxvorstadt": {
+      "total offences": 3521,
+      "crimes against life": 4,
+      "sexual offences": 54,
+      "crimes of violence": 501,
+      "petty theft": 624,
+      "aggravated theft": 450,
+      "overall crime rate": 3494
+    },
+    "Schwabing West": {
+      "total offences": 2071,
+      "crimes against life": 3,
+      "sexual offences": 46,
+      "crimes of violence": 280,
+      "petty theft": 281,
+      "aggravated theft": 410,
+      "overall crime rate": 2061
+    },
+    "Au - Haidhausen": {
+      "total offences": 2943,
+      "crimes against life": 4,
+      "sexual offences": 46,
+      "crimes of violence": 413,
+      "petty theft": 464,
+      "aggravated theft": 328,
+      "overall crime rate": 686
+    },
+    "Sendling": {
+      "total offences": 1685,
+      "crimes against life": 0,
+      "sexual offences": 44,
+      "crimes of violence": 296,
+      "petty theft": 224,
+      "aggravated theft": 231,
+      "overall crime rate": 1672
+    },
+    "Sendling - Westpark": {
+      "total offences": 2089,
+      "crimes against life": 2,
+      "sexual offences": 49,
+      "crimes of violence": 323,
+      "petty theft": 264,
+      "aggravated theft": 311,
+      "overall crime rate": 2069
+    },
+    "Schwanthalerhöhe": {
+      "total offences": 1379,
+      "crimes against life": 1,
+      "sexual offences": 24,
+      "crimes of violence": 196,
+      "petty theft": 187,
+      "aggravated theft": 166,
+      "overall crime rate": 1366
+    },
+    "Neuhausen - Nymphenburg": {
+      "total offences": 3313,
+      "crimes against life": 8,
+      "sexual offences": 65,
+      "crimes of violence": 513,
+      "petty theft": 551,
+      "aggravated theft": 609,
+      "overall crime rate": 3293
+    },
+    "Moosach": {
+      "total offences": 2673,
+      "crimes against life": 1,
+      "sexual offences": 52,
+      "crimes of violence": 454,
+      "petty theft": 581,
+      "aggravated theft": 268,
+      "overall crime rate": 2647
+    },
+    "Milbertshofen - Am Hart": {
+      "total offences": 3516,
+      "crimes against life": 1,
+      "sexual offences": 49,
+      "crimes of violence": 560,
+      "petty theft": 542,
+      "aggravated theft": 350,
+      "overall crime rate": 3490
+    },
+    "Schwabing - Freimann": {
+      "total offences": 6544,
+      "crimes against life": 1,
+      "sexual offences": 68,
+      "crimes of violence": 736,
+      "petty theft": 944,
+      "aggravated theft": 511,
+      "overall crime rate": 4831
+    },
+    "Bogenhausen": {
+      "total offences": 2423,
+      "crimes against life": 2,
+      "sexual offences": 53,
+      "crimes of violence": 370,
+      "petty theft": 327,
+      "aggravated theft": 394,
+      "overall crime rate": 2384
+    },
+    "Berg am Laim": {
+      "total offences": 1669,
+      "crimes against life": 2,
+      "sexual offences": 38,
+      "crimes of violence": 316,
+      "petty theft": 235,
+      "aggravated theft": 195,
+      "overall crime rate": 1645
+    },
+    "Trudering - Riem": {
+      "total offences": 2501,
+      "crimes against life": 3,
+      "sexual offences": 50,
+      "crimes of violence": 403,
+      "petty theft": 429,
+      "aggravated theft": 275,
+      "overall crime rate": 2490
+    },
+    "Ramersdorf - Perlach": {
+      "total offences": 4640,
+      "crimes against life": 5,
+      "sexual offences": 79,
+      "crimes of violence": 708,
+      "petty theft": 839,
+      "aggravated theft": 493,
+      "overall crime rate": 4603
+    },
+    "Obergiesing": {
+      "total offences": 2243,
+      "crimes against life": 2,
+      "sexual offences": 39,
+      "crimes of violence": 396,
+      "petty theft": 226,
+      "aggravated theft": 181,
+      "overall crime rate": 2227
+    },
+    "Untergiesing - Harlaching": {
+      "total offences": 1653,
+      "crimes against life": 1,
+      "sexual offences": 30,
+      "crimes of violence": 254,
+      "petty theft": 271,
+      "aggravated theft": 184,
+      "overall crime rate": 1624
+    },
+    "Thalkirchen - Obersendling - Forstenried - Fürstenried - Solln": {
+      "total offences": 2964,
+      "crimes against life": 2,
+      "sexual offences": 81,
+      "crimes of violence": 501,
+      "petty theft": 444,
+      "aggravated theft": 417,
+      "overall crime rate": 2918
+    },
+    "Hadern": {
+      "total offences": 1297,
+      "crimes against life": 2,
+      "sexual offences": 20,
+      "crimes of violence": 265,
+      "petty theft": 172,
+      "aggravated theft": 173,
+      "overall crime rate": 1292
+    },
+    "Pasing - Obermenzing": {
+      "total offences": 2883,
+      "crimes against life": 2,
+      "sexual offences": 42,
+      "crimes of violence": 516,
+      "petty theft": 576,
+      "aggravated theft": 406,
+      "overall crime rate": 2819
+    },
+    "Aubing - Lochhausen - Langwied": {
+      "total offences": 1584,
+      "crimes against life": 1,
+      "sexual offences": 37,
+      "crimes of violence": 336,
+      "petty theft": 277,
+      "aggravated theft": 190,
+      "overall crime rate": 1561
+    },
+    "Allach - Untermenzing": {
+      "total offences": 840,
+      "crimes against life": 0,
+      "sexual offences": 23,
+      "crimes of violence": 177,
+      "petty theft": 134,
+      "aggravated theft": 134,
+      "overall crime rate": 834
+    },
+    "Feldmoching - Hasenbergl": {
+      "total offences": 1696,
+      "crimes against life": 2,
+      "sexual offences": 44,
+      "crimes of violence": 316,
+      "petty theft": 244,
+      "aggravated theft": 178,
+      "overall crime rate": 1680
+    },
+    "Laim": {
+      "total offences": 2263,
+      "crimes against life": 1,
+      "sexual offences": 52,
+      "crimes of violence": 359,
+      "petty theft": 382,
+      "aggravated theft": 373,
+      "overall crime rate": 2247
+    }
+  }
+}
