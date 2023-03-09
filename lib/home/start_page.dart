@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intro_slider/intro_slider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../src/locations.dart' as locations;
 
@@ -20,14 +21,14 @@ class _StartPage extends State<StartPage> {
   @override
   initState() {
     // change map-icon from default to custom
-//    addCustomIcon();
+    addCustomIcon();
     super.initState();
   }
 
   // change default google-marker-icon to custom one
   void addCustomIcon() {
     BitmapDescriptor.fromAssetImage(
-            const ImageConfiguration(), "lib/assets/location_marker.png")
+            const ImageConfiguration(), "lib/assets/danger_point_marker.png")
         .then(
       (icon) {
         setState(() {

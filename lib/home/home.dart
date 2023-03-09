@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:safe_streets/home/start_page.dart';
 
+import '../intro_slider/intro_slider.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -60,6 +62,17 @@ class HomeScreen extends StatelessWidget {
                 );
               },
               child: const Text("To the SafeMaps"),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to films-cards
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const IntroSlider())
+                );
+              },
+              child: const Text("To Intro-Slider"),
             ),
           ],
         ),

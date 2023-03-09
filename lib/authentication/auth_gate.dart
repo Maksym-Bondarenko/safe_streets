@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 
 import '../home/home.dart';
+import '../intro_slider/intro_slider.dart';
 
 
 class AuthGate extends StatelessWidget {
