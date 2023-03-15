@@ -1,59 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:intro_slider/intro_slider.dart';
 
-class IntroSlider extends StatefulWidget {
-  const IntroSlider({Key? key}) : super(key: key);
+import '../home/start_page.dart';
+
+class IntroSliderRules extends StatefulWidget {
+  const IntroSliderRules({Key? key}) : super(key: key);
 
   @override
-  _IntroSliderState createState() => _IntroSliderState();
+  _IntroSliderRulesState createState() => _IntroSliderRulesState();
 }
 
-class _IntroSliderState extends State<IntroSlider> {
-  List<ContentConfig> listContentConfig = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    listContentConfig.add(
-      const ContentConfig(
-        title: "ERASER",
-        description:
-        "Allow miles wound place the leave had. To sitting subject no improve studied limited",
-        pathImage: "images/photo_eraser.png",
-        backgroundColor: Color(0xfff5a623),
-      ),
-    );
-    listContentConfig.add(
-      const ContentConfig(
-        title: "PENCIL",
-        description:
-        "Ye indulgence unreserved connection alteration appearance",
-        pathImage: "images/photo_pencil.png",
-        backgroundColor: Color(0xff203152),
-      ),
-    );
-    listContentConfig.add(
-      const ContentConfig(
-        title: "RULER",
-        description:
-        "Much evil soon high in hope do view. Out may few northward believing attempted. Yet timed being songs marry one defer men our. Although finished blessing do of",
-        pathImage: "images/photo_ruler.png",
-        backgroundColor: Color(0xff9932CC),
-      ),
-    );
-  }
-
-  void onDonePress() {
-    print("End of slides");
-  }
+class _IntroSliderRulesState extends State<IntroSliderRules> {
+  List<Slide> slides = [];
 
   @override
   Widget build(BuildContext context) {
     return IntroSlider(
-      key: UniqueKey(),
-      // listContentConfig: listContentConfig,
-      // onDonePress: onDonePress,
+      slides: slides,
+      colorActiveDot: Colors.white,
+      onDonePress: () => {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const StartPage()))
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    slides.add(
+      Slide(
+        title: "Management",
+        description:
+            'Management is the administration of an organization, whether it is a business,'
+            ' a non-profit organization, or a government body. ',
+        pathImage: "lib/assets/images/dash.png",
+        heightImage: 370,
+        widthImage: 400,
+        backgroundColor: const Color(0xff4266AC),
+      ),
+    );
+    slides.add(
+      Slide(
+        title: "Chat",
+        description:
+            "Chat refers to the process of communicating, interacting and/or exchanging messages over the Internet. "
+            "It involves two or more individuals that communicate through a chat-enabled service or software. ",
+        pathImage: "lib/assets/images/flutterfire_300x.png",
+        heightImage: 370,
+        widthImage: 400,
+        backgroundColor: const Color(0xff3852B2),
+      ),
+    );
+    slides.add(
+      Slide(
+        title: "Leadership",
+        description:
+            "Leadership is the ability of an individual or a group of individuals to influence and guide followers or other members of an organization.  ",
+        pathImage: "lib/assets/images/location_marker.png",
+        heightImage: 370,
+        widthImage: 400,
+        backgroundColor: const Color(0xff2A78E6),
+      ),
     );
   }
 }

@@ -18,9 +18,9 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
   DesktopWebviewAuthPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("DesktopWebviewAuthPlugin"));
   FlutterJsPluginRegisterWithRegistrar(
-        registry->GetRegistrarForPlugin("FlutterJsPlugin"));
-  PermissionHandlerWindowsPluginRegisterWithRegistrar(
-        registry->GetRegistrarForPlugin("PermissionHandlerWindowsPlugin"));
+      registry->GetRegistrarForPlugin("FlutterJsPlugin"));
   GeolocatorWindowsRegisterWithRegistrar(
-        registry->GetRegistrarForPlugin("GeolocatorWindows"));
+      registry->GetRegistrarForPlugin("GeolocatorWindows"));
+  PermissionHandlerWindowsPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("PermissionHandlerWindowsPlugin"));
 }
