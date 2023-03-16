@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intro_slider/intro_slider.dart';
-
-import '../home/start_page.dart';
+import 'package:safe_streets/home/home.dart';
 
 class IntroSliderRules extends StatefulWidget {
   const IntroSliderRules({Key? key}) : super(key: key);
@@ -20,7 +19,7 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
       colorActiveDot: Colors.white,
       onDonePress: () => {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const StartPage()))
+            context, MaterialPageRoute(builder: (context) => const HomeScreen()))
       },
     );
   }
@@ -34,7 +33,7 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
         description:
             'Management is the administration of an organization, whether it is a business,'
             ' a non-profit organization, or a government body. ',
-        pathImage: "lib/assets/images/dash.png",
+        pathImage: "lib/assets/images/logo_big.png",
         heightImage: 370,
         widthImage: 400,
         backgroundColor: const Color(0xff4266AC),
@@ -46,7 +45,7 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
         description:
             "Chat refers to the process of communicating, interacting and/or exchanging messages over the Internet. "
             "It involves two or more individuals that communicate through a chat-enabled service or software. ",
-        pathImage: "lib/assets/images/flutterfire_300x.png",
+        pathImage: "lib/assets/images/logo_small.png",
         heightImage: 370,
         widthImage: 400,
         backgroundColor: const Color(0xff3852B2),
@@ -57,7 +56,7 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
         title: "Leadership",
         description:
             "Leadership is the ability of an individual or a group of individuals to influence and guide followers or other members of an organization.  ",
-        pathImage: "lib/assets/images/location_marker.png",
+        pathImage: "lib/assets/marker/safe_point_marker.png",
         heightImage: 370,
         widthImage: 400,
         backgroundColor: const Color(0xff2A78E6),

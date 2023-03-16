@@ -30,7 +30,7 @@
 // // change default google-marker-icon to custom one
 // void addCustomIcon() {
 //   BitmapDescriptor.fromAssetImage(
-//       const ImageConfiguration(), "lib/assets/images/ic_danger_point_marker.png")
+//       const ImageConfiguration(), "lib/assets/images/danger_point_marker.png")
 //       .then(
 //         (icon) {
 //       setState(() {

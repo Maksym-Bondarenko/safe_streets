@@ -10,6 +10,8 @@ import '../ui/infowindow/danger_point_infowindow.dart';
 
 import 'dart:ui' as ui;
 
+import '../ui/infowindow/points_types.dart';
+
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
 
@@ -18,7 +20,6 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPage extends State<StartPage> {
-
   BitmapDescriptor dangerMarkerIcon = BitmapDescriptor.defaultMarker;
 
   static final LatLng _kMapGarchingCenter = LatLng(48.249521, 11.653154);
@@ -32,7 +33,8 @@ class _StartPage extends State<StartPage> {
   @override
   initState() {
     // change map-icon from default to custom
-    getBytesFromAsset('lib/assets/marker/ic_danger_point_marker.png', 64).then((onValue) {
+    getBytesFromAsset('lib/assets/marker/danger_point_marker.png', 100)
+        .then((onValue) {
       dangerMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
     });
     super.initState();
@@ -41,27 +43,27 @@ class _StartPage extends State<StartPage> {
   // change default google-marker-icon to custom one
   static Future<Uint8List?> getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
     ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))?.buffer.asUint8List();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
+        ?.buffer
+        .asUint8List();
   }
 
   Set<Marker> customMarkers = {};
 
   Future<void> createCustomMarker(
-      LatLng latLng, String title, String description) async {
+      LatLng latLng, DangerPoints pointType,String title, String description) async {
     var latitude = latLng.latitude;
     var longitude = latLng.longitude;
-    var markerId = "marker_$latitude-$longitude-$title";
-    // TODO: wrap all data into Model and path it to the InfoWindow
-    // var infoWindowModel = DangerPointDetailsModel(
-    //     icon: "sos",
-    //     iconBackgroundColor: "red",
-    //     name: "name",
-    //     placeId: markerId,
-    //     vicinity: "vicinity",
-    //     distance: 10.0,
-    //     danger: 4.0);
+    var markerId = "$pointType-$latitude-$longitude-$title";
+
+    // change a marker according to type of dangerous-point
+    await getBytesFromAsset(pointType.markerSrc, 150)
+        .then((onValue) {
+      dangerMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
+    });
 
     setState(() {
       customMarkers.add(Marker(
@@ -70,22 +72,24 @@ class _StartPage extends State<StartPage> {
         icon: dangerMarkerIcon,
         onTap: () {
           customInfoWindowController.addInfoWindow!(
-              DangerPointInfoWindow(title: title, description: description,),
-              LatLng(latitude, longitude)
-          );
+              DangerPointInfoWindow(
+                  pointType: pointType, title: title, description: description),
+              LatLng(latitude, longitude));
         },
       ));
     });
   }
 
-
   Future<void> showInformationDialog(
       LatLng latLng, BuildContext context) async {
-
     // Dialog Form
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    final TextEditingController titleController = TextEditingController(text: "");
-    final TextEditingController descriptionController = TextEditingController(text: "");
+    final TextEditingController titleController =
+        TextEditingController(text: "");
+    final TextEditingController descriptionController =
+        TextEditingController(text: "");
+    var pointType = DangerPoints.lightPoint;
+    List<DangerPoints> allPointTypes = DangerPoints.values;
 
     return await showDialog(
         context: context,
@@ -99,6 +103,29 @@ class _StartPage extends State<StartPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      DropdownButton<DangerPoints>(
+                        value: pointType,
+                        icon: const Icon(Icons.arrow_downward),
+                        elevation: 15,
+                        style: TextStyle(color: Colors.primaries.first),
+                        underline: Container(
+                          height: 2,
+                          color: Colors.primaries.first.shade100,
+                        ),
+                        items: allPointTypes.map<DropdownMenuItem<DangerPoints>>(
+                            (DangerPoints value) {
+                          return DropdownMenuItem<DangerPoints>(
+                            value: value,
+                            child: Text(value.name),
+                          );
+                        }).toList(),
+                        onChanged: (DangerPoints? value) {
+                          // This is called when the user selects an item.
+                          setState(() {
+                            pointType = value!;
+                          });
+                        },
+                      ),
                       TextFormField(
                         controller: titleController,
                         validator: (value) {
@@ -112,12 +139,6 @@ class _StartPage extends State<StartPage> {
                       ),
                       TextFormField(
                         controller: descriptionController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please, enter the description";
-                          }
-                          return null;
-                        },
                         decoration: const InputDecoration(
                             hintText: "Enter the Description"),
                       ),
@@ -151,7 +172,7 @@ class _StartPage extends State<StartPage> {
                             content: Text('Adding a DangerPoint...')),
                       );
                       // create a DangerPoint with given data
-                      createCustomMarker(latLng, titleController.value.text,
+                      createCustomMarker(latLng, pointType, titleController.value.text,
                           descriptionController.value.text);
                       Navigator.of(context).pop();
                     } else {
@@ -240,67 +261,7 @@ class _StartPage extends State<StartPage> {
             ]),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            print("SOS-Button pressed");
-          },
-          child: const Icon(Icons.sos),
-        ),
       ),
     );
   }
 }
-
-// class DialogExample extends StatelessWidget {
-//   const DialogExample({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('showDialog Sample')),
-//       body: Center(
-//         child: OutlinedButton(
-//           onPressed: () => _dialogBuilder(context),
-//           child: const Text('Open Dialog'),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Future<void> _dialogBuilder(BuildContext context) {
-//     return showDialog<void>(
-//       context: context,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           title: const Text('Basic dialog title'),
-//           content: const Text('A dialog is a type of modal window that\n'
-//               'appears in front of app content to\n'
-//               'provide critical information, or prompt\n'
-//               'for a decision to be made.'),
-//           actions: <Widget>[
-//             TextButton(
-//               style: TextButton.styleFrom(
-//                 textStyle: Theme.of(context).textTheme.labelLarge,
-//               ),
-//               child: const Text('Disable'),
-//               onPressed: () {
-//                 print("disable pressed");
-//                 Navigator.of(context).pop();
-//               },
-//             ),
-//             TextButton(
-//               style: TextButton.styleFrom(
-//                 textStyle: Theme.of(context).textTheme.labelLarge,
-//               ),
-//               child: const Text('Enable'),
-//               onPressed: () {
-//                 print("enable pressed");
-//                 Navigator.of(context).pop();
-//               },
-//             ),
-//           ],
-//         );
-//       },
-//     );
-//   }
-// }
