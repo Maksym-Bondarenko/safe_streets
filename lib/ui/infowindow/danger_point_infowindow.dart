@@ -5,12 +5,16 @@ class DangerPointInfoWindow extends StatefulWidget {
   final DangerPoints pointType;
   final String title;
   final String description;
+  final int votes;
+  final ValueChanged<int> updateVotes;
 
   DangerPointInfoWindow(
       {Key? key,
       required this.pointType,
       required this.title,
-      required this.description})
+      required this.description,
+      required this.votes,
+      required this.updateVotes})
       : super(key: key);
 
   @override
@@ -20,8 +24,6 @@ class DangerPointInfoWindow extends StatefulWidget {
 class _DangerPointInfoWindowState extends State<DangerPointInfoWindow> {
   late DangerPoints point;
   late Color mainColor;
-
-  // TODO: adjust coloring and icon according to pointType
 
   @override
   void initState() {
@@ -79,7 +81,28 @@ class _DangerPointInfoWindowState extends State<DangerPointInfoWindow> {
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12.0,
-                              )))
+                              ))),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () => print('+'),
+                            icon: const Icon(Icons.add),
+                            color: Colors.green,
+                            iconSize: 20,
+                          ),
+                          IconButton(
+                            onPressed: () => {
+                              print('-')
+                            },
+                            icon: const Icon(Icons.remove),
+                            color: Colors.red,
+                            iconSize: 20,
+                          ),
+                          Text(
+                              "Total votes: ${widget.votes}",
+                          ),
+                        ],
+                      ),
                     ])),
           ),
         ]));

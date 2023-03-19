@@ -63,6 +63,8 @@ dependencies:
   geolocator: ^9.0.2
   custom_info_window: ^1.0.1
   grpc: ^3.1.0
+  flutter_speed_dial: ^6.2.0
+  google_maps_cluster_manager: ^3.0.0+1
 
 dev_dependencies:
   flutter_test:
@@ -94,7 +96,10 @@ flutter:
 
   assets:
     - lib/assets/
+    - lib/assets/data/
     - lib/assets/images/
+    - lib/assets/intro/
+    - lib/assets/logos/
     - lib/assets/marker/
 
   # An image asset can refer to one or more resolution-specific "variants", see

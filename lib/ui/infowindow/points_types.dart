@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
-enum DangerPoints {
+abstract class MapPoints {
+  // TODO
+}
+
+enum DangerPoints implements MapPoints {
   lightPoint,
   cleanlinessPoint,
   peoplePoint,
@@ -11,7 +15,7 @@ enum DangerPoints {
   otherPoint;
 }
 
-extension ParseToString on DangerPoints {
+extension DangerPointsDetails on DangerPoints {
 
   // returns a name for the custom point of user
   String get name {
@@ -98,8 +102,30 @@ extension ParseToString on DangerPoints {
 }
 
 // TODO
-enum SafePoints {
+enum SafePoints implements MapPoints {
   restaurant,
   police,
   grocery;
+}
+
+extension SafePointsDetails on SafePoints {
+
+  String get markerSrc {
+    return "lib/assets/marker/safe_point_marker.png";
+  }
+
+  Icon get icon {
+    return const Icon(Icons.health_and_safety, size: 50.0);
+  }
+
+  // returns a corresponding color to the custom user point (for info-window)
+  int get colorR {
+    return 15;
+  }
+  int get colorG {
+    return 157;
+  }
+  int get colorB {
+    return 88;
+  }
 }
