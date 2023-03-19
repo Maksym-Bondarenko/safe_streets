@@ -42,28 +42,28 @@ extension DangerPointsDetails on DangerPoints {
   }
 
   // returns a corresponding icon to the custom user point (for info-window)
-  Icon get icon {
-    switch (this) {
-      case DangerPoints.lightPoint:
-        return const Icon(Icons.flashlight_off, size: 50.0);
-      case DangerPoints.cleanlinessPoint:
-        return const Icon(Icons.cleaning_services, size: 50.0);
-      case DangerPoints.peoplePoint:
-        return const Icon(Icons.person_search, size: 50.0);
-      case DangerPoints.animalsPoint:
-        return const Icon(Icons.pets, size: 50.0);
-      case DangerPoints.roadPoint:
-        return const Icon(Icons.remove_road, size: 50.0);
-      case DangerPoints.childrenPoint:
-        return const Icon(Icons.escalator_warning, size: 50.0);
-      case DangerPoints.surroundingsPoint:
-        return const Icon(Icons.foundation, size: 50.0);
-      case DangerPoints.otherPoint:
-        return const Icon(Icons.dangerous, size: 50.0);
-      default:
-        return const Icon(Icons.dangerous, size: 50.0);
-    }
-  }
+  // Image get icon {
+  //   switch (this) {
+  //     case DangerPoints.lightPoint:
+  //       return const Image(image: AssetImage(''));
+  //     case DangerPoints.cleanlinessPoint:
+  //       return const Icon(Icons.cleaning_services, size: 50.0);
+  //     case DangerPoints.peoplePoint:
+  //       return const Icon(Icons.person_search, size: 50.0);
+  //     case DangerPoints.animalsPoint:
+  //       return const Icon(Icons.pets, size: 50.0);
+  //     case DangerPoints.roadPoint:
+  //       return const Icon(Icons.remove_road, size: 50.0);
+  //     case DangerPoints.childrenPoint:
+  //       return const Icon(Icons.escalator_warning, size: 50.0);
+  //     case DangerPoints.surroundingsPoint:
+  //       return const Icon(Icons.foundation, size: 50.0);
+  //     case DangerPoints.otherPoint:
+  //       return const Icon(Icons.dangerous, size: 50.0);
+  //     default:
+  //       return const Icon(Icons.dangerous, size: 50.0);
+  //   }
+  // }
 
   // returns a corresponding marker source-path to the custom user point (for the map-marker)
   String get markerSrc {

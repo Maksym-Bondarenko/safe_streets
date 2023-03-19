@@ -42,7 +42,7 @@ class _DangerPointInfoWindowState extends State<DangerPointInfoWindow> {
           Container(
             decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                borderRadius: const BorderRadius.all(Radius.circular(50.0)),
                 boxShadow: [
                   BoxShadow(
                       color: mainColor,
@@ -52,7 +52,7 @@ class _DangerPointInfoWindowState extends State<DangerPointInfoWindow> {
                 ]),
             child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
-                child: point.icon),
+                child: Image(image: AssetImage(point.markerSrc), width: 80, height: 80,)),
           ),
           const SizedBox(height: 5.0),
           ConstrainedBox(
