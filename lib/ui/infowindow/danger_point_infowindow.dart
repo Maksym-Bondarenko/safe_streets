@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:safe_streets/ui/infowindow/points_types.dart';
 
 class DangerPointInfoWindow extends StatefulWidget {
-  final DangerPoints pointType;
+  final MapPoints pointType;
   final String title;
   final String description;
   final int votes;
-  final ValueChanged<int> updateVotes;
 
-  DangerPointInfoWindow(
+  const DangerPointInfoWindow(
       {Key? key,
       required this.pointType,
       required this.title,
       required this.description,
-      required this.votes,
-      required this.updateVotes})
+      required this.votes})
       : super(key: key);
 
   @override
@@ -22,7 +20,7 @@ class DangerPointInfoWindow extends StatefulWidget {
 }
 
 class _DangerPointInfoWindowState extends State<DangerPointInfoWindow> {
-  late DangerPoints point;
+  late MapPoints point;
   late Color mainColor;
 
   @override
@@ -52,7 +50,11 @@ class _DangerPointInfoWindowState extends State<DangerPointInfoWindow> {
                 ]),
             child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
-                child: Image(image: AssetImage(point.markerSrc), width: 80, height: 80,)),
+                child: Image(
+                  image: AssetImage(point.markerSrc),
+                  width: 80,
+                  height: 80,
+                )),
           ),
           const SizedBox(height: 5.0),
           ConstrainedBox(
@@ -70,10 +72,10 @@ class _DangerPointInfoWindowState extends State<DangerPointInfoWindow> {
                       Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5.0),
                           child: Text(widget.title,
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14.0,
-                                  color: Colors.red))),
+                                  color: mainColor))),
                       Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 5.0, horizontal: 5.0),
@@ -85,21 +87,20 @@ class _DangerPointInfoWindowState extends State<DangerPointInfoWindow> {
                       Row(
                         children: [
                           IconButton(
-                            onPressed: () => print('+'),
+                            onPressed: () => {print('+')},
                             icon: const Icon(Icons.add),
                             color: Colors.green,
-                            iconSize: 20,
+                            iconSize: 15,
                           ),
                           IconButton(
-                            onPressed: () => {
-                              print('-')
-                            },
+                            onPressed: () => {print('+')},
                             icon: const Icon(Icons.remove),
                             color: Colors.red,
-                            iconSize: 20,
+                            iconSize: 15,
                           ),
                           Text(
-                              "Total votes: ${widget.votes}",
+                            "Total votes: ${widget.votes}",
+                            style: const TextStyle(fontSize: 10),
                           ),
                         ],
                       ),

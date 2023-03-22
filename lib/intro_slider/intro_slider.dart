@@ -21,6 +21,14 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const HomeScreen()))
       },
+      onSkipPress: () => {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const HomeScreen()))
+      },
+      autoScroll: true,
+      autoScrollInterval: const Duration(seconds: 5),
+      loopAutoScroll: true,
+      pauseAutoPlayOnTouch: true,
     );
   }
 

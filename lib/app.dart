@@ -8,7 +8,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.pink,
+        primarySwatch: Colors.blue,
+        primaryColorDark: Colors.indigo,
+        useMaterial3: false,
       ),
       home: const AuthGate(),
     );

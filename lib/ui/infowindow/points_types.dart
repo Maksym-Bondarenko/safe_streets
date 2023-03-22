@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
 
+// class for all possible points in the app: DangerPoint, SafePoint, RecommendationPoint
 abstract class MapPoints {
-  // TODO
+
+  // custom point on the map can be either a 'DangerPoint', 'InformationPoint' or a 'SafePoint' (cannot be created manually)
+  String get type;
+
+  // each point has it corresponding color
+  int get colorR => 0;
+  int get colorG => 0;
+  int get colorB => 0;
+
+  // each point has its corresponding marker
+  String get markerSrc => "lib/assets/marker/danger_point_marker.png";
+
 }
 
 enum DangerPoints implements MapPoints {
@@ -13,6 +25,50 @@ enum DangerPoints implements MapPoints {
   childrenPoint,
   surroundingsPoint,
   otherPoint;
+
+  @override
+  String get type {
+    return "DangerPoint";
+  }
+
+  // set custom color (red) for DangerPoints
+  @override
+  int get colorR {
+    return 219;
+  }
+  @override
+  int get colorG {
+    return 68;
+  }
+  @override
+  int get colorB {
+    return 55;
+  }
+
+  // set custom markers for DangerPoints (differ from sub-type)
+  @override
+  String get markerSrc {
+    switch (this) {
+      case DangerPoints.lightPoint:
+        return "lib/assets/marker/light_point_marker.png";
+      case DangerPoints.cleanlinessPoint:
+        return "lib/assets/marker/cleanliness_point_marker.png";
+      case DangerPoints.peoplePoint:
+        return "lib/assets/marker/people_point_marker.png";
+      case DangerPoints.animalsPoint:
+        return "lib/assets/marker/animals_point_marker.png";
+      case DangerPoints.roadPoint:
+        return "lib/assets/marker/road_point_marker.png";
+      case DangerPoints.childrenPoint:
+        return "lib/assets/marker/children_point_marker.png";
+      case DangerPoints.surroundingsPoint:
+        return "lib/assets/marker/surroundings_point_marker.png";
+      case DangerPoints.otherPoint:
+        return "lib/assets/marker/danger_point_marker.png";
+      default:
+        return "lib/assets/marker/danger_point_marker.png";
+    }
+  }
 }
 
 extension DangerPointsDetails on DangerPoints {
@@ -40,64 +96,51 @@ extension DangerPointsDetails on DangerPoints {
         return 'Other';
     }
   }
+}
 
-  // returns a corresponding icon to the custom user point (for info-window)
-  // Image get icon {
-  //   switch (this) {
-  //     case DangerPoints.lightPoint:
-  //       return const Image(image: AssetImage(''));
-  //     case DangerPoints.cleanlinessPoint:
-  //       return const Icon(Icons.cleaning_services, size: 50.0);
-  //     case DangerPoints.peoplePoint:
-  //       return const Icon(Icons.person_search, size: 50.0);
-  //     case DangerPoints.animalsPoint:
-  //       return const Icon(Icons.pets, size: 50.0);
-  //     case DangerPoints.roadPoint:
-  //       return const Icon(Icons.remove_road, size: 50.0);
-  //     case DangerPoints.childrenPoint:
-  //       return const Icon(Icons.escalator_warning, size: 50.0);
-  //     case DangerPoints.surroundingsPoint:
-  //       return const Icon(Icons.foundation, size: 50.0);
-  //     case DangerPoints.otherPoint:
-  //       return const Icon(Icons.dangerous, size: 50.0);
-  //     default:
-  //       return const Icon(Icons.dangerous, size: 50.0);
-  //   }
-  // }
+// TODO
+enum RecommendationPoints implements MapPoints {
+  cultural,
+  traditional;
 
-  // returns a corresponding marker source-path to the custom user point (for the map-marker)
-  String get markerSrc {
+  @override
+  String get type {
+    return "RecommendationPoint";
+  }
+
+  @override
+  int get colorR {
+    return 66;
+  }
+  @override
+  int get colorG {
+    return 133;
+  }
+  @override
+  int get colorB {
+    return 244;
+  }
+
+  @override
+  String get markerSrc => "lib/assets/marker/touristic_point_marker.png";
+}
+
+extension RecommendationPointsDetails on RecommendationPoints {
+
+  // returns a name for the custom point of user
+  String get name {
     switch (this) {
-      case DangerPoints.lightPoint:
-        return "lib/assets/marker/light_point_marker.png";
-      case DangerPoints.cleanlinessPoint:
-        return "lib/assets/marker/cleanliness_point_marker.png";
-      case DangerPoints.peoplePoint:
-        return "lib/assets/marker/people_point_marker.png";
-      case DangerPoints.animalsPoint:
-        return "lib/assets/marker/animals_point_marker.png";
-      case DangerPoints.roadPoint:
-        return "lib/assets/marker/road_point_marker.png";
-      case DangerPoints.childrenPoint:
-        return "lib/assets/marker/children_point_marker.png";
-      case DangerPoints.surroundingsPoint:
-        return "lib/assets/marker/surroundings_point_marker.png";
-      case DangerPoints.otherPoint:
-        return "lib/assets/marker/danger_point_marker.png";
+      case RecommendationPoints.cultural:
+        return 'Cultural Differences';
+      case RecommendationPoints.traditional:
+        return 'Certain Traditions';
       default:
-        return "lib/assets/marker/danger_point_marker.png";
+        return 'Other';
     }
   }
 
-  // returns a corresponding color to the custom user point (for info-window)
-  int get colorR {
-    return 219;
-  }
-  int get colorG {
-    return 68;
-  }
-  int get colorB {
-    return 55;
+  Icon get icon {
+    return const Icon(Icons.info, size: 50.0);
   }
 }
 
@@ -106,26 +149,27 @@ enum SafePoints implements MapPoints {
   restaurant,
   police,
   grocery;
+
+  @override
+  String get type {
+    return "SafePoint";
+  }
+
+  @override
+  int get colorR => 15;
+  @override
+  int get colorG => 157;
+  @override
+  int get colorB => 88;
+
+  @override
+  String get markerSrc => "lib/assets/marker/safe_point_marker.png";
 }
 
 extension SafePointsDetails on SafePoints {
-
-  String get markerSrc {
-    return "lib/assets/marker/safe_point_marker.png";
-  }
 
   Icon get icon {
     return const Icon(Icons.health_and_safety, size: 50.0);
   }
 
-  // returns a corresponding color to the custom user point (for info-window)
-  int get colorR {
-    return 15;
-  }
-  int get colorG {
-    return 157;
-  }
-  int get colorB {
-    return 88;
-  }
 }
