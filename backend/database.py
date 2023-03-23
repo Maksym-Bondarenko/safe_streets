@@ -30,13 +30,26 @@ class DBConnector(object):
 
     def get_all_users(self):
         with self.pool.connect() as db_conn:
-            return db_conn.execute(sqlalchemy.text("SELECT id, full_name, email, city_id, created_at from users")).fetchall()
+            return db_conn.execute(
+                sqlalchemy.text("SELECT id, full_name, email, city_id, created_at from users")).fetchall()
 
-    def get_all_places(self):
+    def get_all_places(self, danger_ranking, type, user_id):
+        q = "SELECT id, user_id, title, type, danger_ranking, comment, lat, long, created_at from places"
+        if (type is not None) and (danger_ranking is not None):
+            q += f" where type = '{type}' and danger_ranking='{danger_ranking}' "
+        if (type is None) and (danger_ranking is not None):
+            q += f" where danger_ranking='{danger_ranking}' "
+        if (type is not None) and (danger_ranking is None):
+            q += f" where type = '{type}' "
+
+        if (type is None) and (danger_ranking is None) and (user_id is not None):
+            q += f" where user_id={user_id} "
+        elif user_id is not None:
+            q += f" and user_id={user_id} "
+
         with self.pool.connect() as db_conn:
             return db_conn.execute(
-                sqlalchemy.text(
-                    "SELECT id, user_id, title, type, danger_ranking, comment, lat, long, created_at from places")).fetchall()
+                sqlalchemy.text(q)).fetchall()
 
     def add_user(self, user: User):
         if user.city_id is None:
