@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 
+import '../info_pages/terms_and_conditions.dart';
 import '../intro_slider/intro_slider.dart';
 
 
@@ -40,12 +42,30 @@ class AuthGate extends StatelessWidget {
               );
             },
             footerBuilder: (context, action) {
-              return const Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text(
-                  'By signing in, you agree to our terms and conditions.',
-                  style: TextStyle(color: Colors.grey),
-                ),
+              return Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child:
+                  RichText(
+                    text: TextSpan(
+                      style: const TextStyle(color: Colors.grey),
+                      children: <TextSpan>[
+                        const TextSpan(text: 'By signing in, you agree to our '),
+                        TextSpan(
+                          text: 'Terms and Conditions',
+                          style: const TextStyle(color: Colors.blue),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const TermsAndConditions()
+                                  )
+                              );
+                            }
+                        ),
+                      ],
+                    ),
+                  ),
               );
             },
             sideBuilder: (context, shrinkOffset) {

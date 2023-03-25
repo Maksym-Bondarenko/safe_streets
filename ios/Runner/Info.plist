@@ -49,5 +49,18 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<!-- Google Sign-in Section -->
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>com.googleusercontent.apps.721653983645-582ttjthr7c48o5pb80mb5u741j0qhum</string>
+				</array>
+			</dict>
+		</array>
+		<!-- End of the Google Sign-in Section -->
 	</dict>
 </plist>

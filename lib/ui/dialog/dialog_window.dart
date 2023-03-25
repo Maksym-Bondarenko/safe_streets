@@ -5,182 +5,99 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'dart:ui' as ui;
 
-import '../infowindow/danger_point_infowindow.dart';
+import '../infowindow/point_infowindow.dart';
 import '../infowindow/points_types.dart';
 
-class PointsCreator {
-  Set<Marker> currentlyActiveMarkers = {};
-  Set<Marker> dangerPointsMarkers = {};
-  Set<Marker> safePointsMarkers = {};
-  Set<Marker> touristicPointsMarkers = {};
-  BitmapDescriptor dangerMarkerIcon = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor safeMarkerIcon = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor touristicMarkerIcon = BitmapDescriptor.defaultMarker;
-  final CustomInfoWindowController customInfoWindowController =
-      CustomInfoWindowController();
+// opens a Dialog-Window for creating a custom Point (DangerPoint or InformationPoint)
+// each Point-type has different sub-types
+// after providing all information regarding Point, it will be created and putted on the map with a Custom Info-Window
+class CreatePointWindow extends StatefulWidget {
+  final LatLng latLng;
+  final CustomInfoWindowController customInfoWindowController;
+  final Function(Marker) updateMarkers;
 
-// initial filters (show Data-Driven Styling map boundaries, danger-points, safe-points and tourists-points)
-  final List<bool> _selectedFilters = <bool>[false, true, true, false];
+  const CreatePointWindow(
+      {super.key,
+      required this.latLng,
+      required this.customInfoWindowController,
+      required this.updateMarkers});
 
-// visual of ToggleButtons
-  static const List<Widget> filters = <Widget>[
-    Icon(Icons.color_lens),
-    Icon(Icons.notification_important),
-    Icon(Icons.health_and_safety),
-    Icon(Icons.info),
-  ];
+  @override
+  _CreatePointWindowState createState() => _CreatePointWindowState();
+}
 
-  Future<void> showInformationDialog(
-      LatLng latLng, BuildContext context) async {
-    // Dialog Form
-    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    final TextEditingController titleController =
-        TextEditingController(text: "");
-    final TextEditingController descriptionController =
-        TextEditingController(text: "");
-    var pointType = DangerPoints.lightPoint;
-    List<DangerPoints> allPointTypes = DangerPoints.values;
+class _CreatePointWindowState extends State<CreatePointWindow> {
+  // key for the Form
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-    return await showDialog(
-        context: context,
-        builder: (context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return AlertDialog(
-              title: const Text('Create Danger-Point'),
-              content: Form(
-                  key: formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      DropdownButton<DangerPoints>(
-                        value: pointType,
-                        icon: const Icon(Icons.arrow_drop_down),
-                        elevation: 15,
-                        underline: Container(
-                          height: 2,
-                        ),
-                        items: allPointTypes
-                            .map<DropdownMenuItem<DangerPoints>>(
-                                (DangerPoints value) {
-                          return DropdownMenuItem<DangerPoints>(
-                            value: value,
-                            child: Text(value.name),
-                          );
-                        }).toList(),
-                        onChanged: (DangerPoints? value) {
-                          // This is called when the user selects an item.
-                          setState(() {
-                            pointType = value!;
-                          });
-                        },
-                      ),
-                      TextFormField(
-                        controller: titleController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please, enter the title";
-                          }
-                          return null;
-                        },
-                        decoration:
-                            const InputDecoration(hintText: "Enter the Title"),
-                      ),
-                      TextFormField(
-                        controller: descriptionController,
-                      ),
-                    ],
-                  )),
-              actions: <Widget>[
-                InkWell(
-                  child: const Text('Submit'),
-                  onTap: () {
-                    if (formKey.currentState!.validate()) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Adding a DangerPoint...')),
-                      );
-                      // create a DangerPoint with given data
-                      createDangerPoint(
-                          latLng,
-                          pointType,
-                          titleController.value.text,
-                          descriptionController.value.text);
-                      Navigator.of(context).pop();
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Something gone wrong...')),
-                      );
-                    }
-                  },
-                ),
-              ],
-            );
-          });
-        });
+  // main custom point-type (DangerPoint or InformationPoint)
+  var _mainType = MainType.dangerPoint;
+
+  // sub-type of custom point (hang on `_mainType`)
+  late List<MapPoint> _subPointTypes = DangerPoint.values;
+  late MapPoint _subType = _subPointTypes.first;
+
+  // for Point Title
+  final TextEditingController titleController = TextEditingController(text: "");
+
+  // for Point Description
+  final TextEditingController descriptionController =
+      TextEditingController(text: "");
+
+  // set values of `_subType` according to selected `_mainType`
+  void _onMainPointTypeSelected(MainType? newValue) {
+    setState(() {
+      _mainType = newValue!;
+      switch (_mainType) {
+        case MainType.dangerPoint:
+          _subPointTypes = DangerPoint.values;
+          _subType = _subPointTypes.first;
+          break;
+        case MainType.recommendationPoint:
+          _subPointTypes = RecommendationPoint.values;
+          _subType = _subPointTypes.first;
+          break;
+        default:
+          _subPointTypes = DangerPoint.values;
+          _subType = _subPointTypes.first;
+          break;
+      }
+    });
   }
 
-  Future<void> createDangerPoint(LatLng latLng, DangerPoints pointType,
+  BitmapDescriptor customMarkerIcon = BitmapDescriptor.defaultMarker;
+
+  Future<void> createPoint(LatLng latLng, MainType mainType, MapPoint subType,
       String title, String description) async {
     var latitude = latLng.latitude;
     var longitude = latLng.longitude;
-    var markerId = "$pointType-$latitude-$longitude-$title";
+    var markerId = "$mainType-$subType-$latitude-$longitude-$title";
     var votes = 0;
 
     // change a marker according to type of dangerous-point
-    await getBytesFromAsset(pointType.markerSrc, 150).then((onValue) {
-      dangerMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
+    await _getBytesFromAsset(subType.markerSrc, 150).then((onValue) {
+      customMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
     });
 
-    dangerPointsMarkers.add(Marker(
+    widget.updateMarkers(Marker(
       markerId: MarkerId(markerId),
       position: LatLng(latitude, longitude),
-      icon: dangerMarkerIcon,
+      icon: customMarkerIcon,
       onTap: () {
-        customInfoWindowController.addInfoWindow!(
-            DangerPointInfoWindow(
-                pointType: pointType,
+        widget.customInfoWindowController.addInfoWindow!(
+            PointInfoWindow(
+                mainType: _mainType,
+                subType: _subType,
                 title: title,
                 description: description,
                 votes: votes),
             LatLng(latitude, longitude));
       },
     ));
-    updatePointsVisibility();
-  }
-
-// set visibility of different types of points on the map, based on current settings
-  updatePointsVisibility() {
-    if (_selectedFilters[1]) {
-      // show danger points
-      currentlyActiveMarkers =
-          currentlyActiveMarkers.union(dangerPointsMarkers);
-    } else {
-      // hide danger points
-      currentlyActiveMarkers =
-          currentlyActiveMarkers.difference(dangerPointsMarkers);
-    }
-    if (_selectedFilters[2]) {
-      // show safe points
-      currentlyActiveMarkers = currentlyActiveMarkers.union(safePointsMarkers);
-    } else {
-      // hide safe points
-      currentlyActiveMarkers =
-          currentlyActiveMarkers.difference(safePointsMarkers);
-    }
-    if (_selectedFilters[3]) {
-      // show touristic points
-      currentlyActiveMarkers =
-          currentlyActiveMarkers.union(touristicPointsMarkers);
-    } else {
-      // hide touristic points
-      currentlyActiveMarkers =
-          currentlyActiveMarkers.difference(touristicPointsMarkers);
-    }
   }
 
   // change default google-marker-icon to custom one
-  static Future<Uint8List?> getBytesFromAsset(String path, int width) async {
+  static Future<Uint8List?> _getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);
     ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
         targetWidth: width);
@@ -188,5 +105,118 @@ class PointsCreator {
     return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
         ?.buffer
         .asUint8List();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      scrollable: true,
+      title: const Text('Create a Point'),
+      content: Form(
+        key: formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            // drop-down with selecting main type of point (danger or information)
+            Row(children: [
+              DropdownButton<MainType>(
+                value: _mainType,
+                hint: const Text('Select Point-type'),
+                icon: const Icon(Icons.arrow_drop_down),
+                elevation: 15,
+                underline: Container(
+                  height: 2,
+                  color: Colors.blueAccent,
+                ),
+                items: MainType.values
+                    .map<DropdownMenuItem<MainType>>((MainType value) {
+                      int index = value.index;
+                  return DropdownMenuItem<MainType>(
+                    value: value,
+                    enabled: MainTypeDetails.enabledCustomPoints[index],
+                    child: Text(value.name),
+                  );
+                }).toList(),
+                onChanged: (MainType? value) {
+                  setState(() {
+                    _mainType = value!;
+                    _onMainPointTypeSelected(value);
+                  });
+                },
+              ),
+            ]),
+            // drop-down with selecting sub-type of point (based on `_mainType`)
+            Row(children: [
+              DropdownButton<MapPoint>(
+                value: _subType,
+                hint: const Text('Select sub-type'),
+                icon: const Icon(Icons.arrow_drop_down),
+                elevation: 15,
+                underline: Container(
+                  height: 2,
+                  color: Colors.blueAccent,
+                ),
+                items: _subPointTypes
+                    .map<DropdownMenuItem<MapPoint>>((MapPoint value) {
+                  return DropdownMenuItem<MapPoint>(
+                    value: value,
+                    child: Text(value.name),
+                  );
+                }).toList(),
+                onChanged: (MapPoint? value) {
+                  setState(() {
+                    _subType = value!;
+                  });
+                },
+              ),
+            ]),
+            // Text-field for Title
+            TextFormField(
+              controller: titleController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please, enter the title";
+                }
+                return null;
+              },
+              decoration: const InputDecoration(hintText: "Enter the Title"),
+            ),
+            // Text-field for Description
+            TextFormField(
+              controller: descriptionController,
+              keyboardType: TextInputType.multiline,
+              minLines: 1,
+              maxLines: 5,
+              decoration:
+                  const InputDecoration(hintText: "Enter the Description"),
+            ),
+          ],
+        ),
+      ),
+      // submit-button and validation-logic
+      actions: <Widget>[
+        InkWell(
+          splashColor: Colors.blue,
+          onTap: () {
+            if (formKey.currentState!.validate()) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Adding a ${_subType.name}...')),
+              );
+              // create a DangerPoint with given data
+              createPoint(widget.latLng, _mainType, _subType,
+                  titleController.value.text, descriptionController.value.text);
+              Navigator.of(context).pop();
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Something gone wrong...')),
+              );
+            }
+          },
+          child: const Text("Submit"),
+        ),
+      ],
+    );
   }
 }

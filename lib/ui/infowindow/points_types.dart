@@ -1,22 +1,46 @@
 import 'package:flutter/material.dart';
 
-// class for all possible points in the app: DangerPoint, SafePoint, RecommendationPoint
-abstract class MapPoints {
-
-  // custom point on the map can be either a 'DangerPoint', 'InformationPoint' or a 'SafePoint' (cannot be created manually)
-  String get type;
-
-  // each point has it corresponding color
-  int get colorR => 0;
-  int get colorG => 0;
-  int get colorB => 0;
-
-  // each point has its corresponding marker
-  String get markerSrc => "lib/assets/marker/danger_point_marker.png";
-
+// enum of 3 main Point types
+enum MainType {
+  dangerPoint,
+  recommendationPoint,
+  safePoint;
 }
 
-enum DangerPoints implements MapPoints {
+extension MainTypeDetails on MainType {
+  String get name {
+    switch (this) {
+      case MainType.dangerPoint:
+        return 'Danger Point';
+      case MainType.recommendationPoint:
+        return 'Recommendation Point';
+      case MainType.safePoint:
+        return 'Safe Point';
+      default:
+        return 'Danger Point';
+    }
+  }
+
+  static List<bool> enabledCustomPoints = [
+    true,
+    true,
+    false,
+  ];
+}
+
+abstract class MapPoint {
+  dynamic get type;
+
+  int get colorR => 66;
+  int get colorG => 133;
+  int get colorB => 244;
+
+  String get markerSrc;
+
+  String get name;
+}
+
+enum DangerPoint implements MapPoint {
   lightPoint,
   cleanlinessPoint,
   peoplePoint,
@@ -28,7 +52,7 @@ enum DangerPoints implements MapPoints {
 
   @override
   String get type {
-    return "DangerPoint";
+    return "Danger Point";
   }
 
   // set custom color (red) for DangerPoints
@@ -45,25 +69,50 @@ enum DangerPoints implements MapPoints {
     return 55;
   }
 
+  // returns a name for the custom point of user
+  @override
+  String get name {
+    switch (this) {
+      case DangerPoint.lightPoint:
+        return 'Dark Street';
+      case DangerPoint.cleanlinessPoint:
+        return 'Dirty Place';
+      case DangerPoint.peoplePoint:
+        return 'Dangerous People';
+      case DangerPoint.animalsPoint:
+        return 'Wild Animals';
+      case DangerPoint.roadPoint:
+        return 'Bad Road';
+      case DangerPoint.childrenPoint:
+        return 'Danger for Children';
+      case DangerPoint.surroundingsPoint:
+        return 'Uncomfortable Surroundings';
+      case DangerPoint.otherPoint:
+        return 'Other';
+      default:
+        return 'Other';
+    }
+  }
+
   // set custom markers for DangerPoints (differ from sub-type)
   @override
   String get markerSrc {
     switch (this) {
-      case DangerPoints.lightPoint:
+      case DangerPoint.lightPoint:
         return "lib/assets/marker/light_point_marker.png";
-      case DangerPoints.cleanlinessPoint:
+      case DangerPoint.cleanlinessPoint:
         return "lib/assets/marker/cleanliness_point_marker.png";
-      case DangerPoints.peoplePoint:
+      case DangerPoint.peoplePoint:
         return "lib/assets/marker/people_point_marker.png";
-      case DangerPoints.animalsPoint:
+      case DangerPoint.animalsPoint:
         return "lib/assets/marker/animals_point_marker.png";
-      case DangerPoints.roadPoint:
+      case DangerPoint.roadPoint:
         return "lib/assets/marker/road_point_marker.png";
-      case DangerPoints.childrenPoint:
+      case DangerPoint.childrenPoint:
         return "lib/assets/marker/children_point_marker.png";
-      case DangerPoints.surroundingsPoint:
+      case DangerPoint.surroundingsPoint:
         return "lib/assets/marker/surroundings_point_marker.png";
-      case DangerPoints.otherPoint:
+      case DangerPoint.otherPoint:
         return "lib/assets/marker/danger_point_marker.png";
       default:
         return "lib/assets/marker/danger_point_marker.png";
@@ -71,88 +120,75 @@ enum DangerPoints implements MapPoints {
   }
 }
 
-extension DangerPointsDetails on DangerPoints {
-
-  // returns a name for the custom point of user
-  String get name {
-    switch (this) {
-      case DangerPoints.lightPoint:
-        return 'Dark Street';
-      case DangerPoints.cleanlinessPoint:
-        return 'Dirty Place';
-      case DangerPoints.peoplePoint:
-        return 'Dangerous People';
-      case DangerPoints.animalsPoint:
-        return 'Wild Animals';
-      case DangerPoints.roadPoint:
-        return 'Bad Road';
-      case DangerPoints.childrenPoint:
-        return 'Danger for Children';
-      case DangerPoints.surroundingsPoint:
-        return 'Uncomfortable Surroundings';
-      case DangerPoints.otherPoint:
-        return 'Other';
-      default:
-        return 'Other';
-    }
+extension DangerPointDetails on DangerPoint {
+  Icon get icon {
+    return const Icon(Icons.dangerous, size: 50.0);
   }
 }
 
-// TODO
-enum RecommendationPoints implements MapPoints {
-  cultural,
-  traditional;
+enum RecommendationPoint implements MapPoint {
+  intrusivePeople,
+  culturalReligiousSpecifics,
+  badTransport,
+  attentionToBelongings,
+  crowdedEvent;
 
   @override
   String get type {
-    return "RecommendationPoint";
+    return "Recommendation Point";
   }
 
   @override
   int get colorR {
-    return 66;
+    return 244;
   }
   @override
   int get colorG {
-    return 133;
+    return 180;
   }
   @override
   int get colorB {
-    return 244;
+    return 0;
   }
 
-  @override
-  String get markerSrc => "lib/assets/marker/touristic_point_marker.png";
-}
-
-extension RecommendationPointsDetails on RecommendationPoints {
-
   // returns a name for the custom point of user
+  @override
   String get name {
     switch (this) {
-      case RecommendationPoints.cultural:
-        return 'Cultural Differences';
-      case RecommendationPoints.traditional:
-        return 'Certain Traditions';
+      case RecommendationPoint.intrusivePeople:
+        return 'Intrusive people';
+      case RecommendationPoint.culturalReligiousSpecifics:
+        return 'Cultural or religious specifics';
+      case RecommendationPoint.badTransport:
+        return 'Bad transport connections';
+      case RecommendationPoint.attentionToBelongings:
+        return 'Attention to your belongings';
+      case RecommendationPoint.crowdedEvent:
+        return 'Crowded event';
       default:
         return 'Other';
     }
   }
 
+  @override
+  String get markerSrc => "lib/assets/marker/information_point_marker.png";
+}
+
+extension RecommendationPointDetails on RecommendationPoint {
   Icon get icon {
     return const Icon(Icons.info, size: 50.0);
   }
 }
 
 // TODO
-enum SafePoints implements MapPoints {
+enum SafePoint implements MapPoint {
   restaurant,
   police,
   grocery;
 
   @override
   String get type {
-    return "SafePoint";
+    return "Safe Point";
   }
 
   @override
@@ -162,14 +198,23 @@ enum SafePoints implements MapPoints {
   @override
   int get colorB => 88;
 
+  // returns a name for the custom point of user
+  @override
+  String get name {
+    switch (this) {
+      case SafePoint.restaurant:
+        return 'Restaurant';
+      default:
+        return 'Other';
+    }
+  }
+
   @override
   String get markerSrc => "lib/assets/marker/safe_point_marker.png";
 }
 
-extension SafePointsDetails on SafePoints {
-
+extension SafePointDetails on SafePoint {
   Icon get icon {
     return const Icon(Icons.health_and_safety, size: 50.0);
   }
-
 }

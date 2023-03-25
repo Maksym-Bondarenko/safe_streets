@@ -18,12 +18,12 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
       slides: slides,
       colorActiveDot: Colors.white,
       onDonePress: () => {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const HomeScreen()))
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()))
       },
       onSkipPress: () => {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const HomeScreen()))
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()))
       },
       autoScroll: true,
       autoScrollInterval: const Duration(seconds: 5),
@@ -37,37 +37,67 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
     super.initState();
     slides.add(
       Slide(
-        title: "Management",
+        title: "Safe Streets Maps: what is it?",
         description:
-            'Management is the administration of an organization, whether it is a business,'
-            ' a non-profit organization, or a government body. ',
-        pathImage: "lib/assets/images/logo_big.png",
-        heightImage: 370,
-        widthImage: 400,
-        backgroundColor: const Color(0xff4266AC),
+            'Safe Streets assists girls, children, seniors, and other groups that don’t feel safe while getting around the city on their own.'
+            'We provide you with supportive information about specific area issues, suspicious people, dander zones, or on the contrary, safe places such as open cafes late at night.',
+        pathImage: "lib/assets/intro/page_1.png",
+        colorBegin: Colors.blueAccent,
+        colorEnd: Colors.white,
       ),
     );
     slides.add(
       Slide(
-        title: "Chat",
+        title: "Filter-Based Map",
         description:
-            "Chat refers to the process of communicating, interacting and/or exchanging messages over the Internet. "
-            "It involves two or more individuals that communicate through a chat-enabled service or software. ",
-        pathImage: "lib/assets/images/logo_small.png",
-        heightImage: 370,
-        widthImage: 400,
-        backgroundColor: const Color(0xff3852B2),
+            'Simply open the filter-based map and apply what exactly you want to take into account: danger points, recommendations, or safe spaces.'
+            'After that, you will be able to see users’ points on the map or create yours.',
+        pathImage: "lib/assets/intro/page_2.png",
+        colorBegin: Colors.blueAccent,
+        colorEnd: Colors.white,
       ),
     );
     slides.add(
       Slide(
-        title: "Leadership",
+        title: "Creating and checking points",
         description:
-            "Leadership is the ability of an individual or a group of individuals to influence and guide followers or other members of an organization.  ",
-        pathImage: "lib/assets/marker/safe_point_marker.png",
-        heightImage: 370,
-        widthImage: 400,
-        backgroundColor: const Color(0xff2A78E6),
+            'To create a point press long on a map and choose a relevant type of point, danger or recommendation, and a relevant type of issue from the list.'
+            'To read others’ points click on the existing geo-point and read the information mentioned. Additionally, you can rely on the validity by seeing the number of “pluses” proven.',
+        pathImage: "lib/assets/intro/page_3.png",
+        colorBegin: Colors.blueAccent,
+        colorEnd: Colors.white,
+      ),
+    );
+    slides.add(
+      Slide(
+        title: "Rank-based map",
+        description:
+            'Worried about whether the new city you are visiting is safe in general? Then, open the rank-based map and observe the colored visualisation of official crime statistics by each of the city areas.',
+        pathImage: "lib/assets/intro/page_4.png",
+        colorBegin: Colors.blueAccent,
+        colorEnd: Colors.white,
+      ),
+    );
+    slides.add(
+      Slide(
+        title: "Community Forum & Support",
+        description:
+            'Feeling safe starts with area knowledge from reliable sources. Join necessary chats in the Forum and discuss suspicious points, news, events, and many more!'
+            'Don’t forget to read and remember the main emergency numbers in our Support zone. However, we really hope you will never need to use them!',
+        pathImage: "lib/assets/intro/page_5.png",
+        colorBegin: Colors.blueAccent,
+        colorEnd: Colors.white,
+      ),
+    );
+    slides.add(
+      Slide(
+        title: "User Profile",
+        description:
+            'Finally, see how many points you have created on the user profile page. If needed, adjust settings for your account.'
+            'Wishing you a safe journey, good luck!',
+        pathImage: "lib/assets/intro/page_6.png",
+        colorBegin: Colors.blueAccent,
+        colorEnd: Colors.white,
       ),
     );
   }
