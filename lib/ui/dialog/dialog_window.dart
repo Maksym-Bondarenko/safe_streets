@@ -132,7 +132,7 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
                 ),
                 items: MainType.values
                     .map<DropdownMenuItem<MainType>>((MainType value) {
-                      int index = value.index;
+                  int index = value.index;
                   return DropdownMenuItem<MainType>(
                     value: value,
                     enabled: MainTypeDetails.enabledCustomPoints[index],

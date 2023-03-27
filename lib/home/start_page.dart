@@ -6,6 +6,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 
+import '../ui/custom_app_bar.dart';
 import '../ui/dialog/dialog_window.dart';
 
 import 'dart:ui' as ui;
@@ -93,7 +94,7 @@ class _StartPage extends State<StartPage> {
                 mainType: MainType.safePoint,
                 subType: SafePoint.police,
                 title: office.name,
-                description: "Address: ${office.address}, Phone: ${office.phone}",
+                description: "Address: ${office.address},\nPhone: ${office.phone}",
                 votes: 0
               ),
               LatLng(office.lat, office.lng)
@@ -192,13 +193,7 @@ class _StartPage extends State<StartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Align(
-          alignment: Alignment.center,
-          child: Image.asset('lib/assets/images/logo_small.png', color: Colors.white, height: 150),
-        ),
-        elevation: 2,
-      ),
+      appBar: const CustomAppBar(title: 'SafeStreets'),
       body: SafeArea(
         child: Stack(children: [
           GoogleMap(

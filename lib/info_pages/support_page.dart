@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-class SupportPage extends StatelessWidget {
+import '../ui/custom_app_bar.dart';
 
+class SupportPage extends StatelessWidget {
   const SupportPage({super.key});
 
   final String policeNumber = "110";
@@ -9,13 +10,13 @@ class SupportPage extends StatelessWidget {
   final String medicalServiceNumber = "112";
   final String minorCrime = "0800 6 888 000";
   final String medicalServices = "116 117";
-  final String cardCancelation = "116 116";
-  final String generalHelpline = "0800 1 11 01 OR 110800 1 11 01 22";
+  final String cardCancellation = "116 116";
+  final String generalHelpline = "080011101 OR 1108001110122";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: const CustomAppBar(title: 'Support'),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
@@ -33,112 +34,225 @@ class SupportPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Main Emergency Information',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                const Icon(
-                  Icons.local_police,
-                  color: Colors.red,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'Police: $policeNumber',
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                const Icon(
-                  Icons.local_fire_department,
-                  color: Colors.orange,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'Fire Service: $fireServiceNumber',
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                const Icon(
-                  Icons.local_hospital,
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: const BorderSide(
                   color: Colors.blue,
+                  width: 2,
+                  style: BorderStyle.solid,
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  'Medical Service: $medicalServiceNumber',
-                  style: const TextStyle(
-                    fontSize: 16,
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: Column(children: [
+                  Text(
+                    "Main Emergency Information".toUpperCase(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: const TextStyle(color: Colors.black),
+                          children: [
+                            const TextSpan(
+                              text: 'Police: ',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                            TextSpan(
+                              text: policeNumber,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: const TextStyle(color: Colors.black),
+                          children: [
+                            const TextSpan(
+                              text: 'Fire Service: ',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                            TextSpan(
+                              text: fireServiceNumber,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: const TextStyle(color: Colors.black),
+                          children: [
+                            const TextSpan(
+                              text: 'Medical Service: ',
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                            TextSpan(
+                              text: medicalServiceNumber,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ]),
+              ),
             ),
             const SizedBox(height: 24),
-            const Text(
-              'Minor Emergency Information',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+            const Divider(),
+            const SizedBox(height: 24),
+            Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: const BorderSide(
+                  color: Colors.blue,
+                  width: 2,
+                  style: BorderStyle.solid,
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Text(
-                  'Minor crime: $minorCrime',
-                  style: const TextStyle(
-                    fontSize: 12,
-                  ),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Text(
+                      "Minor Emergency Information".toUpperCase(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            style: const TextStyle(color: Colors.black),
+                            children: [
+                              const TextSpan(
+                                text: 'Minor crime: ',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              TextSpan(
+                                text: minorCrime,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            style: const TextStyle(color: Colors.black),
+                            children: [
+                              const TextSpan(
+                                text: 'Medical services: ',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              TextSpan(
+                                text: medicalServices,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            style: const TextStyle(color: Colors.black),
+                            children: [
+                              const TextSpan(
+                                text:
+                                    'Card cancellation in case of lost or theft: ',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              TextSpan(
+                                text: cardCancellation,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            style: const TextStyle(color: Colors.black),
+                            children: [
+                              const TextSpan(
+                                text: 'General helpline: ',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                ),
+                              ),
+                              TextSpan(
+                                text: generalHelpline,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Text(
-                  'Medical services: $medicalServices',
-                  style: const TextStyle(
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Text(
-                  'Card cancelation in case of lost or theft: $cardCancelation',
-                  style: const TextStyle(
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Text(
-                  'General helpline: $generalHelpline',
-                  style: const TextStyle(
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),
