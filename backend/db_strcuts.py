@@ -15,27 +15,22 @@ def asdict(obj):
 @dataclass
 class User:
     id: int
+    firebase_id: str
     full_name: str
     email: str
     created_at: datetime.datetime
-    city_id: Optional[int] = None
-
-
-@dataclass
-class City:
-    id: int
-    name: str
-    country_name: str
 
 
 @dataclass
 class Place:
     id: int
-    user_id: int
-    title: str
-    type: str
-    danger_ranking: str
+    firebase_user_id: str
+    main_type: str
+    sub_type: str
+    n_likes: int
+    n_dislikes: int
     comment: str
     lat: float
     long: float
     created_at: datetime.datetime
+
