@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../ui/custom_app_bar.dart';
+
 class CardItem {
   final String title;
   final String subtitle;
@@ -59,7 +61,8 @@ class _ForumPageState extends State<ForumPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      // appBar: AppBar(title: const Text('Forum')),
+      appBar: const CustomAppBar(title: 'Forum'),
       body: Column(
         children: [
           Container(
@@ -109,7 +112,7 @@ class _ForumPageState extends State<ForumPage> {
           Container(
             height: 60.0,
             decoration: BoxDecoration(
-              color: Colors.grey[200],
+              color: Colors.blue,
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.5),
@@ -124,7 +127,7 @@ class _ForumPageState extends State<ForumPage> {
               children: [
                 IconButton(
                   icon: const Icon(Icons.chat),
-                  color: _selectedIndex == 0 ? Colors.blue : Colors.grey,
+                  color: _selectedIndex == 0 ? Colors.black : Colors.white,
                   onPressed: () {
                     setState(() {
                       _selectedIndex = 0;
@@ -134,7 +137,7 @@ class _ForumPageState extends State<ForumPage> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.filter_list),
-                  color: _selectedIndex == 1 ? Colors.blue : Colors.grey,
+                  color: _selectedIndex == 1 ? Colors.black : Colors.white,
                   onPressed: () {
                     setState(() {
                       _selectedIndex = 1;
@@ -144,7 +147,7 @@ class _ForumPageState extends State<ForumPage> {
                 ),
                 IconButton(
                   icon: const Icon(Icons.star),
-                  color: _selectedIndex == 2 ? Colors.blue : Colors.grey,
+                  color: _selectedIndex == 2 ? Colors.black : Colors.white,
                   onPressed: () {
                     setState(() {
                       _selectedIndex = 2;

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
+import 'package:safe_streets/home/edit_user_details_page.dart';
 import 'package:safe_streets/home/start_page.dart';
 
+import '../authentication/auth_gate.dart';
+import '../info_pages/email_sender.dart';
 import '../info_pages/forum_page.dart';
+import '../info_pages/settings_page.dart';
 import '../info_pages/support_page.dart';
 import 'dds_map.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,91 +31,180 @@ class HomeScreen extends StatelessWidget {
                     ),
                     actions: [
                       SignedOutAction((context) {
-                        Navigator.of(context).pop();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AuthGate()));
                       })
                     ],
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Card(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(Icons.place, size: 48),
-                                  SizedBox(height: 20),
-                                  Text('10', style: TextStyle(fontSize: 18)),
-                                  Text('DangerPoints',
-                                      style: TextStyle(fontSize: 10)),
-                                ],
-                              ),
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(children: [
+                          IntrinsicHeight(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  child: Card(
+                                    elevation: 4,
+                                    color: Colors.blue,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      side: const BorderSide(
+                                        color: Colors.blue,
+                                        width: 2,
+                                        style: BorderStyle.solid,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          Icon(Icons.place, size: 48),
+                                          SizedBox(height: 20),
+                                          Text('10',
+                                              style: TextStyle(fontSize: 18)),
+                                          Padding(
+                                            padding: EdgeInsets.all(4.0),
+                                            child: Text('DangerPoints',
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  fit: FlexFit.tight,
+                                  child: Card(
+                                    elevation: 4,
+                                    color: Colors.blue,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      side: const BorderSide(
+                                        color: Colors.blue,
+                                        width: 2,
+                                        style: BorderStyle.solid,
+                                      ),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          Icon(Icons.place_outlined, size: 48),
+                                          SizedBox(height: 20),
+                                          Text('2',
+                                              style: TextStyle(fontSize: 18)),
+                                          Text('RecommendationPoints',
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold)),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            Card(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(Icons.place_outlined, size: 48),
-                                  SizedBox(height: 20),
-                                  Text('2', style: TextStyle(fontSize: 18)),
-                                  Text('RecommendationPoints',
-                                      style: TextStyle(fontSize: 10)),
-                                ],
+                          ),
+                          const Divider(),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => SettingsPage(
+                                                  notificationsEnabled: true,
+                                                  selectedThemeIndex: 0,
+                                                  onToggleNotifications:
+                                                      (bool) {
+                                                    print(
+                                                        "Notification are toggled on: $bool");
+                                                  },
+                                                  themeNames: const [
+                                                    'Light',
+                                                    'Dark',
+                                                    'System'
+                                                  ],
+                                                  onChangeTheme: (int) {
+                                                    print(
+                                                        "Thema was changed to: $int");
+                                                  },
+                                                )));
+                                  },
+                                  child: const Text(
+                                    "Settings",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                child: const Text("Settings"),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const EditUserDetailsPage(
+                                                    name: "Jane Doe",
+                                                    email: "jane.doe@mail.test",
+                                                    phoneNumber:
+                                                        "1234567890")));
+                                  },
+                                  child: const Text(
+                                    "Change User Details",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                child: const Text("Change User Details"),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const EmailSender()));
+                                  },
+                                  child: const Text(
+                                    "Contact Support",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: ElevatedButton(
-                                onPressed: () {},
-                                child: const Text("Contact Support"),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Divider(),
-                      Padding(
-                        padding: const EdgeInsets.all(2),
-                        child: AspectRatio(
-                          aspectRatio: 1,
-                          child: Image.asset('lib/assets/images/logo_big.png'),
-                        ),
+                            ],
+                          ),
+                          const Divider(),
+                          AspectRatio(
+                            aspectRatio: 1,
+                            child:
+                                Image.asset('lib/assets/images/logo_big.png'),
+                          ),
+                        ]),
                       ),
                     ],
                   ),
@@ -123,107 +216,162 @@ class HomeScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Card(
-                    elevation: 5,
-                    borderOnForeground: true,
-                    clipBehavior: Clip.hardEdge,
-                    child: InkWell(
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () => {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ForumPage()))
-                      },
-                      child: Column(
-                        children: const [
-                          Text(
-                            "Forum",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Text(
+                  "«From SafeStreets to safe cities, to safe countries and finally, to the safe world!»",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 32,
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+              const Divider(),
+              IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: Card(
+                        elevation: 8,
+                        color: Colors.blue,
+                        borderOnForeground: true,
+                        clipBehavior: Clip.hardEdge,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: InkWell(
+                            splashColor: Colors.blue.withAlpha(30),
+                            onTap: () => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const ForumPage()))
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: Text(
+                                    "Forum",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                    "Join area chats and discuss points, meet community mates and many more!"),
+                              ],
+                            ),
                           ),
-                          Text(
-                              "Join area chats and discuss points, meet community mates and many more!"),
-                        ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: Card(
+                        elevation: 8,
+                        color: Colors.blue,
+                        borderOnForeground: true,
+                        clipBehavior: Clip.hardEdge,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: InkWell(
+                            splashColor: Colors.blue.withAlpha(30),
+                            onTap: () => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const SupportPage()))
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: const [
+                                Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: Text(
+                                    "Support",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                    "Search for official emergency contacts in your country."),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Navigate to Data Drive Styling map
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const StartPage()));
+                        },
+                        child: const Text(
+                          "Filter-based Map",
+                          style: TextStyle(color: Colors.black),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 5),
-                Expanded(
-                  flex: 1,
-                  child: Card(
-                    elevation: 5,
-                    borderOnForeground: true,
-                    clipBehavior: Clip.hardEdge,
-                    child: InkWell(
-                      splashColor: Colors.blue.withAlpha(30),
-                      onTap: () => {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const SupportPage()))
-                      },
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
-                            "Support",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                          Text(
-                              "Search for official emergency contacts in your country."),
-                        ],
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Navigate to main ranking map
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const DDSMap()));
+                        },
+                        child: const Text(
+                          "Rank-based Map",
+                          style: TextStyle(color: Colors.black),
+                        ),
                       ),
                     ),
                   ),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate to Data Drive Styling map
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const DDSMap()));
-                    },
-                    child: const Text("Filter-based Map"),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate to main ranking map
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const StartPage()));
-                    },
-                    child: const Text("Rank-based Map"),
-                  ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

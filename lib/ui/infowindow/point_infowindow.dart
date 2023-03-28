@@ -64,71 +64,74 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
             ),
             const SizedBox(height: 5.0),
             Card(
-                margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                margin: const EdgeInsets.symmetric(horizontal: 20.0),
                 elevation: 10.0,
                 surfaceTintColor: Colors.white,
-                child: Column(children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(mainType.name,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20.0,
-                                color: mainColor)),
-                      ],
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(mainType.name,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20.0,
+                                  color: mainColor)),
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
+                    Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(widget.title,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14.0,
+                                    color: mainColor)),
+                          ],
+                        )),
+                    Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(widget.title,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14.0,
-                                  color: mainColor)),
+                          Flexible(
+                            child: Text(widget.description,
+                                style: const TextStyle(
+                                  fontSize: 12.0,
+                                )),
+                          ),
                         ],
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Flexible(
-                          child: Text(widget.description,
-                              style: const TextStyle(
-                                fontSize: 12.0,
-                              )),
+                        IconButton(
+                          onPressed: () => {setState(() => widget.votes--)},
+                          icon: const Icon(Icons.remove),
+                          color: Colors.black,
+                          iconSize: 15,
+                        ),
+                        Text(
+                          "Total votes: ${widget.votes}",
+                          style: const TextStyle(fontSize: 10),
+                        ),
+                        IconButton(
+                          onPressed: () => {setState(() => widget.votes++)},
+                          icon: const Icon(Icons.add),
+                          color: Colors.black,
+                          iconSize: 15,
                         ),
                       ],
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        onPressed: () => {setState(() => widget.votes++)},
-                        icon: const Icon(Icons.add),
-                        color: Colors.green,
-                        iconSize: 15,
-                      ),
-                      Text(
-                        "Total votes: ${widget.votes}",
-                        style: const TextStyle(fontSize: 10),
-                      ),
-                      IconButton(
-                        onPressed: () => {setState(() => widget.votes--)},
-                        icon: const Icon(Icons.remove),
-                        color: Colors.red,
-                        iconSize: 15,
-                      ),
-                    ],
-                  ),
-                ])),
+                  ]),
+                )),
           ])),
     );
   }

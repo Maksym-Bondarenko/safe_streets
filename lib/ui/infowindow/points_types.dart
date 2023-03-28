@@ -131,7 +131,8 @@ enum RecommendationPoint implements MapPoint {
   culturalReligiousSpecifics,
   badTransport,
   attentionToBelongings,
-  crowdedEvent;
+  crowdedEvent,
+  other;
 
   @override
   String get type {
@@ -165,13 +166,32 @@ enum RecommendationPoint implements MapPoint {
         return 'Attention to your belongings';
       case RecommendationPoint.crowdedEvent:
         return 'Crowded event';
+      case RecommendationPoint.other:
+        return 'Other';
       default:
         return 'Other';
     }
   }
 
   @override
-  String get markerSrc => "lib/assets/marker/information_point_marker.png";
+  String get markerSrc {
+    switch (this) {
+      case RecommendationPoint.intrusivePeople:
+        return "lib/assets/marker/intrusive_people_point_marker.png";
+      case RecommendationPoint.culturalReligiousSpecifics:
+        return "lib/assets/marker/cultural_specifies_point_marker.png";
+      case RecommendationPoint.badTransport:
+        return "lib/assets/marker/bad_transport_point_marker.png";
+      case RecommendationPoint.attentionToBelongings:
+        return "lib/assets/marker/attention_belongings_point_marker.png";
+      case RecommendationPoint.crowdedEvent:
+        return "lib/assets/marker/crowd_point_marker.png";
+      case RecommendationPoint.other:
+        return "lib/assets/marker/information_point_marker.png";
+      default:
+        return "lib/assets/marker/information_point_marker.png";
+    }
+  }
 }
 
 extension RecommendationPointDetails on RecommendationPoint {
