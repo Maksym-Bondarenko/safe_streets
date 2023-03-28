@@ -25,6 +25,18 @@ def get_all_users():
     return jsonify(users)
 
 
+# get user by firebase id
+@app.route("/get/users")
+def get_users_by_firebase_id():
+    args = request.args.to_dict()
+    firebase_id = args.get('firebase_id')
+    if firebase_id is None:
+        return jsonify({'status': 'not found', 'message': 'provide firebase_id'})
+    result = db_client.get_users(firebase_id)
+    users = [asdict(User(**row)) for row in result]
+    return jsonify(users)
+
+
 # delete by id or firebase id
 @app.route("/delete/user", methods=['POST'])
 def delete_user():
@@ -64,12 +76,12 @@ def delete_place():
     return jsonify({'status': 'success'})
 
 
-
 @app.route("/update/place/likes", methods=['POST'])
 def update_place_like():
     data = request.get_json()
     db_client.update_like(data['id'])
     return jsonify({'status': 'success'})
+
 
 @app.route("/update/place/dislikes", methods=['POST'])
 def update_place_dislike():

@@ -33,6 +33,14 @@ class DBConnector(object):
             return db_conn.execute(
                 sqlalchemy.text("SELECT id, firebase_id, full_name, email,  created_at from users")).fetchall()
 
+    def get_users(self, firebase_id):
+        q = f"""
+        SELECT id, firebase_id, full_name, email,  created_at from users where firebase_id = '{firebase_id}'
+        """
+        with self.pool.connect() as db_conn:
+            return db_conn.execute(
+                sqlalchemy.text(q)).fetchall()
+
     def get_all_places(self, main_type, sub_type, firebase_user_id):
         q = "SELECT id, firebase_user_id, title, main_type, sub_type, n_likes, n_dislikes, comment, lat, long, created_at from places"
         if (main_type is not None) and (sub_type is not None):
