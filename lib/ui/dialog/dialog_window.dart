@@ -2,6 +2,9 @@ import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'dart:ui' as ui;
 
@@ -94,6 +97,61 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
             LatLng(latitude, longitude));
       },
     ));
+  }
+
+  Future<void> createAndSavePoint(LatLng latLng, MainType mainType,
+      MapPoint subType, String title, String description) async {
+    var latitude = latLng.latitude;
+    var longitude = latLng.longitude;
+    var markerId = "$mainType-$subType-$latitude-$longitude-$title";
+    var votes = 0;
+
+    // change a marker according to type of dangerous-point
+    await _getBytesFromAsset(subType.markerSrc, 150).then((onValue) {
+      customMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
+    });
+
+    widget.updateMarkers(Marker(
+      markerId: MarkerId(markerId),
+      position: LatLng(latitude, longitude),
+      icon: customMarkerIcon,
+      onTap: () {
+        widget.customInfoWindowController.addInfoWindow!(
+            PointInfoWindow(
+                mainType: _mainType,
+                subType: _subType,
+                title: title,
+                description: description,
+                votes: votes),
+            LatLng(latitude, longitude));
+      },
+    ));
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    var uid = 'null';
+    if (user != null && user.uid != null) {
+      uid = user.uid;
+    }
+    print("Current user id");
+    print(uid);
+    // var url = Uri.parse("http://34.89.222.17:8080/add/place");
+    // var url = Uri.parse("http://127.0.0.1:8080/add/place");
+    var url = Uri.parse("http://localhost:8080/add/place");
+    final Map<String, dynamic> body = {
+      "firebase_user_id": uid,
+      // "title": "Title",
+      "main_type": mainType.name,
+      "sub_type": subType.name,
+      "comment": description,
+      "lat": latitude,
+      "long": longitude
+    };
+
+    var result = await http.post(url,
+        headers: {"Content-Type": "application/json"}, body: json.encode(body));
+    print(body);
+    print(result.statusCode);
+    print(result.body);
   }
 
   // change default google-marker-icon to custom one
@@ -204,8 +262,8 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Adding a ${_subType.name}...')),
               );
-              // create a DangerPoint with given data
-              createPoint(widget.latLng, _mainType, _subType,
+              // create a DangerPoint with given data and save it in the DB
+              createAndSavePoint(widget.latLng, _mainType, _subType,
                   titleController.value.text, descriptionController.value.text);
               Navigator.of(context).pop();
             } else {
