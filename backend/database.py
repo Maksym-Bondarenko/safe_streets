@@ -34,7 +34,7 @@ class DBConnector(object):
                 sqlalchemy.text("SELECT id, firebase_id, full_name, email,  created_at from users")).fetchall()
 
     def get_all_places(self, main_type, sub_type, firebase_user_id):
-        q = "SELECT id, firebase_user_id, main_type, sub_type, n_likes, n_dislikes, comment, lat, long, created_at from places"
+        q = "SELECT id, firebase_user_id, title, main_type, sub_type, n_likes, n_dislikes, comment, lat, long, created_at from places"
         if (main_type is not None) and (sub_type is not None):
             q += f" where main_type = '{main_type}' and sub_type='{sub_type}' "
         if (main_type is None) and (sub_type is not None):
@@ -62,8 +62,8 @@ class DBConnector(object):
 
     def add_location(self, place: Place):
         query = f"""
-        Insert into places (firebase_user_id, main_type, sub_type, comment, lat, long) values 
-                             ('{place.firebase_user_id}', '{place.main_type}', '{place.sub_type}',
+        Insert into places (firebase_user_id, title, main_type, sub_type, comment, lat, long) values 
+                             ('{place.firebase_user_id}', '{place.title}','{place.main_type}', '{place.sub_type}',
                              '{place.comment}', '{place.lat}', '{place.long}')   
         """
         with self.pool.connect() as db_conn:

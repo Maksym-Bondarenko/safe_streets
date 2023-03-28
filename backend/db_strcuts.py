@@ -25,6 +25,7 @@ class User:
 class Place:
     id: int
     firebase_user_id: str
+    title: str
     main_type: str
     sub_type: str
     n_likes: int
