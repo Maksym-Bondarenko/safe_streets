@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_info_window/custom_info_window.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import '../ui/custom_app_bar.dart';
 import '../ui/dialog/dialog_window.dart';
@@ -57,6 +60,9 @@ class _StartPage extends State<StartPage> {
   ];
 
   final Map<String, Marker> _policeMarkers = {};
+  final Set<Marker> _dangerPointsMarkers = {};
+  final Set<Marker> _safePointsMarkers = {};
+  final Set<Marker> _recommendationPointsMarkers = {};
 
   @override
   initState() {
@@ -77,36 +83,154 @@ class _StartPage extends State<StartPage> {
 
     // fetch safePoints (police stations)
     final offices = await locations.getGoogleOffices();
+    var url = Uri.parse("http://localhost:8080/get/all_places");
+    var points = [];
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        points = json.decode(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
     setState(() {
       _policeMarkers.clear();
+      _dangerPointsMarkers.clear();
+      _safePointsMarkers.clear();
+      _recommendationPointsMarkers.clear();
       for (final office in offices.offices) {
         final marker = Marker(
-          markerId: MarkerId(office.id),
-          position: LatLng(office.lat, office.lng),
-          icon: safeMarkerIcon,
-          infoWindow: InfoWindow(
-            title: office.name,
-            snippet: office.address,
-          ),
-          onTap: () => {
-            customInfoWindowController.addInfoWindow!(
-              PointInfoWindow(
-                mainType: MainType.safePoint,
-                subType: SafePoint.police,
-                title: office.name,
-                description: "Address: ${office.address},\nPhone: ${office.phone}",
-                votes: 0
-              ),
-              LatLng(office.lat, office.lng)
-            )
-          }
-        );
+            markerId: MarkerId(office.id),
+            position: LatLng(office.lat, office.lng),
+            icon: safeMarkerIcon,
+            infoWindow: InfoWindow(
+              title: office.name,
+              snippet: office.address,
+            ),
+            onTap: () => {
+                  customInfoWindowController.addInfoWindow!(
+                      PointInfoWindow(
+                          mainType: MainType.safePoint,
+                          subType: SafePoint.police,
+                          title: office.name,
+                          description:
+                              "Address: ${office.address},\nPhone: ${office.phone}",
+                          votes: 0),
+                      LatLng(office.lat, office.lng))
+                });
         _policeMarkers[office.name] = marker;
       }
-
+      for (final point in points) {
+        var mainType = getMainType(point["main_type"]);
+        var subType = getSubType(point["sub_type"], point["main_type"]);
+        var latLng =
+            LatLng(double.parse(point["lat"]), double.parse(point["long"]));
+        var latitude = latLng.latitude;
+        var longitude = latLng.longitude;
+        var title = point["title"];
+        var description = point["comment"];
+        var markerId = "$mainType-$subType-$latitude-$longitude-$title";
+        var icon = BitmapDescriptor.defaultMarker;
+        final marker = Marker(
+            markerId: MarkerId(markerId),
+            position: latLng,
+            icon: icon,
+            onTap: () => {
+                  customInfoWindowController.addInfoWindow!(
+                      PointInfoWindow(
+                          mainType: mainType,
+                          subType: subType,
+                          title: title,
+                          description: description,
+                          votes: 0),
+                      latLng)
+                });
+        switch (mainType) {
+          case MainType.dangerPoint:
+            _dangerPointsMarkers.add(marker);
+            break;
+          case MainType.recommendationPoint:
+            _recommendationPointsMarkers.add(marker);
+            break;
+          case MainType.safePoint:
+            _safePointsMarkers.add(marker);
+        }
+      }
+      //add prefetched points from the DB to the map
+      dangerPointsMarkers.addAll(_dangerPointsMarkers);
+      safePointsMarkers.addAll(_safePointsMarkers);
+      recommendationPointsMarkers.addAll(_recommendationPointsMarkers);
       // add police stations to set of safe points
       safePointsMarkers.addAll(_policeMarkers.values.toSet());
     });
+  }
+
+  // static Future<Uint8List?> _getBytesFromAsset(String path, int width) async {
+  //   ByteData data = await rootBundle.load(path);
+  //   ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+  //       targetWidth: width);
+  //   ui.FrameInfo fi = await codec.getNextFrame();
+  //   return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
+  //       ?.buffer
+  //       .asUint8List();
+  // }
+
+  MainType getMainType(String mainType) {
+    switch (mainType) {
+      case "Danger Point":
+        return MainType.dangerPoint;
+      case "Recommendation Point":
+        return MainType.recommendationPoint;
+      case "Safe Point":
+        return MainType.safePoint;
+      default:
+        return MainType.dangerPoint;
+    }
+  }
+
+  MapPoint getSubType(String subType, String mainType) {
+    switch (subType) {
+      //Danger Points
+      case "Dark Street":
+        return DangerPoint.lightPoint;
+      case "Dirty Place":
+        return DangerPoint.cleanlinessPoint;
+      case "Dangerous People":
+        return DangerPoint.peoplePoint;
+      case "Wild Animals":
+        return DangerPoint.animalsPoint;
+      case "Bad Road":
+        return DangerPoint.roadPoint;
+      case "Danger for Children":
+        return DangerPoint.childrenPoint;
+      case "Uncomfortable Surroundings":
+        return DangerPoint.surroundingsPoint;
+      //Recommendation Points
+      case "Intrusive people":
+        return RecommendationPoint.intrusivePeople;
+      case "Cultural or religious specifics":
+        return RecommendationPoint.culturalReligiousSpecifics;
+      case "Bad transport connections":
+        return RecommendationPoint.badTransport;
+      case "Attention to your belongings":
+        return RecommendationPoint.attentionToBelongings;
+      case "Crowded event":
+        return RecommendationPoint.crowdedEvent;
+      //SafePoint
+      case "Police Station":
+        return SafePoint.police;
+      case "Restaurant":
+        return SafePoint.restaurant;
+      case "Grocery Store":
+        return SafePoint.grocery;
+      case "Other":
+        if (mainType == "Danger Point") {
+          return DangerPoint.otherPoint;
+        }
+        return RecommendationPoint.other;
+      default:
+        return DangerPoint.otherPoint;
+    }
   }
 
   // change default google-marker-icon to custom one

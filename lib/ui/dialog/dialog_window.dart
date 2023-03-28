@@ -129,29 +129,31 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
     var uid = 'null';
-    if (user != null && user.uid != null) {
+    if (user != null) {
       uid = user.uid;
     }
-    print("Current user id");
-    print(uid);
+    // print("Current user id");
+    // print(uid);
     // var url = Uri.parse("http://34.89.222.17:8080/add/place");
     // var url = Uri.parse("http://127.0.0.1:8080/add/place");
     var url = Uri.parse("http://localhost:8080/add/place");
     final Map<String, dynamic> body = {
-      "firebase_user_id": uid,
-      // "title": "Title",
+      // "firebase_user_id": uid,
+      "firebase_user_id": "qW72BlAKI3a5ygWEZMcHsJjParn1",
+      "title": title,
       "main_type": mainType.name,
       "sub_type": subType.name,
       "comment": description,
       "lat": latitude,
       "long": longitude
     };
-
-    var result = await http.post(url,
-        headers: {"Content-Type": "application/json"}, body: json.encode(body));
-    print(body);
-    print(result.statusCode);
-    print(result.body);
+    try {
+      await http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: json.encode(body));
+    } catch (e) {
+      print(e);
+    }
   }
 
   // change default google-marker-icon to custom one
