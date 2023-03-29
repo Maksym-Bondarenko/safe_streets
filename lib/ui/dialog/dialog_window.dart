@@ -158,18 +158,21 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
     };
     //check if user is saved in the DB
     try {
+      var host = "34.89.169.182";
+      // uncomment for testing with local server
+      // host = "localhost";
       var response = await http
-          .get(Uri.parse("http://localhost:8080/get/users?firebase_id=${uid}"));
+          .get(Uri.parse("http://${host}:8080/get/users?firebase_id=${uid}"));
 
       // print("${response.statusCode} and body: '${response.body}'");
       if (response.statusCode == 200 && response.body == "[]\n") {
-        await http.post(Uri.parse("http://localhost:8080/add/user"),
+        await http.post(Uri.parse("http://${host}:8080/add/user"),
             headers: {"Content-Type": "application/json"},
             body: json.encode(user_body));
 
         // print("User id ${uid} and email ${email} and name ${name}");
       }
-      response = await http.post(Uri.parse("http://localhost:8080/add/place"),
+      response = await http.post(Uri.parse("http://${host}:8080/add/place"),
           headers: {"Content-Type": "application/json"},
           body: json.encode(place_body));
       // print(response.statusCode);

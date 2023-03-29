@@ -99,10 +99,13 @@ class _StartPage extends State<StartPage> {
       print(e);
     }
 
+    var host = "34.89.169.182";
+    // uncomment for testing with local server
+    // host = "localhost";
     var points = [];
     try {
       final response =
-          await http.get(Uri.parse("http://localhost:8080/get/all_places"));
+          await http.get(Uri.parse("http://${host}:8080/get/all_places"));
       if (response.statusCode == 200) {
         points = json.decode(response.body);
       }
