@@ -37,7 +37,7 @@ class _StartPage extends State<StartPage> {
       target: _kMapGarchingCenter, zoom: 17.0, tilt: 0, bearing: 0);
 
   final CustomInfoWindowController customInfoWindowController =
-  CustomInfoWindowController();
+      CustomInfoWindowController();
 
   Completer<GoogleMapController> _googleMapController = Completer();
 
@@ -82,44 +82,89 @@ class _StartPage extends State<StartPage> {
     });
 
     // fetch safePoints (police stations)
-    final offices = await locations.getGoogleOffices();
-    var url = Uri.parse("http://localhost:8080/get/all_places");
+    // final offices = await locations.getGoogleOffices();
+    var police_stations = [];
+    final munich_center_lat = 48.1351;
+    final munich_center_long = 11.582;
+    final garching_lat = 48.14;
+    final garching_long = 11.67;
+    final api_key = "AIzaSyBOUh5JXj3j97dKR55KnpSmp9xPX0AzoVk";
+    try {
+      final response = await http.get(Uri.parse(
+          "https://maps.googleapis.com/maps/api/place/search/json?location=${garching_lat},${garching_long}8&rankby=distance&types=police&sensor=false&key=${api_key}"));
+      // print(response.statusCode);
+      // print(json.decode(response.body)["results"]);
+      police_stations = json.decode(response.body)["results"];
+    } catch (e) {
+      print(e);
+    }
+
     var points = [];
     try {
-      final response = await http.get(url);
+      final response =
+          await http.get(Uri.parse("http://localhost:8080/get/all_places"));
       if (response.statusCode == 200) {
         points = json.decode(response.body);
       }
     } catch (e) {
       print(e);
     }
+
     setState(() async {
       _policeMarkers.clear();
       _dangerPointsMarkers.clear();
       _safePointsMarkers.clear();
       _recommendationPointsMarkers.clear();
-      for (final office in offices.offices) {
+      for (final police_station in police_stations) {
+        var id = police_station["place_id"];
+        var latitude = police_station["geometry"]["location"]["lat"];
+        var longitude = police_station["geometry"]["location"]["lng"];
+        var address = police_station["vicinity"];
+        var name = police_station["name"];
+        print(
+            "NAME ${name} ADDRESS ${address} lat ${latitude} long ${longitude}");
         final marker = Marker(
-            markerId: MarkerId(office.id),
-            position: LatLng(office.lat, office.lng),
+            markerId: MarkerId(id),
+            position: LatLng(latitude, longitude),
             icon: safeMarkerIcon,
             infoWindow: InfoWindow(
-              title: office.name,
-              snippet: office.address,
+              title: name,
+              snippet: address,
             ),
             onTap: () => {
                   customInfoWindowController.addInfoWindow!(
                       PointInfoWindow(
                           mainType: MainType.safePoint,
                           subType: SafePoint.police,
-                          title: office.name,
-                          description:
-                              "Address: ${office.address},\nPhone: ${office.phone}",
+                          title: name,
+                          description: "Address: ${address}",
                           votes: 0),
-                      LatLng(office.lat, office.lng))
+                      LatLng(latitude, longitude))
                 });
-        _policeMarkers[office.name] = marker;
+        _policeMarkers[name] = marker;
       }
+      // for (final office in offices.offices) {
+      //   final marker = Marker(
+      //       markerId: MarkerId(office.id),
+      //       position: LatLng(office.lat, office.lng),
+      //       icon: safeMarkerIcon,
+      //       infoWindow: InfoWindow(
+      //         title: office.name,
+      //         snippet: office.address,
+      //       ),
+      //       onTap: () => {
+      //             customInfoWindowController.addInfoWindow!(
+      //                 PointInfoWindow(
+      //                     mainType: MainType.safePoint,
+      //                     subType: SafePoint.police,
+      //                     title: office.name,
+      //                     description:
+      //                         "Address: ${office.address},\nPhone: ${office.phone}",
+      //                     votes: 0),
+      //                 LatLng(office.lat, office.lng))
+      //           });
+      //   _policeMarkers[office.name] = marker;
+      // }
       for (final point in points) {
         var mainType = getMainType(point["main_type"]);
         var subType = getSubType(point["sub_type"], point["main_type"]);
@@ -260,14 +305,16 @@ class _StartPage extends State<StartPage> {
         .asUint8List();
   }
 
-  Future<void> showInformationDialog(LatLng latLng,
-      BuildContext context) async {
-
+  Future<void> showInformationDialog(
+      LatLng latLng, BuildContext context) async {
     return await showDialog(
         context: context,
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
-            return CreatePointWindow(latLng: latLng, customInfoWindowController: customInfoWindowController, updateMarkers: (marker) => addCustomMarker(marker));
+            return CreatePointWindow(
+                latLng: latLng,
+                customInfoWindowController: customInfoWindowController,
+                updateMarkers: (marker) => addCustomMarker(marker));
           });
         });
   }
@@ -277,15 +324,15 @@ class _StartPage extends State<StartPage> {
   void addCustomMarker(Marker marker) {
     // add marker according to its category (DangerPoint or InformationPoint)
     setState(() {
-      if(marker.markerId.value.startsWith("MainType.dangerPoint")) {
+      if (marker.markerId.value.startsWith("MainType.dangerPoint")) {
         dangerPointsMarkers.add(marker);
-      } else if(marker.markerId.value.startsWith("MainType.recommendationPoint")) {
+      } else if (marker.markerId.value
+          .startsWith("MainType.recommendationPoint")) {
         recommendationPointsMarkers.add(marker);
       }
       updatePointsVisibility();
     });
   }
-
 
   // set visibility of different types of points on the map, based on current settings
   updatePointsVisibility() {
@@ -335,104 +382,105 @@ class _StartPage extends State<StartPage> {
     return Scaffold(
       appBar: const CustomAppBar(title: 'SafeStreets'),
       body: SafeArea(
-        child: Stack(children: [
-          GoogleMap(
-            onMapCreated: _onMapCreated,
-            onLongPress: (LatLng latLng) async =>
-              await showInformationDialog(latLng, context),
-            onTap: (position) {
-              customInfoWindowController.hideInfoWindow!();
-            },
-            onCameraMove: (position) {
-              customInfoWindowController.onCameraMove!();
-            },
-            mapType: MapType.normal,
-            initialCameraPosition: _kInitialPosition,
-            markers: currentlyActiveMarkers,
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-            compassEnabled: true,
-            trafficEnabled: false,
-            mapToolbarEnabled: true,
-            buildingsEnabled: true,
-            rotateGesturesEnabled: true,
-            scrollGesturesEnabled: true,
-            zoomControlsEnabled: true,
-            zoomGesturesEnabled: true,
-            tiltGesturesEnabled: true,
-          ),
-          CustomInfoWindow(
-            controller: customInfoWindowController,
-            width: 300,
-            height: 300,
-            offset: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ToggleButtons(
-                  direction: Axis.vertical,
-                  onPressed: (int index) {
-                    // All buttons are selectable.
-                    setState(() {
-                      _selectedFilters[index] = !_selectedFilters[index];
-                      updatePointsVisibility();
-                    });
-                  },
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  selectedBorderColor: Colors.blue[700],
-                  selectedColor: Colors.white,
-                  fillColor: Colors.blue[200],
-                  color: Colors.blue[400],
-                  constraints: const BoxConstraints(
-                    minHeight: 50.0,
-                    minWidth: 50.0,
-                  ),
-                  isSelected: _selectedFilters,
-                  children: filters,
-                ),
-              ],
+        child: Stack(
+          children: [
+            GoogleMap(
+              onMapCreated: _onMapCreated,
+              onLongPress: (LatLng latLng) async =>
+                  await showInformationDialog(latLng, context),
+              onTap: (position) {
+                customInfoWindowController.hideInfoWindow!();
+              },
+              onCameraMove: (position) {
+                customInfoWindowController.onCameraMove!();
+              },
+              mapType: MapType.normal,
+              initialCameraPosition: _kInitialPosition,
+              markers: currentlyActiveMarkers,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              compassEnabled: true,
+              trafficEnabled: false,
+              mapToolbarEnabled: true,
+              buildingsEnabled: true,
+              rotateGesturesEnabled: true,
+              scrollGesturesEnabled: true,
+              zoomControlsEnabled: true,
+              zoomGesturesEnabled: true,
+              tiltGesturesEnabled: true,
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 30, left: 15),
-            child: Align(
-              alignment: Alignment.bottomLeft,
-              child: SpeedDial(
-                animatedIcon: AnimatedIcons.menu_arrow,
-                animatedIconTheme: const IconThemeData(size: 25.0),
-                backgroundColor: Colors.blue[600],
-                visible: true,
-                direction: SpeedDialDirection.up,
-                curve: Curves.fastOutSlowIn,
+            CustomInfoWindow(
+              controller: customInfoWindowController,
+              width: 300,
+              height: 300,
+              offset: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SpeedDialChild(
-                    child: const Icon(Icons.sos, color: Colors.white),
-                    backgroundColor: Colors.blue,
-                    onTap: () => print('Pressed SOS'),
-                    label: 'SOS',
-                    labelStyle: const TextStyle(
-                        fontWeight: FontWeight.w500, color: Colors.white),
-                    labelBackgroundColor: Colors.black,
-                  ),
-                  SpeedDialChild(
-                    child: const Icon(Icons.share_location,
-                        color: Colors.white),
-                    backgroundColor: Colors.blue,
-                    onTap: () => print('Pressed Share Location'),
-                    label: 'Share Location',
-                    labelStyle: const TextStyle(
-                        fontWeight: FontWeight.w500, color: Colors.white),
-                    labelBackgroundColor: Colors.black,
+                  ToggleButtons(
+                    direction: Axis.vertical,
+                    onPressed: (int index) {
+                      // All buttons are selectable.
+                      setState(() {
+                        _selectedFilters[index] = !_selectedFilters[index];
+                        updatePointsVisibility();
+                      });
+                    },
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
+                    selectedBorderColor: Colors.blue[700],
+                    selectedColor: Colors.white,
+                    fillColor: Colors.blue[200],
+                    color: Colors.blue[400],
+                    constraints: const BoxConstraints(
+                      minHeight: 50.0,
+                      minWidth: 50.0,
+                    ),
+                    isSelected: _selectedFilters,
+                    children: filters,
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.only(bottom: 30, left: 15),
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: SpeedDial(
+                  animatedIcon: AnimatedIcons.menu_arrow,
+                  animatedIconTheme: const IconThemeData(size: 25.0),
+                  backgroundColor: Colors.blue[600],
+                  visible: true,
+                  direction: SpeedDialDirection.up,
+                  curve: Curves.fastOutSlowIn,
+                  children: [
+                    SpeedDialChild(
+                      child: const Icon(Icons.sos, color: Colors.white),
+                      backgroundColor: Colors.blue,
+                      onTap: () => print('Pressed SOS'),
+                      label: 'SOS',
+                      labelStyle: const TextStyle(
+                          fontWeight: FontWeight.w500, color: Colors.white),
+                      labelBackgroundColor: Colors.black,
+                    ),
+                    SpeedDialChild(
+                      child:
+                          const Icon(Icons.share_location, color: Colors.white),
+                      backgroundColor: Colors.blue,
+                      onTap: () => print('Pressed Share Location'),
+                      label: 'Share Location',
+                      labelStyle: const TextStyle(
+                          fontWeight: FontWeight.w500, color: Colors.white),
+                      labelBackgroundColor: Colors.black,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
