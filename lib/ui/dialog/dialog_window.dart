@@ -129,17 +129,26 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
     var uid = 'null';
+    var email = 'null';
+    var name = 'null';
     if (user != null) {
       uid = user.uid;
+      email = user.email.toString();
+      name = user.displayName.toString();
     }
+
+    final Map<String, dynamic> user_body = {
+      "firebase_id": uid,
+      "full_name": name,
+      "email": email
+    };
     // print("Current user id");
     // print(uid);
     // var url = Uri.parse("http://34.89.222.17:8080/add/place");
     // var url = Uri.parse("http://127.0.0.1:8080/add/place");
-    var url = Uri.parse("http://localhost:8080/add/place");
-    final Map<String, dynamic> body = {
+    final Map<String, dynamic> place_body = {
       // "firebase_user_id": uid,
-      "firebase_user_id": "qW72BlAKI3a5ygWEZMcHsJjParn1",
+      "firebase_user_id": uid,
       "title": title,
       "main_type": mainType.name,
       "sub_type": subType.name,
@@ -147,10 +156,24 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
       "lat": latitude,
       "long": longitude
     };
+    //check if user is saved in the DB
     try {
-      await http.post(url,
+      var response = await http
+          .get(Uri.parse("http://localhost:8080/get/users?firebase_id=${uid}"));
+
+      // print("${response.statusCode} and body: '${response.body}'");
+      if (response.statusCode == 200 && response.body == "[]\n") {
+        await http.post(Uri.parse("http://localhost:8080/add/user"),
+            headers: {"Content-Type": "application/json"},
+            body: json.encode(user_body));
+
+        // print("User id ${uid} and email ${email} and name ${name}");
+      }
+      response = await http.post(Uri.parse("http://localhost:8080/add/place"),
           headers: {"Content-Type": "application/json"},
-          body: json.encode(body));
+          body: json.encode(place_body));
+      // print(response.statusCode);
+      // print(response.body);
     } catch (e) {
       print(e);
     }
