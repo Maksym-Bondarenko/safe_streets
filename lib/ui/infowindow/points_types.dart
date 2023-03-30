@@ -224,6 +224,10 @@ enum SafePoint implements MapPoint {
     switch (this) {
       case SafePoint.restaurant:
         return 'Restaurant';
+      case SafePoint.grocery:
+        return 'Grocery Store';
+      case SafePoint.police:
+        return 'Police Station';
       default:
         return 'Other';
     }
