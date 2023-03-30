@@ -20,17 +20,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           width: MediaQuery.of(context).size.width,
         ),
         AppBar(
-          title: Text(
-            title,
-            style: const TextStyle(color: Colors.black),
-          ),
+          title: Text(title),
           centerTitle: true,
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back,
-              color: Colors.black,
             ),
             onPressed: () {
               Navigator.of(context).pop();

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,12 +8,9 @@ import 'package:custom_info_window/custom_info_window.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import '../ui/custom_app_bar.dart';
 import '../ui/dialog/dialog_window.dart';
 
 import 'dart:ui' as ui;
-
-import '../src/locations.dart' as locations;
 
 import '../ui/infowindow/point_infowindow.dart';
 import '../ui/infowindow/points_types.dart';
@@ -31,32 +27,29 @@ class _StartPage extends State<StartPage> {
   BitmapDescriptor safeMarkerIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor touristicMarkerIcon = BitmapDescriptor.defaultMarker;
 
-  static final LatLng _kMapGarchingCenter = LatLng(48.249521, 11.653154);
+  static const LatLng _kMapMunichCenter = LatLng(48.1351, 11.582);
 
-  static final CameraPosition _kInitialPosition = CameraPosition(
-      target: _kMapGarchingCenter, zoom: 17.0, tilt: 0, bearing: 0);
+  static const CameraPosition _kInitialPosition = CameraPosition(
+      target: _kMapMunichCenter, zoom: 10.0, tilt: 0, bearing: 0);
 
   final CustomInfoWindowController customInfoWindowController =
       CustomInfoWindowController();
 
-  Completer<GoogleMapController> _googleMapController = Completer();
+  final Completer<GoogleMapController> _googleMapController = Completer();
 
   Set<Marker> currentlyActiveMarkers = {};
   Set<Marker> dangerPointsMarkers = {};
   Set<Marker> safePointsMarkers = {};
   Set<Marker> recommendationPointsMarkers = {};
 
-  // add nearby police stations to the safe points
-  // TODO
-
   // initial filters (danger-points, safe-points and tourists-points)
-  final List<bool> _selectedFilters = <bool>[true, true, false];
+  final List<bool> _selectedFilters = <bool>[false, false, false];
 
   // visual of ToggleButtons
   static const List<Widget> filters = <Widget>[
     Icon(Icons.notification_important),
-    Icon(Icons.handshake),
     Icon(Icons.question_mark),
+    Icon(Icons.handshake),
   ];
 
   final Map<String, Marker> _policeMarkers = {};
@@ -70,38 +63,33 @@ class _StartPage extends State<StartPage> {
     super.initState();
   }
 
-  // TODO: fetch real data with corresponding sub-type
+  // fetch data from DB with corresponding sub-type and show them on the map
   Future<void> _onMapCreated(GoogleMapController controller) async {
     // set up controllers
     _googleMapController.complete(controller);
     customInfoWindowController.googleMapController = controller;
 
-    getBytesFromAsset('lib/assets/marker/safe_point_marker.png', 150)
+    getBytesFromAsset('lib/assets/marker/safe_point_marker.png', 200)
         .then((onValue) {
       safeMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
     });
 
     // fetch safePoints (police stations)
-    // final offices = await locations.getGoogleOffices();
-    var police_stations = [];
-    final munich_center_lat = 48.1351;
-    final munich_center_long = 11.582;
-    final garching_lat = 48.14;
-    final garching_long = 11.67;
-    final api_key = "AIzaSyBOUh5JXj3j97dKR55KnpSmp9xPX0AzoVk";
+    var policeStations = [];
+    const munichCenterLat = 48.1351;
+    const munichCenterLong = 11.582;
+    const apiKey = "AIzaSyBOUh5JXj3j97dKR55KnpSmp9xPX0AzoVk";
     try {
       final response = await http.get(Uri.parse(
-          "https://maps.googleapis.com/maps/api/place/search/json?location=${garching_lat},${garching_long}8&rankby=distance&types=police&sensor=false&key=${api_key}"));
-      // print(response.statusCode);
-      // print(json.decode(response.body)["results"]);
-      police_stations = json.decode(response.body)["results"];
+          "https://maps.googleapis.com/maps/api/place/search/json?location=${munichCenterLat},${munichCenterLong}8&rankby=distance&types=police&sensor=false&key=${apiKey}"));
+      policeStations = json.decode(response.body)["results"];
     } catch (e) {
       print(e);
     }
 
-    var host = "34.89.169.182";
+    var host = "34.159.7.34";
     // uncomment for testing with local server
-    // host = "localhost";
+    //host = "localhost";
     var points = [];
     try {
       final response =
@@ -113,91 +101,78 @@ class _StartPage extends State<StartPage> {
       print(e);
     }
 
-    setState(() async {
+    // clear all markers
+    setState(() {
       _policeMarkers.clear();
       _dangerPointsMarkers.clear();
       _safePointsMarkers.clear();
       _recommendationPointsMarkers.clear();
-      for (final police_station in police_stations) {
-        var id = police_station["place_id"];
-        var latitude = police_station["geometry"]["location"]["lat"];
-        var longitude = police_station["geometry"]["location"]["lng"];
-        var address = police_station["vicinity"];
-        var name = police_station["name"];
-        print(
-            "NAME ${name} ADDRESS ${address} lat ${latitude} long ${longitude}");
-        final marker = Marker(
-            markerId: MarkerId(id),
-            position: LatLng(latitude, longitude),
-            icon: safeMarkerIcon,
-            infoWindow: InfoWindow(
-              title: name,
-              snippet: address,
-            ),
-            onTap: () => {
-                  customInfoWindowController.addInfoWindow!(
-                      PointInfoWindow(
-                          mainType: MainType.safePoint,
-                          subType: SafePoint.police,
-                          title: name,
-                          description: "Address: ${address}",
-                          votes: 0),
-                      LatLng(latitude, longitude))
-                });
-        _policeMarkers[name] = marker;
-      }
-      // for (final office in offices.offices) {
-      //   final marker = Marker(
-      //       markerId: MarkerId(office.id),
-      //       position: LatLng(office.lat, office.lng),
-      //       icon: safeMarkerIcon,
-      //       infoWindow: InfoWindow(
-      //         title: office.name,
-      //         snippet: office.address,
-      //       ),
-      //       onTap: () => {
-      //             customInfoWindowController.addInfoWindow!(
-      //                 PointInfoWindow(
-      //                     mainType: MainType.safePoint,
-      //                     subType: SafePoint.police,
-      //                     title: office.name,
-      //                     description:
-      //                         "Address: ${office.address},\nPhone: ${office.phone}",
-      //                     votes: 0),
-      //                 LatLng(office.lat, office.lng))
-      //           });
-      //   _policeMarkers[office.name] = marker;
-      // }
-      for (final point in points) {
-        var mainType = getMainType(point["main_type"]);
-        var subType = getSubType(point["sub_type"], point["main_type"]);
-        var latLng =
-            LatLng(double.parse(point["lat"]), double.parse(point["long"]));
-        var latitude = latLng.latitude;
-        var longitude = latLng.longitude;
-        var title = point["title"];
-        var description = point["comment"];
-        var markerId = "$mainType-$subType-$latitude-$longitude-$title";
-        var customMarkerIcon = BitmapDescriptor.defaultMarker;
-        var icon = BitmapDescriptor.defaultMarker;
-        await _getBytesFromAsset(subType.markerSrc, 150).then((onValue) {
-          customMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
-        });
+    });
 
-        final marker = Marker(
-            markerId: MarkerId(markerId),
-            position: latLng,
-            icon: customMarkerIcon,
-            onTap: () => {
-                  customInfoWindowController.addInfoWindow!(
-                      PointInfoWindow(
-                          mainType: mainType,
-                          subType: subType,
-                          title: title,
-                          description: description,
-                          votes: 0),
-                      latLng)
-                });
+    for (final policeStation in policeStations) {
+      var id = policeStation["place_id"];
+      var latitude = policeStation["geometry"]["location"]["lat"];
+      var longitude = policeStation["geometry"]["location"]["lng"];
+      var address = policeStation["vicinity"];
+      var name = policeStation["name"];
+      print(
+          "NAME ${name} ADDRESS ${address} lat ${latitude} long ${longitude}");
+      final marker = Marker(
+          markerId: MarkerId(id),
+          position: LatLng(latitude, longitude),
+          icon: safeMarkerIcon,
+          onTap: () => {
+                customInfoWindowController.addInfoWindow!(
+                    PointInfoWindow(
+                        mainType: MainType.safePoint,
+                        subType: SafePoint.police,
+                        title: name,
+                        description: "Address: ${address}",
+                        votes: 0),
+                    LatLng(latitude, longitude))
+              });
+
+      // add each police-office
+      setState(() {
+        _policeMarkers[name] = marker;
+        // add police stations to set of safe points
+        safePointsMarkers.addAll(_policeMarkers.values.toSet());
+      });
+    }
+
+    // add all custom made points (DangerPoints and RecommendationPoints)
+    for (final point in points) {
+      var mainType = getMainType(point["main_type"]);
+      var subType = getSubType(point["sub_type"], point["main_type"]);
+      var latLng =
+          LatLng(double.parse(point["lat"]), double.parse(point["long"]));
+      var latitude = latLng.latitude;
+      var longitude = latLng.longitude;
+      var title = point["title"];
+      var description = point["comment"];
+      var markerId = "$mainType-$subType-$latitude-$longitude-$title";
+      var customMarkerIcon = BitmapDescriptor.defaultMarker;
+      await _getBytesFromAsset(subType.markerSrc, 150).then((onValue) {
+        customMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
+      });
+
+      final marker = Marker(
+          markerId: MarkerId(markerId),
+          position: latLng,
+          icon: customMarkerIcon,
+          onTap: () => {
+                customInfoWindowController.addInfoWindow!(
+                    PointInfoWindow(
+                        mainType: mainType,
+                        subType: subType,
+                        title: title,
+                        description: description,
+                        votes: 0),
+                    latLng)
+              });
+
+      // add teach point to the set
+      setState(() {
         switch (mainType) {
           case MainType.dangerPoint:
             _dangerPointsMarkers.add(marker);
@@ -208,25 +183,16 @@ class _StartPage extends State<StartPage> {
           case MainType.safePoint:
             _safePointsMarkers.add(marker);
         }
-      }
-      //add prefetched points from the DB to the map
+      });
+    }
+
+    //add prefetched points from the DB to the map
+    setState(() {
       dangerPointsMarkers.addAll(_dangerPointsMarkers);
       safePointsMarkers.addAll(_safePointsMarkers);
       recommendationPointsMarkers.addAll(_recommendationPointsMarkers);
-      // add police stations to set of safe points
-      safePointsMarkers.addAll(_policeMarkers.values.toSet());
     });
   }
-
-  // static Future<Uint8List?> _getBytesFromAsset(String path, int width) async {
-  //   ByteData data = await rootBundle.load(path);
-  //   ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-  //       targetWidth: width);
-  //   ui.FrameInfo fi = await codec.getNextFrame();
-  //   return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
-  //       ?.buffer
-  //       .asUint8List();
-  // }
 
   // change default google-marker-icon to custom one
   static Future<Uint8List?> _getBytesFromAsset(String path, int width) async {
@@ -239,6 +205,7 @@ class _StartPage extends State<StartPage> {
         .asUint8List();
   }
 
+  // TODO: move to points-file
   MainType getMainType(String mainType) {
     switch (mainType) {
       case "Danger Point":
@@ -252,6 +219,7 @@ class _StartPage extends State<StartPage> {
     }
   }
 
+  // TODO: move to points-file
   MapPoint getSubType(String subType, String mainType) {
     switch (subType) {
       //Danger Points
@@ -354,6 +322,19 @@ class _StartPage extends State<StartPage> {
     }
     if (_selectedFilters[1]) {
       setState(() {
+        // show recommendation points
+        currentlyActiveMarkers =
+            currentlyActiveMarkers.union(recommendationPointsMarkers);
+      });
+    } else {
+      setState(() {
+        // hide recommendation points
+        currentlyActiveMarkers =
+            currentlyActiveMarkers.difference(recommendationPointsMarkers);
+      });
+    }
+    if (_selectedFilters[2]) {
+      setState(() {
         // show safe points
         currentlyActiveMarkers =
             currentlyActiveMarkers.union(safePointsMarkers);
@@ -365,25 +346,14 @@ class _StartPage extends State<StartPage> {
             currentlyActiveMarkers.difference(safePointsMarkers);
       });
     }
-    if (_selectedFilters[2]) {
-      setState(() {
-        // show touristic points
-        currentlyActiveMarkers =
-            currentlyActiveMarkers.union(recommendationPointsMarkers);
-      });
-    } else {
-      setState(() {
-        // hide touristic points
-        currentlyActiveMarkers =
-            currentlyActiveMarkers.difference(recommendationPointsMarkers);
-      });
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'SafeStreets'),
+      appBar: AppBar(
+        title: const Text('SafeStreets'),
+      ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -419,7 +389,7 @@ class _StartPage extends State<StartPage> {
               offset: 10,
             ),
             Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.only(top: 50.0, left: 10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -463,7 +433,10 @@ class _StartPage extends State<StartPage> {
                     SpeedDialChild(
                       child: const Icon(Icons.sos, color: Colors.white),
                       backgroundColor: Colors.blue,
-                      onTap: () => print('Pressed SOS'),
+                      onTap: () {
+                        // TODO: implement functionality
+                        print('Pressed SOS');
+                      },
                       label: 'SOS',
                       labelStyle: const TextStyle(
                           fontWeight: FontWeight.w500, color: Colors.white),
@@ -473,7 +446,10 @@ class _StartPage extends State<StartPage> {
                       child:
                           const Icon(Icons.share_location, color: Colors.white),
                       backgroundColor: Colors.blue,
-                      onTap: () => print('Pressed Share Location'),
+                      onTap: () {
+                        // TODO: implement functionality
+                        print('Pressed Share Location');
+                      },
                       label: 'Share Location',
                       labelStyle: const TextStyle(
                           fontWeight: FontWeight.w500, color: Colors.white),

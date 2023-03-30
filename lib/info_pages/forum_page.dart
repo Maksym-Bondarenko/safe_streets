@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../ui/custom_app_bar.dart';
-
 class CardItem {
   final String title;
   final String subtitle;
@@ -44,13 +42,13 @@ class _ForumPageState extends State<ForumPage> {
         });
       } else {
         List<CardItem> tempList = [];
-        _cardItems.forEach((cardItem) {
+        for (var cardItem in _cardItems) {
           if (cardItem.title
               .toLowerCase()
               .contains(_searchController.text.toLowerCase())) {
             tempList.add(cardItem);
           }
-        });
+        }
         setState(() {
           _filteredCardItems = tempList;
         });
@@ -61,8 +59,7 @@ class _ForumPageState extends State<ForumPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(title: const Text('Forum')),
-      appBar: const CustomAppBar(title: 'Forum'),
+      appBar: AppBar(title: const Text('Forum')),
       body: Column(
         children: [
           Container(

@@ -78,7 +78,7 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
     var votes = 0;
 
     // change a marker according to type of dangerous-point
-    await _getBytesFromAsset(subType.markerSrc, 150).then((onValue) {
+    await _getBytesFromAsset(subType.markerSrc, 200).then((onValue) {
       customMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
     });
 
@@ -107,7 +107,7 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
     var votes = 0;
 
     // change a marker according to type of dangerous-point
-    await _getBytesFromAsset(subType.markerSrc, 150).then((onValue) {
+    await _getBytesFromAsset(subType.markerSrc, 200).then((onValue) {
       customMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
     });
 
@@ -144,7 +144,7 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
     };
     // print("Current user id");
     // print(uid);
-    // var url = Uri.parse("http://34.89.222.17:8080/add/place");
+    // var url = Uri.parse("http://34.159.7.34:8080/add/place");
     // var url = Uri.parse("http://127.0.0.1:8080/add/place");
     final Map<String, dynamic> place_body = {
       // "firebase_user_id": uid,
@@ -158,9 +158,9 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
     };
     //check if user is saved in the DB
     try {
-      var host = "34.89.169.182";
+      var host = "34.159.7.34";
       // uncomment for testing with local server
-      // host = "localhost";
+      //host = "localhost";
       var response = await http
           .get(Uri.parse("http://${host}:8080/get/users?firebase_id=${uid}"));
 

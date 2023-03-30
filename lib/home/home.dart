@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:safe_streets/home/edit_user_details_page.dart';
 import 'package:safe_streets/home/start_page.dart';
+import 'package:safe_streets/info_pages/faq_page.dart';
 
 import '../authentication/auth_gate.dart';
 import '../info_pages/email_sender.dart';
@@ -11,7 +12,7 @@ import '../info_pages/support_page.dart';
 import 'dds_map.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +50,8 @@ class HomeScreen extends StatelessWidget {
                                 Flexible(
                                   fit: FlexFit.tight,
                                   child: Card(
-                                    elevation: 4,
-                                    color: Colors.blue,
+                                    elevation: 10,
+                                    color: Colors.white,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                       side: const BorderSide(
@@ -85,8 +86,8 @@ class HomeScreen extends StatelessWidget {
                                 Flexible(
                                   fit: FlexFit.tight,
                                   child: Card(
-                                    elevation: 4,
-                                    color: Colors.blue,
+                                    elevation: 10,
+                                    color: Colors.white,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10),
                                       side: const BorderSide(
@@ -165,8 +166,9 @@ class HomeScreen extends StatelessWidget {
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 const EditUserDetailsPage(
-                                                    name: "Jane Doe",
-                                                    email: "jane.doe@mail.test",
+                                                    name: "Keira",
+                                                    email:
+                                                        "kiralovessmile@gmail.com",
                                                     phoneNumber:
                                                         "1234567890")));
                                   },
@@ -198,6 +200,26 @@ class HomeScreen extends StatelessWidget {
                               ),
                             ],
                           ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const FaqPage()));
+                                  },
+                                  child: const Text(
+                                    "FAQs",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                           const Divider(),
                           AspectRatio(
                             aspectRatio: 1,
@@ -223,31 +245,37 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Padding(
-                padding: EdgeInsets.all(12.0),
+                padding: EdgeInsets.only(bottom: 80.0),
                 child: Text(
-                  "«From SafeStreets to safe cities, to safe countries and finally, to the safe world!»",
-                  textAlign: TextAlign.center,
+                  "From\nSafe Streets\nto safe cities,\ncountries, and\nthe world!",
+                  textAlign: TextAlign.start,
                   style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.bold,
                     fontSize: 32,
-                    color: Colors.grey,
+                    color: Colors.blue,
                   ),
                 ),
               ),
               const Divider(),
               IntrinsicHeight(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Flexible(
                       fit: FlexFit.tight,
                       child: Card(
-                        elevation: 8,
-                        color: Colors.blue,
+                        elevation: 12,
+                        color: Colors.white,
                         borderOnForeground: true,
                         clipBehavior: Clip.hardEdge,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: const BorderSide(
+                            color: Colors.blue,
+                            width: 2.0,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: InkWell(
@@ -284,10 +312,18 @@ class HomeScreen extends StatelessWidget {
                     Flexible(
                       fit: FlexFit.tight,
                       child: Card(
-                        elevation: 8,
-                        color: Colors.blue,
+                        elevation: 12,
+                        color: Colors.white,
                         borderOnForeground: true,
                         clipBehavior: Clip.hardEdge,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: const BorderSide(
+                            color: Colors.blue,
+                            width: 2.0,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: InkWell(

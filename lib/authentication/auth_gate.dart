@@ -6,7 +6,6 @@ import 'package:flutterfire_ui/auth.dart';
 import '../info_pages/terms_and_conditions.dart';
 import '../intro_slider/intro_slider.dart';
 
-
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
 
@@ -20,11 +19,10 @@ class AuthGate extends StatelessWidget {
             providerConfigs: const [
               EmailProviderConfiguration(),
               GoogleProviderConfiguration(
-                clientId: "721653983645-tf0jcvomt95vakv9o6h8fome21d414bp.apps.googleusercontent.com"
-              ),
+                  clientId:
+                      "721653983645-tf0jcvomt95vakv9o6h8fome21d414bp.apps.googleusercontent.com"),
             ],
-            headerBuilder: (context, constraints, shrinkOffset
-                ) {
+            headerBuilder: (context, constraints, shrinkOffset) {
               return Padding(
                 padding: const EdgeInsets.all(20),
                 child: AspectRatio(
@@ -44,13 +42,12 @@ class AuthGate extends StatelessWidget {
             footerBuilder: (context, action) {
               return Padding(
                 padding: const EdgeInsets.only(top: 16),
-                child:
-                  RichText(
-                    text: TextSpan(
-                      style: const TextStyle(color: Colors.grey),
-                      children: <TextSpan>[
-                        const TextSpan(text: 'By signing in, you agree to our '),
-                        TextSpan(
+                child: RichText(
+                  text: TextSpan(
+                    style: const TextStyle(color: Colors.grey),
+                    children: <TextSpan>[
+                      const TextSpan(text: 'By signing in, you agree to our '),
+                      TextSpan(
                           text: 'Terms and Conditions',
                           style: const TextStyle(color: Colors.blue),
                           recognizer: TapGestureRecognizer()
@@ -58,14 +55,12 @@ class AuthGate extends StatelessWidget {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const TermsAndConditions()
-                                  )
-                              );
-                            }
-                        ),
-                      ],
-                    ),
+                                      builder: (context) =>
+                                          const TermsAndConditions()));
+                            }),
+                    ],
                   ),
+                ),
               );
             },
             sideBuilder: (context, shrinkOffset) {

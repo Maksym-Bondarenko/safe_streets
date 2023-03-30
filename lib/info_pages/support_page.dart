@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../ui/custom_app_bar.dart';
-
 class SupportPage extends StatelessWidget {
   const SupportPage({super.key});
 
@@ -16,7 +14,7 @@ class SupportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Support'),
+      appBar: AppBar(title: const Text('Support')),
       body: Container(
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(

@@ -21,6 +21,7 @@ extension MainTypeDetails on MainType {
     }
   }
 
+  // enable only DangerPoint and RecommendationPoint for manual creation (without SafePoint)
   static List<bool> enabledCustomPoints = [
     true,
     true,
@@ -32,7 +33,9 @@ abstract class MapPoint {
   dynamic get type;
 
   int get colorR => 66;
+
   int get colorG => 133;
+
   int get colorB => 244;
 
   String get markerSrc;
@@ -60,10 +63,12 @@ enum DangerPoint implements MapPoint {
   int get colorR {
     return 219;
   }
+
   @override
   int get colorG {
     return 68;
   }
+
   @override
   int get colorB {
     return 55;
@@ -143,10 +148,12 @@ enum RecommendationPoint implements MapPoint {
   int get colorR {
     return 244;
   }
+
   @override
   int get colorG {
     return 180;
   }
+
   @override
   int get colorB {
     return 0;
@@ -200,7 +207,7 @@ extension RecommendationPointDetails on RecommendationPoint {
   }
 }
 
-// TODO
+// TODO: add another safe-points, possibly with own markers
 enum SafePoint implements MapPoint {
   restaurant,
   police,
@@ -213,8 +220,10 @@ enum SafePoint implements MapPoint {
 
   @override
   int get colorR => 15;
+
   @override
   int get colorG => 157;
+
   @override
   int get colorB => 88;
 

@@ -37,7 +37,7 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
         title: const Text('Edit User Details'),
         actions: [
           IconButton(
-            icon: Icon(Icons.check),
+            icon: const Icon(Icons.check),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 // TODO: Save changes and navigate back to previous screen

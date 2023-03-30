@@ -19,16 +19,13 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
       colorActiveDot: Colors.white,
       onDonePress: () => {
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => HomeScreen()))
+            MaterialPageRoute(builder: (context) => const HomeScreen()))
       },
       onSkipPress: () => {
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => HomeScreen()))
+            MaterialPageRoute(builder: (context) => const HomeScreen()))
       },
-      autoScroll: true,
-      autoScrollInterval: const Duration(seconds: 5),
-      loopAutoScroll: true,
-      pauseAutoPlayOnTouch: true,
+      autoScroll: false,
     );
   }
 
@@ -53,7 +50,7 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
           fontSize: 18,
         ),
         pathImage: "lib/assets/intro/page_1.png",
-        heightImage: 400,
+        heightImage: 250,
         foregroundImageFit: BoxFit.fitHeight,
         colorBegin: Colors.blueAccent,
         colorEnd: Colors.white,
@@ -68,16 +65,16 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
           fontSize: 30,
         ),
         maxLineTitle: 3,
-          textOverFlowTitle: TextOverflow.ellipsis,
+        textOverFlowTitle: TextOverflow.ellipsis,
         description:
             'Simply open the filter-based map and apply what exactly you want to take into account: danger points, recommendations, or safe spaces.\n\n'
             'After that, you will be able to see users’ points on the map or create yours.',
-          styleDescription: const TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-          ),
-          pathImage: "lib/assets/intro/page_2.png",
-        heightImage: 400,
+        styleDescription: const TextStyle(
+          color: Colors.black,
+          fontSize: 18,
+        ),
+        pathImage: "lib/assets/intro/page_2.png",
+        heightImage: 250,
         foregroundImageFit: BoxFit.fitHeight,
         colorBegin: Colors.blueAccent,
         colorEnd: Colors.white,
@@ -101,7 +98,7 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
           fontSize: 18,
         ),
         pathImage: "lib/assets/intro/page_3.png",
-        heightImage: 400,
+        heightImage: 250,
         foregroundImageFit: BoxFit.fitHeight,
         colorBegin: Colors.blueAccent,
         colorEnd: Colors.white,
@@ -118,13 +115,14 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
         maxLineTitle: 3,
         textOverFlowTitle: TextOverflow.ellipsis,
         description:
-            'Worried about whether the new city you are visiting is safe in general? Then, open the rank-based map and observe the colored visualisation of official crime statistics by each of the city areas.\n',
+            'Worried about whether the new city you are visiting is safe in general?\n\n'
+            'Then, open the rank-based map and observe the colored visualisation of official crime statistics by each of the city areas.',
         styleDescription: const TextStyle(
           color: Colors.black,
           fontSize: 18,
         ),
         pathImage: "lib/assets/intro/page_4.png",
-        heightImage: 400,
+        heightImage: 250,
         foregroundImageFit: BoxFit.fitHeight,
         colorBegin: Colors.blueAccent,
         colorEnd: Colors.white,
@@ -148,7 +146,7 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
           fontSize: 18,
         ),
         pathImage: "lib/assets/intro/page_5.png",
-        heightImage: 400,
+        heightImage: 250,
         foregroundImageFit: BoxFit.fitHeight,
         colorBegin: Colors.blueAccent,
         colorEnd: Colors.white,
@@ -168,11 +166,11 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
             'Finally, see how many points you have created on the user profile page. If needed, adjust settings for your account.\n\n'
             'Wishing you a safe journey, good luck!',
         styleDescription: const TextStyle(
-            color: Colors.black,
-            fontSize: 18,
+          color: Colors.black,
+          fontSize: 18,
         ),
         pathImage: "lib/assets/intro/page_6.png",
-        heightImage: 400,
+        heightImage: 250,
         foregroundImageFit: BoxFit.fitHeight,
         colorBegin: Colors.blueAccent,
         colorEnd: Colors.white,

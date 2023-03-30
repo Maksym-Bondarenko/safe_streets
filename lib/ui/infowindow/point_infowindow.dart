@@ -88,11 +88,13 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(widget.title,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14.0,
-                                    color: mainColor)),
+                            Flexible(
+                              child: Text(widget.title,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14.0,
+                                      color: mainColor)),
+                            ),
                           ],
                         )),
                     Padding(

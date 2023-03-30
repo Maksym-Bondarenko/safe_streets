@@ -18,6 +18,7 @@ void main() async {
   runApp(const MyApp());
 }
 
+// !!! ATTENTION: cause an error on iOS !!!
 // Asking for all permissions
 // Future<void> _requestPermissions() async {
 //   // Request permission to access the device's location

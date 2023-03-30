@@ -4,7 +4,7 @@ class SettingsPage extends StatefulWidget {
   final bool notificationsEnabled;
   final int selectedThemeIndex;
   final Function(bool) onToggleNotifications;
-  final void Function(int?)? onChangeTheme; // Updated signature
+  final void Function(int?)? onChangeTheme;
   final List<String> themeNames;
 
   const SettingsPage({
@@ -50,7 +50,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         title: Text(widget.themeNames[index]),
                         value: index,
                         groupValue: widget.selectedThemeIndex,
-                        onChanged: widget.onChangeTheme, // Updated parameter
+                        onChanged: widget.onChangeTheme,
                       ),
                     ),
                   ),
@@ -61,29 +61,17 @@ class _SettingsPageState extends State<SettingsPage> {
           ListTile(
             title: const Text('Language'),
             subtitle: const Text('English'),
-            onTap: () {
-              // TODO: Implement language selection
-            },
+            onTap: () {},
           ),
           ListTile(
             title: const Text('Font Size'),
             subtitle: const Text('Medium'),
-            onTap: () {
-              // TODO: Implement font size selection
-            },
+            onTap: () {},
           ),
-          Divider(),
+          const Divider(),
           ListTile(
             title: const Text('About'),
-            onTap: () {
-              // TODO: Implement about screen
-            },
-          ),
-          ListTile(
-            title: const Text('Logout'),
-            onTap: () {
-              // TODO: Implement logout functionality
-            },
+            onTap: () {},
           ),
         ],
       ),

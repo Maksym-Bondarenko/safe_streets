@@ -22,10 +22,12 @@ class _EmailSenderState extends State<EmailSender> {
     text: 'max.druppy@gmail.com',
   );
 
-  final _subjectController = TextEditingController(text: 'Contact Developers for Support');
+  final _subjectController =
+      TextEditingController(text: 'Contact Developers for Support');
 
   final _bodyController = TextEditingController(
-    text: 'Mail body.',
+    text:
+        'This developer is looking for a internship at Google, feel free to contact him ;-)',
   );
 
   Future<void> send() async {
@@ -192,7 +194,7 @@ class _EmailSenderState extends State<EmailSender> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Failed to create file in applicion directory'),
+          content: Text('Failed to create file in application directory'),
         ),
       );
     }

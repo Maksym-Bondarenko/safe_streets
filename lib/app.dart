@@ -4,6 +4,7 @@ import 'authentication/auth_gate.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: false,
       ),
       home: const AuthGate(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
