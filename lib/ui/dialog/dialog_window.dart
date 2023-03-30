@@ -218,11 +218,16 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
                 ),
                 items: MainType.values
                     .map<DropdownMenuItem<MainType>>((MainType value) {
-                  int index = value.index;
+                  bool disabled = value == MainType.safePoint;
+                  print('$disabled');
                   return DropdownMenuItem<MainType>(
                     value: value,
-                    enabled: MainTypeDetails.enabledCustomPoints[index],
-                    child: Text(value.name),
+                    enabled: !disabled,
+                    child: Text(
+                      value.name,
+                      // TODO: fix this workaround with transparent color: just hide and do not show 'Safe Point'
+                      style: TextStyle(color: disabled ? Colors.transparent : Colors.black),
+                    ),
                   );
                 }).toList(),
                 onChanged: (MainType? value) {

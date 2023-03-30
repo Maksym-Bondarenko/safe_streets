@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_info_window/custom_info_window.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -33,7 +34,7 @@ class _StartPage extends State<StartPage> {
       target: _kMapMunichCenter, zoom: 10.0, tilt: 0, bearing: 0);
 
   final CustomInfoWindowController customInfoWindowController =
-      CustomInfoWindowController();
+  CustomInfoWindowController();
 
   final Completer<GoogleMapController> _googleMapController = Completer();
 
@@ -74,11 +75,11 @@ class _StartPage extends State<StartPage> {
       safeMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
     });
 
-    // fetch safePoints (police stations)
+    // fetch safePoints (police stations) and custom points (DangerPoint and RecommendationPoint)
     var policeStations = [];
     const munichCenterLat = 48.1351;
     const munichCenterLong = 11.582;
-    const apiKey = "AIzaSyBOUh5JXj3j97dKR55KnpSmp9xPX0AzoVk";
+    String? apiKey = dotenv.env['GOOGLE_MAPS_API_KEY'];
     try {
       final response = await http.get(Uri.parse(
           "https://maps.googleapis.com/maps/api/place/search/json?location=${munichCenterLat},${munichCenterLong}8&rankby=distance&types=police&sensor=false&key=${apiKey}"));
@@ -92,8 +93,7 @@ class _StartPage extends State<StartPage> {
     //host = "localhost";
     var points = [];
     try {
-      final response =
-          await http.get(Uri.parse("http://${host}:8080/get/all_places"));
+      final response = await http.get(Uri.parse("http://${host}:8080/get/all_places"));
       if (response.statusCode == 200) {
         points = json.decode(response.body);
       }
@@ -121,16 +121,17 @@ class _StartPage extends State<StartPage> {
           markerId: MarkerId(id),
           position: LatLng(latitude, longitude),
           icon: safeMarkerIcon,
-          onTap: () => {
-                customInfoWindowController.addInfoWindow!(
-                    PointInfoWindow(
-                        mainType: MainType.safePoint,
-                        subType: SafePoint.police,
-                        title: name,
-                        description: "Address: ${address}",
-                        votes: 0),
-                    LatLng(latitude, longitude))
-              });
+          onTap: () =>
+          {
+            customInfoWindowController.addInfoWindow!(
+                PointInfoWindow(
+                    mainType: MainType.safePoint,
+                    subType: SafePoint.police,
+                    title: name,
+                    description: "Address: ${address}",
+                    votes: 0),
+                LatLng(latitude, longitude))
+          });
 
       // add each police-office
       setState(() {
@@ -145,7 +146,7 @@ class _StartPage extends State<StartPage> {
       var mainType = getMainType(point["main_type"]);
       var subType = getSubType(point["sub_type"], point["main_type"]);
       var latLng =
-          LatLng(double.parse(point["lat"]), double.parse(point["long"]));
+      LatLng(double.parse(point["lat"]), double.parse(point["long"]));
       var latitude = latLng.latitude;
       var longitude = latLng.longitude;
       var title = point["title"];
@@ -160,16 +161,17 @@ class _StartPage extends State<StartPage> {
           markerId: MarkerId(markerId),
           position: latLng,
           icon: customMarkerIcon,
-          onTap: () => {
-                customInfoWindowController.addInfoWindow!(
-                    PointInfoWindow(
-                        mainType: mainType,
-                        subType: subType,
-                        title: title,
-                        description: description,
-                        votes: 0),
-                    latLng)
-              });
+          onTap: () =>
+          {
+            customInfoWindowController.addInfoWindow!(
+                PointInfoWindow(
+                    mainType: mainType,
+                    subType: subType,
+                    title: title,
+                    description: description,
+                    votes: 0),
+                latLng)
+          });
 
       // add teach point to the set
       setState(() {
@@ -222,7 +224,7 @@ class _StartPage extends State<StartPage> {
   // TODO: move to points-file
   MapPoint getSubType(String subType, String mainType) {
     switch (subType) {
-      //Danger Points
+    //Danger Points
       case "Dark Street":
         return DangerPoint.lightPoint;
       case "Dirty Place":
@@ -237,7 +239,7 @@ class _StartPage extends State<StartPage> {
         return DangerPoint.childrenPoint;
       case "Uncomfortable Surroundings":
         return DangerPoint.surroundingsPoint;
-      //Recommendation Points
+    //Recommendation Points
       case "Intrusive people":
         return RecommendationPoint.intrusivePeople;
       case "Cultural or religious specifics":
@@ -248,7 +250,7 @@ class _StartPage extends State<StartPage> {
         return RecommendationPoint.attentionToBelongings;
       case "Crowded event":
         return RecommendationPoint.crowdedEvent;
-      //SafePoint
+    //SafePoint
       case "Police Station":
         return SafePoint.police;
       case "Restaurant":
@@ -276,8 +278,8 @@ class _StartPage extends State<StartPage> {
         .asUint8List();
   }
 
-  Future<void> showInformationDialog(
-      LatLng latLng, BuildContext context) async {
+  Future<void> showInformationDialog(LatLng latLng,
+      BuildContext context) async {
     return await showDialog(
         context: context,
         builder: (context) {
@@ -360,7 +362,7 @@ class _StartPage extends State<StartPage> {
             GoogleMap(
               onMapCreated: _onMapCreated,
               onLongPress: (LatLng latLng) async =>
-                  await showInformationDialog(latLng, context),
+              await showInformationDialog(latLng, context),
               onTap: (position) {
                 customInfoWindowController.hideInfoWindow!();
               },
@@ -444,7 +446,7 @@ class _StartPage extends State<StartPage> {
                     ),
                     SpeedDialChild(
                       child:
-                          const Icon(Icons.share_location, color: Colors.white),
+                      const Icon(Icons.share_location, color: Colors.white),
                       backgroundColor: Colors.blue,
                       onTap: () {
                         // TODO: implement functionality

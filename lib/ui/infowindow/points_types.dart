@@ -20,13 +20,6 @@ extension MainTypeDetails on MainType {
         return 'Danger Point';
     }
   }
-
-  // enable only DangerPoint and RecommendationPoint for manual creation (without SafePoint)
-  static List<bool> enabledCustomPoints = [
-    true,
-    true,
-    false,
-  ];
 }
 
 abstract class MapPoint {

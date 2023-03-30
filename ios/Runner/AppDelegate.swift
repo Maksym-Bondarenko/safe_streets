@@ -10,8 +10,7 @@ import GoogleMaps  // for google-maps api
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
 
-    // TODO: Add your Google Maps API key
-    GMSServices.provideAPIKey("AIzaSyBOUh5JXj3j97dKR55KnpSmp9xPX0AzoVk")
+    GMSServices.provideAPIKey(Bundle.main.object(forInfoDictionaryKey:"googleMapsApiKey") as? String ?? "");
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
