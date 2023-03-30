@@ -1,0 +1,8 @@
+[core]
+account = chernov.andrey.998@gmail.com
+project = peak-ranger-379221
+
+[compute]
+zone = europe-west3-b
+region = europe-west3
+

@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package SafeCity;
+
+message GenericResponse {
+  string status = 1;
+  string message = 2;
+}
+
+message User{
+  uint32 id = 1;
+  string full_name = 2;
+  string email = 3;
+  optional int32 city_id = 4;
+}
+
+message BadPlace{
+  uint32 id = 1;
+  uint32 user_id = 2;
+  double lat = 3;
+  double long = 4;
+  string comment = 5;
+  uint32 rating = 6;
+}
+
+message Empty {}
+
+message UserList {
+  repeated User users = 1;
+}
+
+message BadPlaceList {
+  repeated BadPlace BadPlaces = 1;
+}
+
+service SafeCityService {
+  rpc AddUser(User) returns (GenericResponse) {}
+  rpc UpdateUser(User) returns (GenericResponse) {}
+  rpc GetAllUsers(Empty) returns (UserList) {}
+
+  rpc AddBadPlace(BadPlace) returns (GenericResponse) {}
+  rpc UpdateBadPlace(BadPlace) returns (GenericResponse) {}
+  rpc DeleteBadPlace(BadPlace) returns (GenericResponse) {}
+  rpc GetAllBadPlaces(Empty) returns (BadPlaceList) {}
+}
