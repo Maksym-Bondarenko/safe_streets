@@ -1,4 +1,4 @@
-# 🗺️ safe_streets
+# 🗺️ safeStreets
 
 Safe Streets assists women, children, seniors, and other groups that don’t feel safe while getting
 around the city on their own.
@@ -33,26 +33,6 @@ support emergency contacts. Also, there is a space for user profile settings and
 administrative features.
 
 Watch our [You-Tube video](https://youtu.be/pJbVnoq-iaQ) to get the overview of our app!
-
-## 💻 Technologies used
-
-For the proof of concept, we built a 3-tier application on the Google cloud platform. The
-presentation layer was built on Flutter. For the business logic tier, we launched a docker container
-on a VM instance using Flask Python. Finally, the database is a PostgreSQL server, which is stored
-in Cloud SQL. The connection between the frontend and the backend was implemented using the REST
-API.
-Before deploying an application to production, we are going to transfer the backend server to Google
-Kubernetes Engine. Since users will update danger points frequently, we will deploy an in-memory
-database for the points.
-
-* [Flutter](https://flutter.dev/) - The framework used
-* [Dart](https://dart.dev/) - The language used
-* [Flask Python](https://flask.palletsprojects.com) - For backend
-* [PostgreSQL](https://www.postgresql.org/) - For Database
-* [Docker](https://www.docker.com/) - For running Server in a container
-* [Google Maps API](https://cloud.google.com/maps-platform/) - For maps and location services
-* [Firebase](https://firebase.google.com/) - For authentication
-* [Google Cloud Platform](https://cloud.google.com/) - For cloud services
 
 ## 🚀 Getting Started
 
@@ -114,6 +94,26 @@ for instructions on how to do this.):
   Also, you need to change the API key in the source code in the file `start_page.dart`, by adding
   your own key in the `apiKey`-variable in `_onMapCreated()`-function (for fetching the
   police-stations and saved points).
+
+## 💻 Technologies used
+
+For the proof of concept, we built a 3-tier application on the Google cloud platform. The
+presentation layer was built on Flutter. For the business logic tier, we launched a docker container
+on a VM instance using Flask Python. Finally, the database is a PostgreSQL server, which is stored
+in Cloud SQL. The connection between the frontend and the backend was implemented using the REST
+API.
+Before deploying an application to production, we are going to transfer the backend server to Google
+Kubernetes Engine. Since users will update danger points frequently, we will deploy an in-memory
+database for the points.
+
+* [Flutter](https://flutter.dev/) - The framework used
+* [Dart](https://dart.dev/) - The language used
+* [Flask Python](https://flask.palletsprojects.com) - For backend
+* [PostgreSQL](https://www.postgresql.org/) - For Database
+* [Docker](https://www.docker.com/) - For running Server in a container
+* [Google Maps API](https://cloud.google.com/maps-platform/) - For maps and location services
+* [Firebase](https://firebase.google.com/) - For authentication
+* [Google Cloud Platform](https://cloud.google.com/) - For cloud services
 
 ### 🚫 Limitations:
 
