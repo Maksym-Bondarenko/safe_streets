@@ -160,7 +160,7 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
     try {
       var host = "34.159.7.34";
       // TODO: uncomment following line for testing with local server
-      //host = "localhost";
+      host = "localhost";
       var response = await http
           .get(Uri.parse("http://${host}:8080/get/users?firebase_id=${uid}"));
 

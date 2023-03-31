@@ -91,7 +91,7 @@ class _StartPage extends State<StartPage> {
 
     var host = "34.159.7.34";
     // TODO: uncomment following line for testing with local server
-    //host = "localhost";
+    host = "localhost";
     var points = [];
     try {
       final response = await http.get(Uri.parse("http://${host}:8080/get/all_places"));

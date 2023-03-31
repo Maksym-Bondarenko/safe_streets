@@ -7,9 +7,10 @@ around the city on their own.
 
 [![Flutter Version](https://img.shields.io/badge/flutter-3.7.7-blue)](https://flutter.dev/)
 [![Dart Version](https://img.shields.io/badge/dart-2.19.4-blue)](https://dart.dev/)
-[![Flask Version](https://img.shields.io/badge/Flask-v2.1.1-red)](https://flask.palletsprojects.com/en/2.1.x/)
+[![Flask Version](https://img.shields.io/badge/Flask-v1.1.2-red)](https://flask.palletsprojects.com/en/2.1.x/)
+[![Python](https://img.shields.io/badge/Python-v3.7.7-blue)](https://www.python.org/)
 [![PostgreSQL Version](https://img.shields.io/badge/PostgreSQL-v14.1-blue)](https://www.postgresql.org/)
-[![Docker Version](https://img.shields.io/badge/Docker-v20.10.23-blue)](https://www.docker.com/)
+[![Docker Version](https://img.shields.io/badge/Docker-v20.10.17-blue)](https://www.docker.com/)
 [![Firebase](https://img.shields.io/badge/firebase-11.23.1-orange)](https://firebase.google.com/)
 [![Google Maps API](https://img.shields.io/badge/google%20maps-API-red)](https://cloud.google.com/maps-platform/)
 [![Google Cloud Platform](https://img.shields.io/badge/google%20cloud-platform-blue)](https://cloud.google.com/)
@@ -158,6 +159,13 @@ database for the points.
 * [Ekaterina Erofeeva](https://github.com/ekaterina-erofeeva)
 * [Kira Dianova](https://github.com/keira-d)
 
+### 🧪 Tested on:
+
+The application was tested on mobile devices with Android and iOS:
+
+* Android 13 (Xiaomi 11T) - physical device
+* iOS 16.2 (iPhone 12) - emulator
+
 ### 📷 App-Screenshots
 
 There are some of screenshots of SafeStreets-App:
@@ -170,10 +178,3 @@ There are some of screenshots of SafeStreets-App:
 ![Screenshot of SafeStreets](/lib/assets/screenshots/screenshot6_filter-map.jpg "Filter map")
 ![Screenshot of SafeStreets](/lib/assets/screenshots/screenshot7_safe-point.jpg "Safe point")
 ![Screenshot of SafeStreets](/lib/assets/screenshots/screenshot8_point-creation.jpg "point creation")
-
-### 🧪 Tested on:
-
-The application was tested on mobile devices with Android and iOS:
-
-* Android 13 (Xiaomi 11T)
-* iOS 16.2 (iPhone 12)
