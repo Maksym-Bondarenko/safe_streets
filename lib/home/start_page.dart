@@ -79,6 +79,7 @@ class _StartPage extends State<StartPage> {
     var policeStations = [];
     const munichCenterLat = 48.1351;
     const munichCenterLong = 11.582;
+    // TODO: Add your Google Maps API key here
     String? apiKey = dotenv.env['GOOGLE_MAPS_API_KEY'];
     try {
       final response = await http.get(Uri.parse(
@@ -89,7 +90,7 @@ class _StartPage extends State<StartPage> {
     }
 
     var host = "34.159.7.34";
-    // uncomment for testing with local server
+    // TODO: uncomment following line for testing with local server
     //host = "localhost";
     var points = [];
     try {

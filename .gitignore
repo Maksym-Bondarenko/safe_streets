@@ -44,5 +44,5 @@ app.*.map.json
 /android/app/release
 
 # to exclude files with API-keys to be published
-*.env
+api_keys.env
 ios/Flutter/Debug.xcconfig

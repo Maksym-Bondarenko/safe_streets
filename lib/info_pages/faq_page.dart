@@ -9,19 +9,15 @@ class FaqPage extends StatefulWidget {
 
 class _FaqPageState extends State<FaqPage> {
   List<String> questions = [
-    'What is Flutter?',
-    'What are the benefits of using Flutter?',
-    'What programming languages does Flutter use?',
-    'What are Flutter widgets?',
-    'What are Flutter plugins?'
+    'How can the app help you feel safer?',
+    'What is the difference between the two listed types of maps?',
+    'What are three types of points about?',
   ];
 
   List<String> answers = [
-    'Flutter is a mobile app development framework created by Google that allows developers to build high-performance, cross-platform apps for iOS and Android using a single codebase.',
-    'Flutter offers several benefits to developers, including faster development times, hot reload functionality, a wide range of pre-built widgets, and excellent performance on both iOS and Android.',
-    'Flutter uses the Dart programming language, which is also developed by Google. Dart is a modern, object-oriented programming language that is easy to learn and use.',
-    'Flutter widgets are the building blocks of Flutter apps. They are reusable, customizable UI elements that allow developers to create beautiful and responsive user interfaces quickly and easily.',
-    'Flutter plugins are packages of code that provide access to native device features, such as camera or Bluetooth functionality, from within a Flutter app.'
+    'Informative points and rank-based maps (currently are not integrated in our app, as it is under development for Flutter) provide you with information regarding potential danger that might occur while getting around the city on your own.',
+    'Filter-based maps are providing 3 types of informative points, while rank-based maps are showing city areas, divided by different danger colours.',
+    'Danger is a high recommendation to avoid the place. Recommendation is a medium recommendation to be careful. Safe is an open public place, which might be used as a shelter in case of emergency.',
   ];
 
   int _selectedIndex = -1;

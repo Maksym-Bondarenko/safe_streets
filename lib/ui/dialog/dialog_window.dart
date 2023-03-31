@@ -159,7 +159,7 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
     //check if user is saved in the DB
     try {
       var host = "34.159.7.34";
-      // uncomment for testing with local server
+      // TODO: uncomment following line for testing with local server
       //host = "localhost";
       var response = await http
           .get(Uri.parse("http://${host}:8080/get/users?firebase_id=${uid}"));
