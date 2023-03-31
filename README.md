@@ -48,11 +48,11 @@ database for the points.
 * [Flutter](https://flutter.dev/) - The framework used
 * [Dart](https://dart.dev/) - The language used
 * [Flask Python](https://flask.palletsprojects.com) - For backend
-* [PostgreSQL](https://www.postgresql.org/) - for Database
-* [Docker](https://www.docker.com/) - for running Server in container
-* [Google Maps API](https://cloud.google.com/maps-platform/) - Used for maps and location services
-* [Firebase](https://firebase.google.com/) - Used for authentication
-* [Google Cloud Platform](https://cloud.google.com/) - Used for cloud services
+* [PostgreSQL](https://www.postgresql.org/) - For Database
+* [Docker](https://www.docker.com/) - For running Server in a container
+* [Google Maps API](https://cloud.google.com/maps-platform/) - For maps and location services
+* [Firebase](https://firebase.google.com/) - For authentication
+* [Google Cloud Platform](https://cloud.google.com/) - For cloud services
 
 ## 🚀 Getting Started
 
