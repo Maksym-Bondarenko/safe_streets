@@ -33,7 +33,7 @@ After all, the app includes a forum for points discussion and making the area a 
 support emergency contacts. Also, there is a space for user profile settings and other
 administrative features.
 
-Watch our [You-Tube video](https://youtu.be/pJbVnoq-iaQ) to get the overview of our app!
+Watch our [You-Tube video](https://youtu.be/pJbVnoq-iaQ) to get the overview of the app!
 
 ## 🚀 Getting Started
 
@@ -49,7 +49,7 @@ You'll also need to have the following software installed:
   or [Visual Studio Code](https://code.visualstudio.com/) (with Flutter and Dart plugins) for
   development
 * A [Google Cloud Platform](https://cloud.google.com/) account with the
-  Maps [API](https://developers.google.com/maps) and [Firebase](https://firebase.google.com/)
+  [Maps API](https://developers.google.com/maps) and [Firebase](https://firebase.google.com/)
   services enabled
 
 ### 🦿 Installation
@@ -92,6 +92,9 @@ for instructions on how to do this.):
 - `AndroidManifest.xml` (to run on Android devices)
 - `AppDelegate.swift` (to run on iOS devices)
 - `index.html` (to run on web)
+- `index.html` amd `index.js` in `data-driven-styling`-folder (
+  for [data-driven-styling](https://cloud.google.com/blog/products/maps-platform/introducing-data-driven-styling)
+  of the maps)
   Also, you need to change the API key in the source code in the file `start_page.dart`, by adding
   your own key in the `apiKey`-variable in `_onMapCreated()`-function (for fetching the
   police-stations and saved points).
@@ -136,17 +139,19 @@ database for the points.
   to provide a better user experience and more functionality.
 * On the settings-page, add options for changing user preferences such as language, time zone, and
   notification settings.
+* Restructure the source code by dividing it into multiple files and extracting it into reusable
+  components
 * Implement voting for points (dangerPoint, recommendationPoint and safePoint) and logic for their
-  auto-deletion
+  auto-deletion.
 * Add overall information for regions from DDS, containing report details, such as: last criminal
-  rate, amount of thefts; touristic advices for countries
+  rate, amount of thefts; touristic advices for countries.
 * On the change-user-details-page, allow users to update their profile information such as name,
   email address, and profile picture.
 * On the forum-page, add features such as upvoting and downvoting posts, write own posts, and
   sorting posts by popularity, date, or relevance.
 * Improve the user interface and design of all three pages to make them more visually appealing and
   easier to navigate.
-* Provide clustering of map-markers by zoom-out
+* Provide clustering of map-markers by zoom-out.
 * Add unit and integration tests for these pages to ensure that they are functioning correctly and
   to prevent any regressions in functionality.
 * Consider adding support for additional languages to make the website accessible to a wider
