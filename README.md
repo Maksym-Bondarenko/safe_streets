@@ -19,7 +19,9 @@ around the city on their own.
 
 ## 📝 Description
 
-Safe Streets is an app, aiming to solve the 5th and 11th SDGs. The core idea is to help those who do
+Safe Streets is an app, aiming to solve the [5th](https://sdg-tracker.org/gender-equality)
+and [11th](https://sdg-tracker.org/cities) [Sustainable Development Goals](https://www.un.org/sustainabledevelopment/sustainable-development-goals/)
+. The core idea is to help those who do
 not feel safe on the street, especially girls and women, by providing filters (informative points)
 and area-based maps (ranking of crime reports).
 
@@ -36,6 +38,8 @@ support emergency contacts. Also, there is a space for user profile settings and
 administrative features.
 
 Watch our [You-Tube video](https://youtu.be/pJbVnoq-iaQ) to get the overview of the app!
+
+[2023 Solution Challenge | Google Developers](https://developers.google.com/community/gdsc-solution-challenge)
 
 ## 🚀 Getting Started
 
@@ -70,9 +74,9 @@ following commands, while running
 your [Docker Desktop](https://www.docker.com/products/docker-desktop/):
 
 ```
-`docker build .`
-`docker tag <id_of_built_image> run_db`
-`docker run -p 8080:8080 run_db`
+docker build .
+docker tag <id_of_built_image> run_db
+docker run -p 8080:8080 run_db
 ```
 
 Those commands will start the server locally on your machine via docker.
@@ -140,24 +144,30 @@ database for the points.
 
 ### 🔮 Future Work:
 
-* [ ] Updating the current placeholders for the settings-page, change-user-details-page, and forum-page
+* [ ] Updating the current placeholders for the settings-page, change-user-details-page, and
+  forum-page
   to provide a better user experience and more functionality.
-* [ ] On the settings-page, add options for changing user preferences such as language, time zone, and
+* [ ] On the settings-page, add options for changing user preferences such as language, time zone,
+  and
   notification settings.
 * [ ] Restructure the source code by dividing it into multiple files and extracting it into reusable
   components
-* [ ] Implement voting for points (dangerPoint, recommendationPoint and safePoint) and logic for their
+* [ ] Implement voting for points (dangerPoint, recommendationPoint and safePoint) and logic for
+  their
   auto-deletion.
-* [ ] Add overall information for regions from DDS, containing report details, such as: last criminal
+* [ ] Add overall information for regions from DDS, containing report details, such as: last
+  criminal
   rate, amount of thefts; touristic advices for countries.
 * [ ] On the change-user-details-page, allow users to update their profile information such as name,
   email address, and profile picture.
 * [ ] On the forum-page, add features such as upvoting and downvoting posts, write own posts, and
   sorting posts by popularity, date, or relevance.
-* [ ] Improve the user interface and design of all three pages to make them more visually appealing and
+* [ ] Improve the user interface and design of all three pages to make them more visually appealing
+  and
   easier to navigate.
 * [ ] Provide clustering of map-markers by zoom-out.
-* [ ] Add unit and integration tests for these pages to ensure that they are functioning correctly and
+* [ ] Add unit and integration tests for these pages to ensure that they are functioning correctly
+  and
   to prevent any regressions in functionality.
 * [ ] Consider adding support for additional languages to make the website accessible to a wider
   audience.
