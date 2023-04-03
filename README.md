@@ -1,5 +1,7 @@
 # 🗺️ safeStreets
 
+![Logo_SafeStreets](/lib/assets/logos/main_logo_inverted.png "logo")
+
 Safe Streets assists women, children, seniors, and other groups that don’t feel safe while getting
 around the city on their own.
 
@@ -175,11 +177,13 @@ The application was tested on mobile devices with Android and iOS:
 
 There are some of screenshots of SafeStreets-App:
 
-![Screenshot of SafeStreets](/lib/assets/screenshots/screenshot1_intro-slider.jpg "Intro-slider")
-![Screenshot of SafeStreets](/lib/assets/screenshots/screenshot2_main-screen.jpg "Main screen")
-![Screenshot of SafeStreets](/lib/assets/screenshots/screenshot3_dds-map.jpg "DDS map")
-![Screenshot of SafeStreets](/lib/assets/screenshots/screenshot4_user-profile.jpg "User profile")
-![Screenshot of SafeStreets](/lib/assets/screenshots/screenshot5_user-profile.jpg "User profile")
-![Screenshot of SafeStreets](/lib/assets/screenshots/screenshot6_filter-map.jpg "Filter map")
-![Screenshot of SafeStreets](/lib/assets/screenshots/screenshot7_safe-point.jpg "Safe point")
-![Screenshot of SafeStreets](/lib/assets/screenshots/screenshot8_point-creation.jpg "point creation")
+| Title          | Screenshot                                                                                             |
+|----------------|--------------------------------------------------------------------------------------------------------|
+| Intro-slider   | ![Screenshot of SafeStreets1](/lib/assets/screenshots/screenshot1_intro-slider.jpg "Intro-slider")     |
+| Main screen    | ![Screenshot of SafeStreets2](/lib/assets/screenshots/screenshot2_main-screen.jpg "Main screen")       |
+| DDS map        | ![Screenshot of SafeStreets3](/lib/assets/screenshots/screenshot3_dds-map.jpg "DDS map")               |
+| User profile   | ![Screenshot of SafeStreets4](/lib/assets/screenshots/screenshot4_user-profile.jpg "User profile")     |
+| User profile   | ![Screenshot of SafeStreets5](/lib/assets/screenshots/screenshot5_user-profile.jpg "User profile")     |
+| Filter map     | ![Screenshot of SafeStreets6](/lib/assets/screenshots/screenshot6_filter-map.jpg "Filter map")         |
+| Safe point     | ![Screenshot of SafeStreets7](/lib/assets/screenshots/screenshot7_safe-point.jpg "Safe point")         |
+| point creation | ![Screenshot of SafeStreets8](/lib/assets/screenshots/screenshot8_point-creation.jpg "point creation") |
