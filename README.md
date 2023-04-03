@@ -1,11 +1,11 @@
 # 🗺️ safeStreets
 
-![Logo_SafeStreets](/lib/assets/logos/main_logo_inverted.png "logo"){: width=250px }
+<img src="/lib/assets/logos/main_logo_inverted.png" alt="logo" width="250">
 
 Safe Streets assists women, children, seniors, and other groups that don’t feel safe while getting
 around the city on their own.
 
-«From Safe Streets to safe cities, countries and the world!»
+> From Safe Streets to safe cities, countries and the world!
 
 [![Flutter Version](https://img.shields.io/badge/flutter-3.7.7-blue)](https://flutter.dev/)
 [![Dart Version](https://img.shields.io/badge/dart-2.19.4-blue)](https://dart.dev/)
@@ -69,17 +69,20 @@ If you want to start a local server, start Docker, go to the `backend` folder, o
 following commands, while running
 your [Docker Desktop](https://www.docker.com/products/docker-desktop/):
 
-1. `docker build .`
-2. `docker tag <id_of_built_image> run_db`
-3. `docker run -p 8080:8080 run_db`
-   Those commands will start the server locally on your machine via docker.
-   To be able fetch and save the points, you have to change in code `host` variable from its value
-   to `"localhost"` (you need to uncomment some lines of code in `start_page.dart`
-   and `dialog_window.dart`, that are mentioned in
-   comments).
-   You can try (e.g. via [Postman](https://www.postman.com/)) run a
-   get-request: `http://127.0.0.1:8080/get/all_places` and see all
-   already created points.
+```
+`docker build .`
+`docker tag <id_of_built_image> run_db`
+`docker run -p 8080:8080 run_db`
+```
+
+Those commands will start the server locally on your machine via docker.
+To be able fetch and save the points, you have to change in code `host` variable from its value
+to `"localhost"` (you need to uncomment some lines of code in `start_page.dart`
+and `dialog_window.dart`, that are mentioned in
+comments).
+You can try (e.g. via [Postman](https://www.postman.com/)) run a
+get-request: `http://127.0.0.1:8080/get/all_places` and see all
+already created points.
 
 You should now be able to run the app on your emulator or physical device.
 
@@ -137,26 +140,26 @@ database for the points.
 
 ### 🔮 Future Work:
 
-* Updating the current placeholders for the settings-page, change-user-details-page, and forum-page
+* [ ] Updating the current placeholders for the settings-page, change-user-details-page, and forum-page
   to provide a better user experience and more functionality.
-* On the settings-page, add options for changing user preferences such as language, time zone, and
+* [ ] On the settings-page, add options for changing user preferences such as language, time zone, and
   notification settings.
-* Restructure the source code by dividing it into multiple files and extracting it into reusable
+* [ ] Restructure the source code by dividing it into multiple files and extracting it into reusable
   components
-* Implement voting for points (dangerPoint, recommendationPoint and safePoint) and logic for their
+* [ ] Implement voting for points (dangerPoint, recommendationPoint and safePoint) and logic for their
   auto-deletion.
-* Add overall information for regions from DDS, containing report details, such as: last criminal
+* [ ] Add overall information for regions from DDS, containing report details, such as: last criminal
   rate, amount of thefts; touristic advices for countries.
-* On the change-user-details-page, allow users to update their profile information such as name,
+* [ ] On the change-user-details-page, allow users to update their profile information such as name,
   email address, and profile picture.
-* On the forum-page, add features such as upvoting and downvoting posts, write own posts, and
+* [ ] On the forum-page, add features such as upvoting and downvoting posts, write own posts, and
   sorting posts by popularity, date, or relevance.
-* Improve the user interface and design of all three pages to make them more visually appealing and
+* [ ] Improve the user interface and design of all three pages to make them more visually appealing and
   easier to navigate.
-* Provide clustering of map-markers by zoom-out.
-* Add unit and integration tests for these pages to ensure that they are functioning correctly and
+* [ ] Provide clustering of map-markers by zoom-out.
+* [ ] Add unit and integration tests for these pages to ensure that they are functioning correctly and
   to prevent any regressions in functionality.
-* Consider adding support for additional languages to make the website accessible to a wider
+* [ ] Consider adding support for additional languages to make the website accessible to a wider
   audience.
 
 ## 👥 Authors
@@ -191,7 +194,7 @@ There are some of screenshots of SafeStreets-App:
 ## License
 
 This project is licensed under the Apache License, Version 2.0. See
-the [LICENSE](https://github.com/Maksym-Bondarenko/safe_streets/blob/main/LICENSE) file for details.
+the [LICENSE](./LICENSE) file for details.
 
 The Apache License, Version 2.0 is a permissive open source software license that allows you to use,
 modify, and distribute the software for both commercial and non-commercial purposes. Under the terms
