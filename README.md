@@ -1,6 +1,6 @@
 # 🗺️ safeStreets
 
-![Logo_SafeStreets](/lib/assets/logos/main_logo_inverted.png "logo")
+![Logo_SafeStreets](/lib/assets/logos/main_logo_inverted.png "logo"){: width=250px }
 
 Safe Streets assists women, children, seniors, and other groups that don’t feel safe while getting
 around the city on their own.
@@ -187,3 +187,22 @@ There are some of screenshots of SafeStreets-App:
 | Filter map     | ![Screenshot of SafeStreets6](/lib/assets/screenshots/screenshot6_filter-map.jpg "Filter map")         |
 | Safe point     | ![Screenshot of SafeStreets7](/lib/assets/screenshots/screenshot7_safe-point.jpg "Safe point")         |
 | point creation | ![Screenshot of SafeStreets8](/lib/assets/screenshots/screenshot8_point-creation.jpg "point creation") |
+
+## License
+
+This project is licensed under the Apache License, Version 2.0. See
+the [LICENSE](https://github.com/Maksym-Bondarenko/safe_streets/blob/main/LICENSE) file for details.
+
+The Apache License, Version 2.0 is a permissive open source software license that allows you to use,
+modify, and distribute the software for both commercial and non-commercial purposes. Under the terms
+of the Apache License, the software is provided "as is", without warranty of any kind, and the
+copyright holder (the original author or authors of the software) is not liable for any damages
+arising from the use or distribution of the software.
+
+One key feature of the Apache License is its patent license grant, which means that anyone who
+receives the software also receives a license to any patents that are necessary to use the software.
+This provision helps to prevent patent disputes and ensures that the software can be used and
+distributed without fear of patent litigation.
+
+For more information about the Apache License, Version 2.0, please see
+the [official license page](https://www.apache.org/licenses/LICENSE-2.0).
