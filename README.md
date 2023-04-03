@@ -2,10 +2,10 @@
 
 <img src="/lib/assets/logos/main_logo_inverted.png" alt="logo" width="250">
 
+> From Safe Streets to safe cities, countries and the world!
+
 Safe Streets assists women, children, seniors, and other groups that don’t feel safe while getting
 around the city on their own.
-
-> From Safe Streets to safe cities, countries and the world!
 
 [![Flutter Version](https://img.shields.io/badge/flutter-3.7.7-blue)](https://flutter.dev/)
 [![Dart Version](https://img.shields.io/badge/dart-2.19.4-blue)](https://dart.dev/)
@@ -162,13 +162,6 @@ database for the points.
 * [ ] Consider adding support for additional languages to make the website accessible to a wider
   audience.
 
-## 👥 Authors
-
-* [Maksym Bondarenko](https://github.com/Maksym-Bondarenko)
-* [Chernov Andrey](https://github.com/ChernovAndrey)
-* [Ekaterina Erofeeva](https://github.com/ekaterina-erofeeva)
-* [Kira Dianova](https://github.com/keira-d)
-
 ### 🧪 Tested on:
 
 The application was tested on mobile devices with Android and iOS:
@@ -176,9 +169,16 @@ The application was tested on mobile devices with Android and iOS:
 * Android 13 (Xiaomi 11T) - physical device
 * iOS 16.2 (iPhone 12) - emulator
 
-### 📷 App-Screenshots
+## 👥 Authors
 
-There are some of screenshots of SafeStreets-App:
+* [Maksym Bondarenko](https://github.com/Maksym-Bondarenko)
+* [Chernov Andrey](https://github.com/ChernovAndrey)
+* [Ekaterina Erofeeva](https://github.com/ekaterina-erofeeva)
+* [Kira Dianova](https://github.com/keira-d)
+
+## 📷 App-Screenshots
+
+There are some of screenshots of our SafeStreets-App:
 
 | Title          | Screenshot                                                                                             |
 |----------------|--------------------------------------------------------------------------------------------------------|
@@ -191,7 +191,7 @@ There are some of screenshots of SafeStreets-App:
 | Safe point     | ![Screenshot of SafeStreets7](/lib/assets/screenshots/screenshot7_safe-point.jpg "Safe point")         |
 | point creation | ![Screenshot of SafeStreets8](/lib/assets/screenshots/screenshot8_point-creation.jpg "point creation") |
 
-## License
+## ⚖ License
 
 This project is licensed under the Apache License, Version 2.0. See
 the [LICENSE](./LICENSE) file for details.
