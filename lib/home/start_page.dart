@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_info_window/custom_info_window.dart';
@@ -9,12 +8,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../shared/global_functions.dart';
 import '../ui/dialog/dialog_window.dart';
 
-import 'dart:ui' as ui;
-
 import '../ui/infowindow/point_infowindow.dart';
-import '../ui/infowindow/points_types.dart';
+import '../shared/points_types.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -24,9 +22,8 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPage extends State<StartPage> {
-  BitmapDescriptor dangerMarkerIcon = BitmapDescriptor.defaultMarker;
+
   BitmapDescriptor safeMarkerIcon = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor touristicMarkerIcon = BitmapDescriptor.defaultMarker;
 
   static const LatLng _kMapMunichCenter = LatLng(48.1351, 11.582);
 
@@ -43,6 +40,11 @@ class _StartPage extends State<StartPage> {
   Set<Marker> safePointsMarkers = {};
   Set<Marker> recommendationPointsMarkers = {};
 
+  final Map<String, Marker> _policeMarkers = {};
+  final Set<Marker> _dangerPointsMarkers = {};
+  final Set<Marker> _safePointsMarkers = {};
+  final Set<Marker> _recommendationPointsMarkers = {};
+
   // initial filters (danger-points, safe-points and tourists-points)
   final List<bool> _selectedFilters = <bool>[false, false, false];
 
@@ -53,15 +55,10 @@ class _StartPage extends State<StartPage> {
     Icon(Icons.handshake),
   ];
 
-  final Map<String, Marker> _policeMarkers = {};
-  final Set<Marker> _dangerPointsMarkers = {};
-  final Set<Marker> _safePointsMarkers = {};
-  final Set<Marker> _recommendationPointsMarkers = {};
-
   @override
   initState() {
-    updatePointsVisibility();
     super.initState();
+    updatePointsVisibility();
   }
 
   // fetch data from DB with corresponding sub-type and show them on the map
@@ -70,7 +67,7 @@ class _StartPage extends State<StartPage> {
     _googleMapController.complete(controller);
     customInfoWindowController.googleMapController = controller;
 
-    getBytesFromAsset('lib/assets/marker/safe_point_marker.png', 200)
+    getBytesFromAsset('lib/assets/markers/safe_points/safe_point_marker.png', 200)
         .then((onValue) {
       safeMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
     });
@@ -154,7 +151,7 @@ class _StartPage extends State<StartPage> {
       var description = point["comment"];
       var markerId = "$mainType-$subType-$latitude-$longitude-$title";
       var customMarkerIcon = BitmapDescriptor.defaultMarker;
-      await _getBytesFromAsset(subType.markerSrc, 150).then((onValue) {
+      await getBytesFromAsset(subType.markerSrc, 150).then((onValue) {
         customMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
       });
 
@@ -195,88 +192,6 @@ class _StartPage extends State<StartPage> {
       safePointsMarkers.addAll(_safePointsMarkers);
       recommendationPointsMarkers.addAll(_recommendationPointsMarkers);
     });
-  }
-
-  // change default google-marker-icon to custom one
-  static Future<Uint8List?> _getBytesFromAsset(String path, int width) async {
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-        targetWidth: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
-        ?.buffer
-        .asUint8List();
-  }
-
-  // TODO: move to points-file
-  MainType getMainType(String mainType) {
-    switch (mainType) {
-      case "Danger Point":
-        return MainType.dangerPoint;
-      case "Recommendation Point":
-        return MainType.recommendationPoint;
-      case "Safe Point":
-        return MainType.safePoint;
-      default:
-        return MainType.dangerPoint;
-    }
-  }
-
-  // TODO: move to points-file
-  MapPoint getSubType(String subType, String mainType) {
-    switch (subType) {
-    //Danger Points
-      case "Dark Street":
-        return DangerPoint.lightPoint;
-      case "Dirty Place":
-        return DangerPoint.cleanlinessPoint;
-      case "Dangerous People":
-        return DangerPoint.peoplePoint;
-      case "Wild Animals":
-        return DangerPoint.animalsPoint;
-      case "Bad Road":
-        return DangerPoint.roadPoint;
-      case "Danger for Children":
-        return DangerPoint.childrenPoint;
-      case "Uncomfortable Surroundings":
-        return DangerPoint.surroundingsPoint;
-    //Recommendation Points
-      case "Intrusive people":
-        return RecommendationPoint.intrusivePeople;
-      case "Cultural or religious specifics":
-        return RecommendationPoint.culturalReligiousSpecifics;
-      case "Bad transport connections":
-        return RecommendationPoint.badTransport;
-      case "Attention to your belongings":
-        return RecommendationPoint.attentionToBelongings;
-      case "Crowded event":
-        return RecommendationPoint.crowdedEvent;
-    //SafePoint
-      case "Police Station":
-        return SafePoint.police;
-      case "Restaurant":
-        return SafePoint.restaurant;
-      case "Grocery Store":
-        return SafePoint.grocery;
-      case "Other":
-        if (mainType == "Danger Point") {
-          return DangerPoint.otherPoint;
-        }
-        return RecommendationPoint.other;
-      default:
-        return DangerPoint.otherPoint;
-    }
-  }
-
-  // change default google-marker-icon to custom one
-  static Future<Uint8List?> getBytesFromAsset(String path, int width) async {
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-        targetWidth: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
-        ?.buffer
-        .asUint8List();
   }
 
   Future<void> showInformationDialog(LatLng latLng,
@@ -351,6 +266,16 @@ class _StartPage extends State<StartPage> {
     }
   }
 
+  // TODO: implement SOS-functionality
+  void SOSPressed() {
+    print('Pressed SOS');
+  }
+
+  // TODO: implement share location functionality
+  void shareLocation() {
+    print('Pressed Share Location');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -360,106 +285,29 @@ class _StartPage extends State<StartPage> {
       body: SafeArea(
         child: Stack(
           children: [
-            GoogleMap(
-              onMapCreated: _onMapCreated,
-              onLongPress: (LatLng latLng) async =>
-              await showInformationDialog(latLng, context),
-              onTap: (position) {
-                customInfoWindowController.hideInfoWindow!();
-              },
-              onCameraMove: (position) {
-                customInfoWindowController.onCameraMove!();
-              },
-              mapType: MapType.normal,
-              initialCameraPosition: _kInitialPosition,
-              markers: currentlyActiveMarkers,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-              compassEnabled: true,
-              trafficEnabled: false,
-              mapToolbarEnabled: true,
-              buildingsEnabled: true,
-              rotateGesturesEnabled: true,
-              scrollGesturesEnabled: true,
-              zoomControlsEnabled: true,
-              zoomGesturesEnabled: true,
-              tiltGesturesEnabled: true,
-            ),
+            // Google Map widget
+            _buildGoogleMap(),
+
+            // Custom Info Window
             CustomInfoWindow(
               controller: customInfoWindowController,
               width: 300,
               height: 300,
               offset: 10,
             ),
+
+            // Toggle Buttons
             Padding(
               padding: const EdgeInsets.only(top: 50.0, left: 10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  ToggleButtons(
-                    direction: Axis.vertical,
-                    onPressed: (int index) {
-                      // All buttons are selectable.
-                      setState(() {
-                        _selectedFilters[index] = !_selectedFilters[index];
-                        updatePointsVisibility();
-                      });
-                    },
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                    selectedBorderColor: Colors.blue[700],
-                    selectedColor: Colors.white,
-                    fillColor: Colors.blue[200],
-                    color: Colors.blue[400],
-                    constraints: const BoxConstraints(
-                      minHeight: 50.0,
-                      minWidth: 50.0,
-                    ),
-                    isSelected: _selectedFilters,
-                    children: filters,
-                  ),
-                ],
-              ),
+              child: _buildToggleButtons(),
             ),
+
+            // Speed Dial
             Padding(
               padding: const EdgeInsets.only(bottom: 30, left: 15),
               child: Align(
                 alignment: Alignment.bottomLeft,
-                child: SpeedDial(
-                  animatedIcon: AnimatedIcons.menu_arrow,
-                  animatedIconTheme: const IconThemeData(size: 25.0),
-                  backgroundColor: Colors.blue[600],
-                  visible: true,
-                  direction: SpeedDialDirection.up,
-                  curve: Curves.fastOutSlowIn,
-                  children: [
-                    SpeedDialChild(
-                      child: const Icon(Icons.sos, color: Colors.white),
-                      backgroundColor: Colors.blue,
-                      onTap: () {
-                        // TODO: implement functionality
-                        print('Pressed SOS');
-                      },
-                      label: 'SOS',
-                      labelStyle: const TextStyle(
-                          fontWeight: FontWeight.w500, color: Colors.white),
-                      labelBackgroundColor: Colors.black,
-                    ),
-                    SpeedDialChild(
-                      child:
-                      const Icon(Icons.share_location, color: Colors.white),
-                      backgroundColor: Colors.blue,
-                      onTap: () {
-                        // TODO: implement functionality
-                        print('Pressed Share Location');
-                      },
-                      label: 'Share Location',
-                      labelStyle: const TextStyle(
-                          fontWeight: FontWeight.w500, color: Colors.white),
-                      labelBackgroundColor: Colors.black,
-                    ),
-                  ],
-                ),
+                child: _buildSpeedDial(),
               ),
             ),
           ],
@@ -467,4 +315,114 @@ class _StartPage extends State<StartPage> {
       ),
     );
   }
+
+  Widget _buildGoogleMap() {
+    return GoogleMap(
+      // Callback when the map is created
+      onMapCreated: _onMapCreated,
+
+      // Callback when long-pressing on the map
+      onLongPress: (LatLng latLng) async {
+        try {
+          await showInformationDialog(latLng, context);
+        } catch (e) {
+          // Handle the exception
+          print('Error: $e');
+        }
+      },
+
+      // Callback when tapping on the map
+      onTap: (position) {
+        customInfoWindowController.hideInfoWindow!();
+      },
+
+      // Callback when the camera is moved
+      onCameraMove: (position) {
+        customInfoWindowController.onCameraMove!();
+      },
+
+      // Map settings
+      mapType: MapType.normal,
+      initialCameraPosition: _kInitialPosition,
+      markers: currentlyActiveMarkers,
+      myLocationEnabled: true,
+      myLocationButtonEnabled: true,
+      compassEnabled: true,
+      trafficEnabled: false,
+      mapToolbarEnabled: true,
+      buildingsEnabled: true,
+      rotateGesturesEnabled: true,
+      scrollGesturesEnabled: true,
+      zoomControlsEnabled: true,
+      zoomGesturesEnabled: true,
+      tiltGesturesEnabled: true,
+    );
+  }
+
+  Widget _buildToggleButtons() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          // Toggle Buttons for filters
+          ToggleButtons(
+            direction: Axis.vertical,
+            onPressed: (int index) {
+              // All buttons are selectable.
+              setState(() {
+                _selectedFilters[index] = !_selectedFilters[index];
+                updatePointsVisibility();
+              });
+            },
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            selectedBorderColor: Colors.blue[700],
+            selectedColor: Colors.white,
+            fillColor: Colors.blue[200],
+            color: Colors.blue[400],
+            constraints: const BoxConstraints(
+              minHeight: 50.0,
+              minWidth: 50.0,
+            ),
+            isSelected: _selectedFilters,
+            children: filters,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSpeedDial() {
+    return SpeedDial(
+      animatedIcon: AnimatedIcons.menu_arrow,
+      animatedIconTheme: const IconThemeData(size: 25.0),
+      backgroundColor: Colors.blue[600],
+      visible: true,
+      direction: SpeedDialDirection.up,
+      curve: Curves.fastOutSlowIn,
+      children: [
+        // SOS Button
+        SpeedDialChild(
+          child: const Icon(Icons.sos, color: Colors.white),
+          backgroundColor: Colors.blue,
+          onTap: SOSPressed,
+          label: 'SOS',
+          labelStyle: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
+          labelBackgroundColor: Colors.black,
+        ),
+
+        // Share Location Button
+        SpeedDialChild(
+          child: const Icon(Icons.share_location, color: Colors.white),
+          backgroundColor: Colors.blue,
+          onTap: shareLocation,
+          label: 'Share Location',
+          labelStyle: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
+          labelBackgroundColor: Colors.black,
+        ),
+      ],
+    );
+  }
+
 }

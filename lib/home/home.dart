@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'package:safe_streets/home/edit_user_details_page.dart';
+import 'package:safe_streets/info_pages/edit_user_details_page.dart';
 import 'package:safe_streets/home/start_page.dart';
 import 'package:safe_streets/info_pages/faq_page.dart';
 

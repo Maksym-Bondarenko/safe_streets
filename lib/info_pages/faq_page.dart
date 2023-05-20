@@ -8,12 +8,14 @@ class FaqPage extends StatefulWidget {
 }
 
 class _FaqPageState extends State<FaqPage> {
+  // List of questions
   List<String> questions = [
     'How can the app help you feel safer?',
     'What is the difference between the two listed types of maps?',
     'What are three types of points about?',
   ];
 
+  // Corresponding list of answers
   List<String> answers = [
     'Informative points and rank-based maps (currently are not integrated in our app, as it is under development for Flutter) provide you with information regarding potential danger that might occur while getting around the city on your own.',
     'Filter-based maps are providing 3 types of informative points, while rank-based maps are showing city areas, divided by different danger colours.',
@@ -39,6 +41,7 @@ class _FaqPageState extends State<FaqPage> {
               ),
               elevation: 2,
               child: ExpansionTile(
+                // Question title
                 title: Text(
                   questions[index],
                   style: const TextStyle(
@@ -46,6 +49,7 @@ class _FaqPageState extends State<FaqPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                // Expand/collapse callback
                 onExpansionChanged: (bool expanded) {
                   setState(() {
                     _selectedIndex = expanded ? index : -1;
@@ -55,6 +59,7 @@ class _FaqPageState extends State<FaqPage> {
                 children: <Widget>[
                   Padding(
                     padding: const EdgeInsets.all(16.0),
+                    // Answer text
                     child: Text(
                       answers[index],
                       style: const TextStyle(fontSize: 16.0),

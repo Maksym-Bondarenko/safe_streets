@@ -1,15 +1,13 @@
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'dart:ui' as ui;
-
+import '../../shared/global_functions.dart';
 import '../infowindow/point_infowindow.dart';
-import '../infowindow/points_types.dart';
+import '../../shared/points_types.dart';
 
 // opens a Dialog-Window for creating a custom Point (DangerPoint or InformationPoint)
 // each Point-type has different sub-types
@@ -47,6 +45,8 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
   final TextEditingController descriptionController =
       TextEditingController(text: "");
 
+  BitmapDescriptor customMarkerIcon = BitmapDescriptor.defaultMarker;
+
   // set values of `_subType` according to selected `_mainType`
   void _onMainPointTypeSelected(MainType? newValue) {
     setState(() {
@@ -68,37 +68,7 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
     });
   }
 
-  BitmapDescriptor customMarkerIcon = BitmapDescriptor.defaultMarker;
-
-  Future<void> createPoint(LatLng latLng, MainType mainType, MapPoint subType,
-      String title, String description) async {
-    var latitude = latLng.latitude;
-    var longitude = latLng.longitude;
-    var markerId = "$mainType-$subType-$latitude-$longitude-$title";
-    var votes = 0;
-
-    // change a marker according to type of dangerous-point
-    await _getBytesFromAsset(subType.markerSrc, 200).then((onValue) {
-      customMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
-    });
-
-    widget.updateMarkers(Marker(
-      markerId: MarkerId(markerId),
-      position: LatLng(latitude, longitude),
-      icon: customMarkerIcon,
-      onTap: () {
-        widget.customInfoWindowController.addInfoWindow!(
-            PointInfoWindow(
-                mainType: _mainType,
-                subType: _subType,
-                title: title,
-                description: description,
-                votes: votes),
-            LatLng(latitude, longitude));
-      },
-    ));
-  }
-
+  // TODO: rewrite
   Future<void> createAndSavePoint(LatLng latLng, MainType mainType,
       MapPoint subType, String title, String description) async {
     var latitude = latLng.latitude;
@@ -107,7 +77,7 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
     var votes = 0;
 
     // change a marker according to type of dangerous-point
-    await _getBytesFromAsset(subType.markerSrc, 200).then((onValue) {
+    await getBytesFromAsset(subType.markerSrc, 200).then((onValue) {
       customMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
     });
 
@@ -137,7 +107,7 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
       name = user.displayName.toString();
     }
 
-    final Map<String, dynamic> user_body = {
+    final Map<String, dynamic> userBody = {
       "firebase_id": uid,
       "full_name": name,
       "email": email
@@ -146,7 +116,7 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
     // print(uid);
     // var url = Uri.parse("http://34.159.7.34:8080/add/place");
     // var url = Uri.parse("http://127.0.0.1:8080/add/place");
-    final Map<String, dynamic> place_body = {
+    final Map<String, dynamic> placeBody = {
       // "firebase_user_id": uid,
       "firebase_user_id": uid,
       "title": title,
@@ -168,29 +138,18 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
       if (response.statusCode == 200 && response.body == "[]\n") {
         await http.post(Uri.parse("http://${host}:8080/add/user"),
             headers: {"Content-Type": "application/json"},
-            body: json.encode(user_body));
+            body: json.encode(userBody));
 
         // print("User id ${uid} and email ${email} and name ${name}");
       }
       response = await http.post(Uri.parse("http://${host}:8080/add/place"),
           headers: {"Content-Type": "application/json"},
-          body: json.encode(place_body));
+          body: json.encode(placeBody));
       // print(response.statusCode);
       // print(response.body);
     } catch (e) {
       print(e);
     }
-  }
-
-  // change default google-marker-icon to custom one
-  static Future<Uint8List?> _getBytesFromAsset(String path, int width) async {
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-        targetWidth: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
-        ?.buffer
-        .asUint8List();
   }
 
   @override
@@ -205,109 +164,134 @@ class _CreatePointWindowState extends State<CreatePointWindow> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // drop-down with selecting main type of point (danger or information)
-            Row(children: [
-              DropdownButton<MainType>(
-                value: _mainType,
-                hint: const Text('Select Point-type'),
-                icon: const Icon(Icons.arrow_drop_down),
-                elevation: 15,
-                underline: Container(
-                  height: 2,
-                  color: Colors.blueAccent,
-                ),
-                items: MainType.values
-                    .map<DropdownMenuItem<MainType>>((MainType value) {
-                  bool disabled = value == MainType.safePoint;
-                  print('$disabled');
-                  return DropdownMenuItem<MainType>(
-                    value: value,
-                    enabled: !disabled,
-                    child: Text(
-                      value.name,
-                      // TODO: fix this workaround with transparent color: just hide and do not show 'Safe Point'
-                      style: TextStyle(color: disabled ? Colors.transparent : Colors.black),
-                    ),
-                  );
-                }).toList(),
-                onChanged: (MainType? value) {
-                  setState(() {
-                    _mainType = value!;
-                    _onMainPointTypeSelected(value);
-                  });
-                },
-              ),
-            ]),
-            // drop-down with selecting sub-type of point (based on `_mainType`)
-            Row(children: [
-              DropdownButton<MapPoint>(
-                value: _subType,
-                hint: const Text('Select sub-type'),
-                icon: const Icon(Icons.arrow_drop_down),
-                elevation: 15,
-                underline: Container(
-                  height: 2,
-                  color: Colors.blueAccent,
-                ),
-                items: _subPointTypes
-                    .map<DropdownMenuItem<MapPoint>>((MapPoint value) {
-                  return DropdownMenuItem<MapPoint>(
-                    value: value,
-                    child: Text(value.name),
-                  );
-                }).toList(),
-                onChanged: (MapPoint? value) {
-                  setState(() {
-                    _subType = value!;
-                  });
-                },
-              ),
-            ]),
-            // Text-field for Title
-            TextFormField(
-              controller: titleController,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "Please, enter the title";
-                }
-                return null;
-              },
-              decoration: const InputDecoration(hintText: "Enter the Title"),
-            ),
-            // Text-field for Description
-            TextFormField(
-              controller: descriptionController,
-              keyboardType: TextInputType.multiline,
-              minLines: 1,
-              maxLines: 5,
-              decoration:
-                  const InputDecoration(hintText: "Enter the Description"),
-            ),
+            _buildMainTypeDropdown(),
+            _buildSubTypeDropdown(),
+            _buildTitleTextField(),
+            _buildDescriptionTextField(),
           ],
         ),
       ),
-      // submit-button and validation-logic
       actions: <Widget>[
-        InkWell(
-          splashColor: Colors.blue,
-          onTap: () {
-            if (formKey.currentState!.validate()) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Adding a ${_subType.name}...')),
+        _buildSubmitButton(context),
+      ],
+    );
+  }
+
+  // Drop-down with selecting of main point-type
+  Widget _buildMainTypeDropdown() {
+    // forbid choosing 'safePoint' as a manual Point-Type
+    final allowedTypes = MainType.values.where((type) => type != MainType.safePoint);
+
+    return Row(
+      children: [
+        DropdownButton<MainType>(
+          value: _mainType,
+          hint: const Text('Select Point-type'),
+          icon: const Icon(Icons.arrow_drop_down),
+          elevation: 15,
+          underline: Container(
+            height: 2,
+            color: Colors.blueAccent,
+          ),
+          items: allowedTypes.map<DropdownMenuItem<MainType>>(
+                (MainType value) {
+              return DropdownMenuItem<MainType>(
+                value: value,
+                child: Text(value.name),
               );
-              // create a DangerPoint with given data and save it in the DB
-              createAndSavePoint(widget.latLng, _mainType, _subType,
-                  titleController.value.text, descriptionController.value.text);
-              Navigator.of(context).pop();
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Something gone wrong...')),
-              );
-            }
+            },
+          ).toList(),
+          onChanged: (MainType? value) {
+            setState(() {
+              _mainType = value!;
+              _onMainPointTypeSelected(value);
+            });
           },
-          child: const Text("Submit"),
         ),
       ],
+    );
+  }
+
+  // Drop-down with selecting of point sub-type (based on main type)
+  Widget _buildSubTypeDropdown() {
+    return Row(
+      children: [
+        DropdownButton<MapPoint>(
+          value: _subType,
+          hint: const Text('Select sub-type'),
+          icon: const Icon(Icons.arrow_drop_down),
+          elevation: 15,
+          underline: Container(
+            height: 2,
+            color: Colors.blueAccent,
+          ),
+          items: _subPointTypes.map<DropdownMenuItem<MapPoint>>(
+                (MapPoint value) {
+              return DropdownMenuItem<MapPoint>(
+                value: value,
+                child: Text(value.name),
+              );
+            },
+          ).toList(),
+          onChanged: (MapPoint? value) {
+            setState(() {
+              _subType = value!;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  // Textual Field for Point Title
+  Widget _buildTitleTextField() {
+    return TextFormField(
+      controller: titleController,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "Please, enter the title";
+        }
+        return null;
+      },
+      decoration: const InputDecoration(hintText: "Enter the Title"),
+    );
+  }
+
+  // Textual Field for Point Description
+  Widget _buildDescriptionTextField() {
+    return TextFormField(
+      controller: descriptionController,
+      keyboardType: TextInputType.multiline,
+      minLines: 1,
+      maxLines: 5,
+      decoration: const InputDecoration(hintText: "Enter the Description"),
+    );
+  }
+
+  // Submit Point Button
+  Widget _buildSubmitButton(BuildContext context) {
+    return InkWell(
+      splashColor: Colors.blue,
+      onTap: () {
+        if (formKey.currentState!.validate()) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Adding a ${_subType.name}...')),
+          );
+          createAndSavePoint(
+            widget.latLng,
+            _mainType,
+            _subType,
+            titleController.value.text,
+            descriptionController.value.text,
+          );
+          Navigator.of(context).pop();
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Something gone wrong...')),
+          );
+        }
+      },
+      child: const Text("Submit"),
     );
   }
 }

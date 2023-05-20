@@ -19,15 +19,16 @@ class _EmailSenderState extends State<EmailSender> {
   bool isHTML = false;
 
   final _recipientController = TextEditingController(
-    text: 'max.druppy@gmail.com',
+    // TODO: change to real mail
+    text: 'john.doe@mysafestreets.com',
   );
 
   final _subjectController =
-      TextEditingController(text: 'Contact Developers for Support');
+      TextEditingController(text: 'Contact for Support');
 
   final _bodyController = TextEditingController(
     text:
-        'This developer is looking for a internship at Google, feel free to contact him ;-)',
+        'Hi SafeStreets team, ...',
   );
 
   Future<void> send() async {
@@ -165,6 +166,7 @@ class _EmailSenderState extends State<EmailSender> {
     );
   }
 
+  // TODO: rewrite, as 'getImage' is deprecated
   void _openImagePicker() async {
     final picker = ImagePicker();
     PickedFile? pick = await picker.getImage(source: ImageSource.gallery);

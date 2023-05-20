@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   connectivity_plus
   desktop_webview_auth
+  firebase_core
   flutter_js
   geolocator_windows
   permission_handler_windows

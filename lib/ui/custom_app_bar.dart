@@ -1,48 +1,42 @@
 import 'package:flutter/material.dart';
 
-// stateless widget of custom AppBar with logo on it to use as Scaffold-header on all pages
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+  final VoidCallback? leadingOnPressed;
 
-  const CustomAppBar({Key? key, required this.title}) : super(key: key);
+  // Constructor to initialize the title, logo image path, and leading button onPressed callback
+  const CustomAppBar({
+    Key? key,
+    required this.title,
+    this.leadingOnPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Image.asset(
+    return AppBar(
+      title: Text(title),
+      centerTitle: true,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      leading: leadingOnPressed != null
+          ? IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: leadingOnPressed,
+      )
+          : null,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          color: Colors.blue.withOpacity(0.5),
+        ),
+        child: Image.asset(
           'lib/assets/logos/logo_long_horizontal.png',
           fit: BoxFit.cover,
-          height: kToolbarHeight +
-              MediaQuery.of(context)
-                  .padding
-                  .top, // height of the image should be the same as the app bar
-          width: MediaQuery.of(context).size.width,
         ),
-        AppBar(
-          title: Text(title),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          // add a semi-transparent background color to the AppBar
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              color: Colors.blue.withOpacity(0.5),
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 
+  // TODO: rewrite, as some elements are deprecated
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight +
       MediaQueryData.fromWindow(WidgetsBinding.instance.window).padding.top);

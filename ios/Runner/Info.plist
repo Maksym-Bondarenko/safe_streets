@@ -50,7 +50,7 @@
 		<key>UIStatusBarHidden</key>
 		<false/>
 		<key>googleMapsApiKey</key>
-        <string>$(GOOGLE_MAPS_API_KEY)</string>
+		<string>$(GOOGLE_MAPS_API_KEY)</string>
 		<!-- Google Sign-in Section -->
 		<key>CFBundleURLTypes</key>
 		<array>

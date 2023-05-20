@@ -108,7 +108,7 @@ flutter:
     - lib/assets/images/
     - lib/assets/intro/
     - lib/assets/logos/
-    - lib/assets/marker/
+    - lib/assets/markers/
     - lib/assets/screenshots/
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -11,9 +11,11 @@ class AuthGate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // StreamBuilder to handle authentication state changes
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
+        // Check if user is not authenticated
         if (!snapshot.hasData) {
           return SignInScreen(
             providerConfigs: const [
@@ -22,6 +24,7 @@ class AuthGate extends StatelessWidget {
                   clientId:
                       "721653983645-tf0jcvomt95vakv9o6h8fome21d414bp.apps.googleusercontent.com"),
             ],
+            // Header builder for the sign-in screen
             headerBuilder: (context, constraints, shrinkOffset) {
               return Padding(
                 padding: const EdgeInsets.all(20),
@@ -31,6 +34,7 @@ class AuthGate extends StatelessWidget {
                 ),
               );
             },
+            // Subtitle builder for the sign-in screen
             subtitleBuilder: (context, action) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -39,6 +43,7 @@ class AuthGate extends StatelessWidget {
                     : const Text('Welcome to SafeStreets, please sign up!'),
               );
             },
+            // Footer builder for the sign-in screen
             footerBuilder: (context, action) {
               return Padding(
                 padding: const EdgeInsets.only(top: 16),
@@ -52,6 +57,7 @@ class AuthGate extends StatelessWidget {
                           style: const TextStyle(color: Colors.blue),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
+                              // Navigate to the Terms and Conditions page
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -63,6 +69,7 @@ class AuthGate extends StatelessWidget {
                 ),
               );
             },
+            // Side builder for the sign-in screen (for big screens/monitors)
             sideBuilder: (context, shrinkOffset) {
               return Padding(
                 padding: const EdgeInsets.all(20),
@@ -75,6 +82,7 @@ class AuthGate extends StatelessWidget {
           );
         }
 
+        // If user is authenticated, show the IntroSliderRules widget
         return const IntroSliderRules();
       },
     );
