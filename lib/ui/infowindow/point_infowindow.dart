@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:safe_streets/shared/points_types.dart';
 
+/// Info-Window of a Point-Marker
+/// including point-type, subtype, title, description, icon and votes
 class PointInfoWindow extends StatefulWidget {
   final MainType mainType;
   final MapPoint subType;

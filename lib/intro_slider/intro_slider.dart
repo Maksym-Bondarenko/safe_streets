@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intro_slider/intro_slider.dart';
 
+/// Intro-Slider, giving overview of the app
 class IntroSliderRules extends StatefulWidget {
   const IntroSliderRules({Key? key}) : super(key: key);
 
@@ -22,9 +23,9 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
     );
   }
 
-  // Navigates to the home screen
+  // TODO: Navigates to the home screen
   void _navigateToHome() {
-    Navigator.pushNamed(context, '/home');
+    Navigator.pushNamed(context, '/homeScreen');
   }
 
   @override

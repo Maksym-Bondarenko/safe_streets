@@ -9,25 +9,24 @@ import '../../shared/global_functions.dart';
 import '../infowindow/point_infowindow.dart';
 import '../../shared/points_types.dart';
 
-// opens a Dialog-Window for creating a custom Point (DangerPoint or InformationPoint)
-// each Point-type has different sub-types
-// after providing all information regarding Point, it will be created and putted on the map with a Custom Info-Window
-class CreatePointWindow extends StatefulWidget {
+/// Class creates a Dialog-Window for a custom Point (DangerPoint or InformationPoint)
+/// after providing all information regarding Point, it will be created and putted on the map with a Custom Info-Window
+class DialogWindow extends StatefulWidget {
   final LatLng latLng;
   final CustomInfoWindowController customInfoWindowController;
   final Function(Marker) updateMarkers;
 
-  const CreatePointWindow(
+  const DialogWindow(
       {super.key,
       required this.latLng,
       required this.customInfoWindowController,
       required this.updateMarkers});
 
   @override
-  _CreatePointWindowState createState() => _CreatePointWindowState();
+  _DialogWindowState createState() => _DialogWindowState();
 }
 
-class _CreatePointWindowState extends State<CreatePointWindow> {
+class _DialogWindowState extends State<DialogWindow> {
   // key for the Form
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 

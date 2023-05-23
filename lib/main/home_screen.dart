@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'package:safe_streets/info_pages/edit_user_details_page.dart';
-import 'package:safe_streets/home/start_page.dart';
+import 'package:safe_streets/main/filter_map.dart';
 import 'package:safe_streets/info_pages/faq_page.dart';
 
 import '../authentication/auth_gate.dart';
 import '../info_pages/email_sender.dart';
-import '../info_pages/forum_page.dart';
+import '../forum/forum_page.dart';
 import '../info_pages/settings_page.dart';
 import '../info_pages/support_page.dart';
 import 'dds_map.dart';
 
+/// Home-screen after authentication, containing dashboard with main information,
+/// settings, and navigation to further pages
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  // TODO: modulise the content into different files
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,12 +63,12 @@ class HomeScreen extends StatelessWidget {
                                         style: BorderStyle.solid,
                                       ),
                                     ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(8.0),
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
-                                        children: const [
+                                        children: [
                                           Icon(Icons.place, size: 48),
                                           SizedBox(height: 20),
                                           Text('10',
@@ -96,12 +99,12 @@ class HomeScreen extends StatelessWidget {
                                         style: BorderStyle.solid,
                                       ),
                                     ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                    child: const Padding(
+                                      padding: EdgeInsets.all(8.0),
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
-                                        children: const [
+                                        children: [
                                           Icon(Icons.place_outlined, size: 48),
                                           SizedBox(height: 20),
                                           Text('2',
@@ -286,10 +289,10 @@ class HomeScreen extends StatelessWidget {
                                   MaterialPageRoute(
                                       builder: (context) => const ForumPage()))
                             },
-                            child: Column(
+                            child: const Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Padding(
                                   padding: EdgeInsets.all(4.0),
                                   child: Text(
@@ -335,10 +338,10 @@ class HomeScreen extends StatelessWidget {
                                       builder: (context) =>
                                           const SupportPage()))
                             },
-                            child: Column(
+                            child: const Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Padding(
                                   padding: EdgeInsets.all(4.0),
                                   child: Text(
@@ -368,11 +371,11 @@ class HomeScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(4.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          // Navigate to Data Drive Styling map
+                          // Navigate to FilterPoints-map
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const StartPage()));
+                                  builder: (context) => const FilterMap()));
                         },
                         child: const Text(
                           "Filter-based Map",
@@ -391,7 +394,7 @@ class HomeScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(4.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          // Navigate to main ranking map
+                          // Navigate to DDS-map
                           Navigator.push(
                               context,
                               MaterialPageRoute(

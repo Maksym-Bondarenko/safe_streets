@@ -14,14 +14,15 @@ import '../ui/dialog/dialog_window.dart';
 import '../ui/infowindow/point_infowindow.dart';
 import '../shared/points_types.dart';
 
-class StartPage extends StatefulWidget {
-  const StartPage({super.key});
+/// Main Page with the FilterMarkers-Map, including 3 types of Points
+class FilterMap extends StatefulWidget {
+  const FilterMap({super.key});
 
   @override
-  State<StatefulWidget> createState() => _StartPage();
+  State<StatefulWidget> createState() => _FilterMap();
 }
 
-class _StartPage extends State<StartPage> {
+class _FilterMap extends State<FilterMap> {
 
   BitmapDescriptor safeMarkerIcon = BitmapDescriptor.defaultMarker;
 
@@ -200,7 +201,7 @@ class _StartPage extends State<StartPage> {
         context: context,
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
-            return CreatePointWindow(
+            return DialogWindow(
                 latLng: latLng,
                 customInfoWindowController: customInfoWindowController,
                 updateMarkers: (marker) => addCustomMarker(marker));

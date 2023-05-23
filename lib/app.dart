@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'authentication/auth_gate.dart';
 
+/// Here the app is built and navigated to the @{AuthGate}
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+/// Functions for working with three types of points (Safe, Danger, Recommendation)
+
 // Enum representing the three main Point types
 enum MainType {
   dangerPoint,

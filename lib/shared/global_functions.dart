@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'dart:ui' as ui;
 
+/// Collection of global functions, that are used across the application
+
 // change default google-marker-icon to custom one
 Future<Uint8List?> getBytesFromAsset(String path, int width) async {
   ByteData data = await rootBundle.load(path);

@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CardItem {
-  final String title;
-  final String subtitle;
-
-  CardItem(this.title, this.subtitle);
-}
-
+/// Page with forum for community
 class ForumPage extends StatefulWidget {
   const ForumPage({super.key});
 
@@ -159,4 +153,11 @@ class _ForumPageState extends State<ForumPage> {
       ),
     );
   }
+}
+
+class CardItem {
+  final String title;
+  final String subtitle;
+
+  CardItem(this.title, this.subtitle);
 }
