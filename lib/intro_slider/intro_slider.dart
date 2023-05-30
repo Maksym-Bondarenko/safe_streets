@@ -17,15 +17,18 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
     return IntroSlider(
       slides: slides,
       colorActiveDot: Colors.white,
+      autoScroll: false,
+      renderNextBtn: _customRenderNextBtn(),
+      renderDoneBtn: _customRenderDoneBtn(),
+      renderSkipBtn: _customRenderSkipBtn(),
       onDonePress: () => _navigateToHome(),
       onSkipPress: () => _navigateToHome(),
-      autoScroll: false,
     );
   }
 
   // TODO: Navigates to the home screen
   void _navigateToHome() {
-    Navigator.pushNamed(context, '/homeScreen');
+    Navigator.pushNamed(context, '/home');
   }
 
   @override
@@ -33,6 +36,27 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
     super.initState();
     slides = SlideData.slides;
   }
+}
+
+Widget _customRenderSkipBtn() {
+  return const Text(
+    "Skip",
+    style: IntroStyling.buttonsStyle,
+  );
+}
+
+Widget _customRenderNextBtn() {
+  return const Text(
+    "Next",
+    style: IntroStyling.buttonsStyle,
+  );
+}
+
+Widget _customRenderDoneBtn() {
+  return const Text(
+    "Done",
+    style: IntroStyling.buttonsStyle,
+  );
 }
 
 // content of the slides (title, description, image)
@@ -116,6 +140,11 @@ class IntroStyling {
   static const descriptionStyle = TextStyle(
     color: Colors.black,
     fontSize: 18,
+  );
+
+  static const buttonsStyle = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
   );
 }
 

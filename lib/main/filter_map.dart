@@ -4,15 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_info_window/custom_info_window.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
-import '../shared/global_functions.dart';
-import '../ui/dialog/dialog_window.dart';
-
-import '../ui/infowindow/point_infowindow.dart';
+import '../services/safe_points_service.dart';
 import '../shared/points_types.dart';
+import '../ui/dialog/dialog_window.dart';
 
 /// Main Page with the FilterMarkers-Map, including 3 types of Points
 class FilterMap extends StatefulWidget {
@@ -24,7 +19,8 @@ class FilterMap extends StatefulWidget {
 
 class _FilterMap extends State<FilterMap> {
 
-  BitmapDescriptor safeMarkerIcon = BitmapDescriptor.defaultMarker;
+  // service for retrieving (fetch, post, http) the safe points by map-initialisation
+  final safePointsService = SafePointsService();
 
   static const LatLng _kMapMunichCenter = LatLng(48.1351, 11.582);
 
@@ -62,44 +58,17 @@ class _FilterMap extends State<FilterMap> {
     updatePointsVisibility();
   }
 
-  // fetch data from DB with corresponding sub-type and show them on the map
   Future<void> _onMapCreated(GoogleMapController controller) async {
     // set up controllers
     _googleMapController.complete(controller);
     customInfoWindowController.googleMapController = controller;
 
-    getBytesFromAsset('lib/assets/markers/safe_points/safe_point_marker.png', 200)
-        .then((onValue) {
-      safeMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
-    });
+    // get the places with markers on the map
+    fetchPlaces();
+  }
 
-    // fetch safePoints (police stations) and custom points (DangerPoint and RecommendationPoint)
-    var policeStations = [];
-    const munichCenterLat = 48.1351;
-    const munichCenterLong = 11.582;
-    // TODO: Add your Google Maps API key here
-    String? apiKey = dotenv.env['GOOGLE_MAPS_API_KEY'];
-    try {
-      final response = await http.get(Uri.parse(
-          "https://maps.googleapis.com/maps/api/place/search/json?location=${munichCenterLat},${munichCenterLong}8&rankby=distance&types=police&sensor=false&key=${apiKey}"));
-      policeStations = json.decode(response.body)["results"];
-    } catch (e) {
-      print(e);
-    }
-
-    var host = "34.159.7.34";
-    // TODO: uncomment following line for testing with local server
-    host = "localhost";
-    var points = [];
-    try {
-      final response = await http.get(Uri.parse("http://${host}:8080/get/all_places"));
-      if (response.statusCode == 200) {
-        points = json.decode(response.body);
-      }
-    } catch (e) {
-      print(e);
-    }
-
+  /// fetch data from DB or google-api with corresponding sub-type and show them on the map
+  Future<void> fetchPlaces() async {
     // clear all markers
     setState(() {
       _policeMarkers.clear();
@@ -108,71 +77,52 @@ class _FilterMap extends State<FilterMap> {
       _recommendationPointsMarkers.clear();
     });
 
+    // call functions for fetching separately SsafePoints (police stations)
+    // and CustomPoints (Danger and Recommendation)
+    fetchPoliceStations();
+    fetchCustomPoints();
+
+    //add prefetched points from the DB to the map
+    setState(() {
+      dangerPointsMarkers.addAll(_dangerPointsMarkers);
+      safePointsMarkers.addAll(_safePointsMarkers);
+      recommendationPointsMarkers.addAll(_recommendationPointsMarkers);
+    });
+  }
+
+  /// set on map all Police Stations (SafePoints)
+  Future<void> fetchPoliceStations() async {
+    // Fetch police stations and using the service
+    var policeStations = await safePointsService.fetchPoliceStations();
+
+    // iterate through the police stations and create a marker with InfoWindow for each
     for (final policeStation in policeStations) {
-      var id = policeStation["place_id"];
-      var latitude = policeStation["geometry"]["location"]["lat"];
-      var longitude = policeStation["geometry"]["location"]["lng"];
-      var address = policeStation["vicinity"];
       var name = policeStation["name"];
-      print(
-          "NAME ${name} ADDRESS ${address} lat ${latitude} long ${longitude}");
-      final marker = Marker(
-          markerId: MarkerId(id),
-          position: LatLng(latitude, longitude),
-          icon: safeMarkerIcon,
-          onTap: () =>
-          {
-            customInfoWindowController.addInfoWindow!(
-                PointInfoWindow(
-                    mainType: MainType.safePoint,
-                    subType: SafePoint.police,
-                    title: name,
-                    description: "Address: ${address}",
-                    votes: 0),
-                LatLng(latitude, longitude))
-          });
+      var marker = await safePointsService.getPoliceMarker(policeStation, customInfoWindowController);
 
       // add each police-office
       setState(() {
         _policeMarkers[name] = marker;
-        // add police stations to set of safe points
-        safePointsMarkers.addAll(_policeMarkers.values.toSet());
       });
     }
 
+    // add police stations to set of safe points
+    setState(() {
+      safePointsMarkers.addAll(_policeMarkers.values.toSet());
+    });
+  }
+
+  /// set on map all Custom Points (DangerPoints and RecommendationPoints)
+  Future<void> fetchCustomPoints() async {
+    // Fetch custom points using the service
+    var customPoints = await safePointsService.fetchCustomPoints();
+
     // add all custom made points (DangerPoints and RecommendationPoints)
-    for (final point in points) {
-      var mainType = getMainType(point["main_type"]);
-      var subType = getSubType(point["sub_type"], point["main_type"]);
-      var latLng =
-      LatLng(double.parse(point["lat"]), double.parse(point["long"]));
-      var latitude = latLng.latitude;
-      var longitude = latLng.longitude;
-      var title = point["title"];
-      var description = point["comment"];
-      var markerId = "$mainType-$subType-$latitude-$longitude-$title";
-      var customMarkerIcon = BitmapDescriptor.defaultMarker;
-      await getBytesFromAsset(subType.markerSrc, 150).then((onValue) {
-        customMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
-      });
+    for (final customPoint in customPoints) {
+      var mainType = getMainType(customPoint["main_type"]);
+      var marker = await safePointsService.getCustomMarker(customPoint, customInfoWindowController);
 
-      final marker = Marker(
-          markerId: MarkerId(markerId),
-          position: latLng,
-          icon: customMarkerIcon,
-          onTap: () =>
-          {
-            customInfoWindowController.addInfoWindow!(
-                PointInfoWindow(
-                    mainType: mainType,
-                    subType: subType,
-                    title: title,
-                    description: description,
-                    votes: 0),
-                latLng)
-          });
-
-      // add teach point to the set
+      // add each point to the set
       setState(() {
         switch (mainType) {
           case MainType.dangerPoint:
@@ -186,13 +136,6 @@ class _FilterMap extends State<FilterMap> {
         }
       });
     }
-
-    //add prefetched points from the DB to the map
-    setState(() {
-      dangerPointsMarkers.addAll(_dangerPointsMarkers);
-      safePointsMarkers.addAll(_safePointsMarkers);
-      recommendationPointsMarkers.addAll(_recommendationPointsMarkers);
-    });
   }
 
   Future<void> showInformationDialog(LatLng latLng,
@@ -297,13 +240,17 @@ class _FilterMap extends State<FilterMap> {
               offset: 10,
             ),
 
+            // TODO: add field for path-navigation
+
             // Toggle Buttons
+            // TODO: change design
             Padding(
               padding: const EdgeInsets.only(top: 50.0, left: 10.0),
               child: _buildToggleButtons(),
             ),
 
             // Speed Dial
+            // TODO: implement functionality
             Padding(
               padding: const EdgeInsets.only(bottom: 30, left: 15),
               child: Align(

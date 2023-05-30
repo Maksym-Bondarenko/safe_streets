@@ -10,21 +10,21 @@ class PointInfoWindow extends StatefulWidget {
   final String description;
   late int votes;
 
-  PointInfoWindow(
-      {Key? key,
-      required this.mainType,
-      required this.subType,
-      required this.title,
-      required this.description,
-      required this.votes})
-      : super(key: key);
+  PointInfoWindow({
+    Key? key,
+    required this.mainType,
+    required this.subType,
+    required this.title,
+    required this.description,
+    required this.votes,
+  }) : super(key: key);
 
   @override
   _PointInfoWindowState createState() => _PointInfoWindowState();
 }
 
-class _PointInfoWindowState extends State<PointInfoWindow> with SingleTickerProviderStateMixin {
-
+class _PointInfoWindowState extends State<PointInfoWindow>
+    with SingleTickerProviderStateMixin {
   late Color mainColor;
   // for animation of the icon
   late AnimationController _animationController;
@@ -32,23 +32,20 @@ class _PointInfoWindowState extends State<PointInfoWindow> with SingleTickerProv
   @override
   void initState() {
     super.initState();
-    mainColor = Color.fromRGBO(widget.subType.colorR, widget.subType.colorG,
-        widget.subType.colorB, 1.0);
+    mainColor = Color.fromRGBO(
+        widget.subType.colorR, widget.subType.colorG, widget.subType.colorB, 1.0);
 
     // initialise the animation controller (for point-icon)
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-
   }
 
   // animate (zoom-in, zoom-out) the point-icon
-  void _animateIcon() {
-    _animationController.forward();
-    Future.delayed(const Duration(milliseconds: 500), () {
-      _animationController.reverse();
-    });
+  void _animateIcon() async {
+    await _animationController.forward();
+    await _animationController.reverse();
   }
 
   @override
@@ -72,7 +69,7 @@ class _PointInfoWindowState extends State<PointInfoWindow> with SingleTickerProv
   }
 
   void _saveVotes() {
-    // TODO: Add your code here to save the votes to the backend
+    // TODO: Add code here to save the votes to the backend
   }
 
   @override
@@ -81,10 +78,10 @@ class _PointInfoWindowState extends State<PointInfoWindow> with SingleTickerProv
       child: InkWell(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        onTap: _animateIcon,
+        onTap: () => _animateIcon(), // Pass the BuildContext here
         child: Column(
           children: <Widget>[
-            _buildPointIcon(),
+            _buildPointIcon(context), // Pass the BuildContext here
             const SizedBox(height: 5.0),
             _buildInfoCard(),
           ],
@@ -94,26 +91,38 @@ class _PointInfoWindowState extends State<PointInfoWindow> with SingleTickerProv
   }
 
   // Icon of Point (according to the type and sub-type)
-  Widget _buildPointIcon() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-        boxShadow: [
-          BoxShadow(
-            color: mainColor,
-            spreadRadius: 10,
-            blurRadius: 10,
-            offset: const Offset(0, 0),
+  Widget _buildPointIcon(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        return Transform.scale(
+          scale: 1.0 - _animationController.value * 0.2,
+          child: child,
+        );
+      },
+      child: GestureDetector(
+        onTap: _animateIcon,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+            boxShadow: [
+              BoxShadow(
+                color: mainColor,
+                spreadRadius: 10,
+                blurRadius: 10,
+                offset: const Offset(0, 0),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        child: Image(
-          image: AssetImage(widget.subType.markerSrc),
-          width: 80,
-          height: 80,
+          child: ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            child: Image(
+              image: AssetImage(widget.subType.markerSrc),
+              width: 80,
+              height: 80,
+            ),
+          ),
         ),
       ),
     );
@@ -147,7 +156,7 @@ class _PointInfoWindowState extends State<PointInfoWindow> with SingleTickerProv
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            widget.mainType.toString(),
+            widget.mainType.name,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20.0,

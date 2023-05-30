@@ -109,6 +109,9 @@ flutter:
     - lib/assets/intro/
     - lib/assets/logos/
     - lib/assets/markers/
+    - lib/assets/markers/danger_points/
+    - lib/assets/markers/recommendation_points/
+    - lib/assets/markers/safe_points/
     - lib/assets/screenshots/
 
   # An image asset can refer to one or more resolution-specific "variants", see
