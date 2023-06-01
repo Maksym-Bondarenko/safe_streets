@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 
 import '../services/safe_points_service.dart';
+import '../shared/pathSearch.dart';
 import '../shared/points_types.dart';
 import '../ui/dialog/dialog_window.dart';
 
@@ -30,7 +32,14 @@ class _FilterMap extends State<FilterMap> {
   final CustomInfoWindowController customInfoWindowController =
   CustomInfoWindowController();
 
-  final Completer<GoogleMapController> _googleMapController = Completer();
+  // final Completer<GoogleMapController> _googleMapController = Completer();
+  late GoogleMapController mapController;
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  Map<PolylineId, Polyline> polylines = {};
+
+  late Position _currentPosition;
 
   Set<Marker> currentlyActiveMarkers = {};
   Set<Marker> dangerPointsMarkers = {};
@@ -55,17 +64,39 @@ class _FilterMap extends State<FilterMap> {
   @override
   initState() {
     super.initState();
+    _getCurrentLocation();
     updatePointsVisibility();
   }
 
-  Future<void> _onMapCreated(GoogleMapController controller) async {
-    // set up controllers
-    _googleMapController.complete(controller);
-    customInfoWindowController.googleMapController = controller;
-
-    // get the places with markers on the map
-    fetchPlaces();
+  // Method for retrieving the current location
+  _getCurrentLocation() async {
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) async {
+      setState(() {
+        _currentPosition = position;
+        print('CURRENT POS: $_currentPosition');
+        mapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: LatLng(position.latitude, position.longitude),
+              zoom: 18.0,
+            ),
+          ),
+        );
+      });
+    }).catchError((e) {
+      print(e);
+    });
   }
+
+  // Future<void> _onMapCreated(GoogleMapController controller) async {
+  //   // set up controllers
+  //   _googleMapController.complete(controller);
+  //   customInfoWindowController.googleMapController = controller;
+  //
+  //   // get the places with markers on the map
+  //   fetchPlaces();
+  // }
 
   /// fetch data from DB or google-api with corresponding sub-type and show them on the map
   Future<void> fetchPlaces() async {
@@ -210,6 +241,12 @@ class _FilterMap extends State<FilterMap> {
     }
   }
 
+  @override
+  void dispose() {
+    customInfoWindowController.dispose();
+    super.dispose();
+  }
+
   // TODO: implement SOS-functionality
   void SOSPressed() {
     print('Pressed SOS');
@@ -222,43 +259,58 @@ class _FilterMap extends State<FilterMap> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('SafeStreets'),
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // Google Map widget
-            _buildGoogleMap(),
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    return SizedBox(
+      height: height,
+      width: width,
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: const Text('SafeStreets'),
+        ),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              // Google Map widget
+              _buildGoogleMap(),
 
-            // Custom Info Window
-            CustomInfoWindow(
-              controller: customInfoWindowController,
-              width: 300,
-              height: 300,
-              offset: 10,
-            ),
+              // Show zoom buttons
+              _buildCustomZoomButtons(),
 
-            // TODO: add field for path-navigation
+              // Show current location button
+              _buildCustomCurrentLocationButton(),
 
-            // Toggle Buttons
-            // TODO: change design
-            Padding(
-              padding: const EdgeInsets.only(top: 50.0, left: 10.0),
-              child: _buildToggleButtons(),
-            ),
-
-            // Speed Dial
-            // TODO: implement functionality
-            Padding(
-              padding: const EdgeInsets.only(bottom: 30, left: 15),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: _buildSpeedDial(),
+              // Custom Info Window
+              CustomInfoWindow(
+                controller: customInfoWindowController,
+                width: 300,
+                height: 300,
+                offset: 10,
               ),
-            ),
-          ],
+
+              // Route-builder enables searching for a points and
+              // building a navigation-path between them
+              const PathSearch(),
+
+              // Toggle Buttons
+              // TODO: change design
+              Padding(
+                padding: const EdgeInsets.only(top: 50.0, left: 10.0),
+                child: _buildToggleButtons(),
+              ),
+
+              // Speed Dial
+              // TODO: implement functionality
+              Padding(
+                padding: const EdgeInsets.only(bottom: 30, left: 15),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: _buildSpeedDial(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -266,9 +318,31 @@ class _FilterMap extends State<FilterMap> {
 
   Widget _buildGoogleMap() {
     return GoogleMap(
+      // Map settings
+      mapType: MapType.normal,
+      initialCameraPosition: _kInitialPosition,
+      markers: currentlyActiveMarkers,
+      polylines: Set<Polyline>.of(polylines.values),
+      myLocationEnabled: true,
+      myLocationButtonEnabled: false,
+      compassEnabled: true,
+      trafficEnabled: false,
+      mapToolbarEnabled: true,
+      buildingsEnabled: true,
+      rotateGesturesEnabled: true,
+      scrollGesturesEnabled: true,
+      zoomControlsEnabled: false,
+      zoomGesturesEnabled: true,
+      tiltGesturesEnabled: true,
       // Callback when the map is created
-      onMapCreated: _onMapCreated,
-
+      onMapCreated: (controller) {
+        setState(() {
+          mapController = controller;
+        });
+        // _googleMapController.complete(controller);
+        // get the places with markers on the map
+          fetchPlaces();
+      },
       // Callback when long-pressing on the map
       onLongPress: (LatLng latLng) async {
         try {
@@ -278,32 +352,102 @@ class _FilterMap extends State<FilterMap> {
           print('Error: $e');
         }
       },
-
       // Callback when tapping on the map
       onTap: (position) {
         customInfoWindowController.hideInfoWindow!();
       },
-
       // Callback when the camera is moved
       onCameraMove: (position) {
         customInfoWindowController.onCameraMove!();
       },
+    );
+  }
 
-      // Map settings
-      mapType: MapType.normal,
-      initialCameraPosition: _kInitialPosition,
-      markers: currentlyActiveMarkers,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: true,
-      compassEnabled: true,
-      trafficEnabled: false,
-      mapToolbarEnabled: true,
-      buildingsEnabled: true,
-      rotateGesturesEnabled: true,
-      scrollGesturesEnabled: true,
-      zoomControlsEnabled: true,
-      zoomGesturesEnabled: true,
-      tiltGesturesEnabled: true,
+  Widget _buildCustomZoomButtons() {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ClipOval(
+              child: Material(
+                color: Colors.blue.shade100, // button color
+                child: InkWell(
+                  splashColor: Colors.blue, // inkwell color
+                  child: const SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Icon(Icons.add),
+                  ),
+                  onTap: () {
+                    mapController.animateCamera(
+                      CameraUpdate.zoomIn(),
+                    );
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            ClipOval(
+              child: Material(
+                color: Colors.blue.shade100, // button color
+                child: InkWell(
+                  splashColor: Colors.blue, // inkwell color
+                  child: const SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Icon(Icons.remove),
+                  ),
+                  onTap: () {
+                    mapController.animateCamera(
+                      CameraUpdate.zoomOut(),
+                    );
+                  },
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCustomCurrentLocationButton() {
+    // Show current location button
+    return SafeArea(
+      child: Align(
+        alignment: Alignment.bottomRight,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 10.0, bottom: 10.0),
+          child: ClipOval(
+            child: Material(
+              color: Colors.orange.shade100, // button color
+              child: InkWell(
+                splashColor: Colors.orange, // inkwell color
+                child: const SizedBox(
+                  width: 56,
+                  height: 56,
+                  child: Icon(Icons.my_location),
+                ),
+                onTap: () {
+                  mapController.animateCamera(
+                    CameraUpdate.newCameraPosition(
+                      CameraPosition(
+                        target: LatLng(
+                          _currentPosition.latitude,
+                          _currentPosition.longitude,
+                        ),
+                        zoom: 18.0,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
