@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:safe_streets/main/filter_map.dart';
 
 import '../forum/forum_page.dart';
 import '../info_pages/support_page.dart';
@@ -77,12 +76,7 @@ class HomeScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   // Navigate to the FilterPoints-map
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const FilterMap(),
-                    ),
-                  );
+                  Navigator.pushNamed(context, '/filterMap');
                 },
                 child: const Text(
                   "Filter-based Map",
