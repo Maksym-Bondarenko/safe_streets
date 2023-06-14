@@ -226,6 +226,7 @@ class _PathSearch extends State<PathSearch> {
 
   // creates the set of polylines from the start point to the destination point
   setPolylines(double startLatitude, double startLongitude, double destinationLatitude, double destinationLongitude) async {
+    // TODO: move to service
     PolylineResult result = await
     polylinePoints.getRouteBetweenCoordinates(
         dotenv.env['GOOGLE_MAPS_API_KEY']!,
@@ -279,7 +280,7 @@ class _PathSearch extends State<PathSearch> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
+    //var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     final googleMapController = widget.googleMapController;
 

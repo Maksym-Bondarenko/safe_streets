@@ -5,9 +5,11 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_info_window/custom_info_window.dart';
+import 'package:safe_streets/ui/spinners/loading_spinner.dart';
 
 import '../services/safe_points_service.dart';
 import '../shared/global_functions.dart';
+import '../ui/fake_call/fake_call.dart';
 import '../ui/path_search/pathSearch.dart';
 import '../shared/points_types.dart';
 import '../ui/dialog/dialog_window.dart';
@@ -244,8 +246,16 @@ class _FilterMap extends State<FilterMap> {
     super.dispose();
   }
 
+  void fakeCallPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => const FakeCallWidget(callerName: 'Bob')),
+    );
+  }
+
   // TODO: implement SOS-functionality
-  void SOSPressed() {
+  void sosPressed() {
     print('Pressed SOS');
   }
 
@@ -256,56 +266,80 @@ class _FilterMap extends State<FilterMap> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    //var height = MediaQuery.of(context).size.height;
+    //var width = MediaQuery.of(context).size.width;
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('SafeStreets'),
       ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // Google Map widget
-            _buildGoogleMap(),
+      body: FutureBuilder(
+          future: safePointsService.fetchData(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting ||
+                snapshot.connectionState == ConnectionState.active) {
+              // Display the loading spinner while the data is being fetched
+              return const LoadingSpinnerWidget();
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              // Display your actual page content once the data is loaded
+              if (snapshot.hasData) {
+                final data = snapshot.data as String;
+                print(data);
+                return SafeArea(
+                  child: Stack(
+                    children: [
+                      // Google Map widget
+                      _buildGoogleMap(),
 
-            // Route-builder enables searching for points and building a navigation path between them
-            PathSearch(
-              googleMapController: mapController,
-              onPathDataReceived: onPathDataReceived,
-            ),
+                      // Route-builder enables searching for points and building a navigation path between them
+                      PathSearch(
+                        googleMapController: mapController,
+                        onPathDataReceived: onPathDataReceived,
+                      ),
 
-            // Show current location button and zoom-buttons
-            Positioned(
-              bottom: 30,
-              right: 10,
-              child: _buildCustomMapButtons(),
-            ),
+                      // Show current location button and zoom-buttons
+                      Positioned(
+                        bottom: 30,
+                        right: 10,
+                        child: _buildCustomMapButtons(),
+                      ),
 
-            // Toggle Buttons
-            Positioned(
-              top: 30,
-              left: 10,
-              child: _buildToggleButtons(),
-            ),
+                      // Toggle Buttons
+                      Positioned(
+                        top: 30,
+                        left: 10,
+                        child: _buildToggleButtons(),
+                      ),
 
-            // Custom Info Window
-            CustomInfoWindow(
-              controller: customInfoWindowController,
-              width: 300,
-              height: 300,
-              offset: 50,
-            ),
+                      // Custom Info Window
+                      CustomInfoWindow(
+                        controller: customInfoWindowController,
+                        width: 300,
+                        height: 300,
+                        offset: 50,
+                      ),
 
-            // Speed Dial
-            Positioned(
-              bottom: 30,
-              left: 10,
-              child: _buildSpeedDial(),
-            ),
-          ],
-        ),
-      ),
+                      // Speed Dial
+                      Positioned(
+                        bottom: 30,
+                        left: 10,
+                        child: _buildSpeedDial(),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return const Center(
+                  child: Text('Error occurred during data-fetching.'),
+                );
+              }
+            } else {
+              // Handle any error that occurred during the data loading process
+              return const Center(
+                child: Text('Error occurred.'),
+              );
+            }
+          }),
     );
   }
 
@@ -481,11 +515,20 @@ class _FilterMap extends State<FilterMap> {
       direction: SpeedDialDirection.up,
       curve: Curves.fastOutSlowIn,
       children: [
+        // Fake-Call Button
+        SpeedDialChild(
+            child: const Icon(Icons.call, color: Colors.white),
+            backgroundColor: Colors.blue,
+            onTap: fakeCallPressed,
+            label: 'Fake-Call',
+            labelStyle: const TextStyle(
+                fontWeight: FontWeight.w500, color: Colors.white),
+            labelBackgroundColor: Colors.black),
         // SOS Button
         SpeedDialChild(
           child: const Icon(Icons.sos, color: Colors.white),
           backgroundColor: Colors.blue,
-          onTap: SOSPressed,
+          onTap: sosPressed,
           label: 'SOS',
           labelStyle:
               const TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
