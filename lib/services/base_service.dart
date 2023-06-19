@@ -12,5 +12,13 @@ abstract class BaseService {
   final munichCenterLat = 48.1351;
   final munichCenterLong = 11.582;
 
+  // TODO: change test to real functionality
+  Future<String> fetchData() async {
+    // Simulate an asynchronous task (e.g., fetching data)
+    await Future.delayed(const Duration(seconds: 2));
+    // You can perform your actual data loading logic here
+    return 'Fetched Data';
+  }
+
   // Define common methods or utilities for services here
 }

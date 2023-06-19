@@ -71,6 +71,7 @@ dependencies:
   shared_preferences: ^2.0.20
   photo_view: ^0.14.0
   flutter_dotenv: ^5.0.2
+  audioplayers: ^4.1.0
 
 dev_dependencies:
   flutter_test:
@@ -103,8 +104,10 @@ flutter:
   assets:
     - api_keys.env
     - lib/assets/
+    - lib/assets/audio/
     - lib/assets/data/
     - lib/assets/dds/
+    - lib/assets/fake_call/
     - lib/assets/images/
     - lib/assets/intro/
     - lib/assets/logos/
