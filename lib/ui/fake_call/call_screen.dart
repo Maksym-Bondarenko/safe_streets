@@ -18,7 +18,7 @@ class CallScreen extends StatelessWidget {
     final audioPlayer = AudioPlayer();
 
     void playAudio() async {
-      await audioPlayer.play(AssetSource(audioFilePath));
+      //await audioPlayer.play(AssetSource(audioFilePath));
     }
 
     void stopAudio() async {
@@ -35,11 +35,11 @@ class CallScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const CircleAvatar(
-              radius: 80,
-              backgroundImage:
-                  AssetImage('lib/assets/fake_call/profile_picture.png'),
-            ),
+            // const CircleAvatar(
+            //   radius: 80,
+            //   backgroundImage:
+            //       AssetImage('lib/assets/fake_call/profile_picture.png'),
+            // ),
             const SizedBox(height: 16),
             Text(
               callerName,

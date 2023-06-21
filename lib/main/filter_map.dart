@@ -11,7 +11,6 @@ import '../services/safe_points_service.dart';
 import '../shared/global_functions.dart';
 import '../ui/fake_call/fake_call.dart';
 import '../ui/path_search/pathSearch.dart';
-import '../shared/points_types.dart';
 import '../ui/dialog/dialog_window.dart';
 
 /// Main Page with the FilterMarkers-Map, including 3 types of Points
@@ -38,7 +37,7 @@ class _FilterMap extends State<FilterMap> {
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  GoogleMapController? mapController;
+  GoogleMapController? _googleMapController;
 
   late Position _currentPosition;
 
@@ -69,14 +68,14 @@ class _FilterMap extends State<FilterMap> {
   initState() {
     super.initState();
     // set GoogleMapController to the global one across the components
-    mapController = widget.googleMapController;
+    _googleMapController = widget.googleMapController;
     _getCurrentLocation();
     updatePointsVisibility();
   }
 
   void _getCurrentLocation() async {
     try {
-      Position position = await getCurrentLocation(mapController);
+      Position position = await getCurrentLocation(_googleMapController);
       setState(() {
         _currentPosition = position;
       });
@@ -121,19 +120,20 @@ class _FilterMap extends State<FilterMap> {
   /// set on map all Police Stations (SafePoints)
   Future<void> fetchPoliceStations() async {
     // Fetch police stations and using the service
-    var policeStations = await safePointsService.fetchPoliceStations();
+    // TODO: uncomment
+    //var policeStations = await safePointsService.fetchPoliceStations();
 
     // iterate through the police stations and create a marker with InfoWindow for each
-    for (final policeStation in policeStations) {
-      var name = policeStation["name"];
-      var marker = await safePointsService.getPoliceMarker(
-          policeStation, customInfoWindowController);
-
-      // add each police-office
-      setState(() {
-        _policeMarkers[name] = marker;
-      });
-    }
+    // for (final policeStation in policeStations) {
+    //   var name = policeStation["name"];
+    //   var marker = await safePointsService.getPoliceMarker(
+    //       policeStation, customInfoWindowController);
+    //
+    //   // add each police-office
+    //   setState(() {
+    //     _policeMarkers[name] = marker;
+    //   });
+    // }
 
     // add police stations to set of safe points
     setState(() {
@@ -144,28 +144,29 @@ class _FilterMap extends State<FilterMap> {
   /// set on map all Custom Points (DangerPoints and RecommendationPoints)
   Future<void> fetchCustomPoints() async {
     // Fetch custom points using the service
-    var customPoints = await safePointsService.fetchCustomPoints();
+    // TODO: uncomment
+    //var customPoints = await safePointsService.fetchCustomPoints();
 
     // add all custom made points (DangerPoints and RecommendationPoints)
-    for (final customPoint in customPoints) {
-      var mainType = getMainType(customPoint["main_type"]);
-      var marker = await safePointsService.getCustomMarker(
-          customPoint, customInfoWindowController);
-
-      // add each point to the set
-      setState(() {
-        switch (mainType) {
-          case MainType.dangerPoint:
-            _dangerPointsMarkers.add(marker);
-            break;
-          case MainType.recommendationPoint:
-            _recommendationPointsMarkers.add(marker);
-            break;
-          case MainType.safePoint:
-            _safePointsMarkers.add(marker);
-        }
-      });
-    }
+    // for (final customPoint in customPoints) {
+    //   var mainType = getMainType(customPoint["main_type"]);
+    //   var marker = await safePointsService.getCustomMarker(
+    //       customPoint, customInfoWindowController);
+    //
+    //   // add each point to the set
+    //   setState(() {
+    //     switch (mainType) {
+    //       case MainType.dangerPoint:
+    //         _dangerPointsMarkers.add(marker);
+    //         break;
+    //       case MainType.recommendationPoint:
+    //         _recommendationPointsMarkers.add(marker);
+    //         break;
+    //       case MainType.safePoint:
+    //         _safePointsMarkers.add(marker);
+    //     }
+    //   });
+    // }
   }
 
   Future<void> showInformationDialog(
@@ -273,19 +274,7 @@ class _FilterMap extends State<FilterMap> {
       appBar: AppBar(
         title: const Text('SafeStreets'),
       ),
-      body: FutureBuilder(
-          future: safePointsService.fetchData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting ||
-                snapshot.connectionState == ConnectionState.active) {
-              // Display the loading spinner while the data is being fetched
-              return const LoadingSpinnerWidget();
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              // Display your actual page content once the data is loaded
-              if (snapshot.hasData) {
-                final data = snapshot.data as String;
-                print(data);
-                return SafeArea(
+      body: SafeArea(
                   child: Stack(
                     children: [
                       // Google Map widget
@@ -293,7 +282,7 @@ class _FilterMap extends State<FilterMap> {
 
                       // Route-builder enables searching for points and building a navigation path between them
                       PathSearch(
-                        googleMapController: mapController,
+                        googleMapController: _googleMapController,
                         onPathDataReceived: onPathDataReceived,
                       ),
 
@@ -327,19 +316,7 @@ class _FilterMap extends State<FilterMap> {
                       ),
                     ],
                   ),
-                );
-              } else {
-                return const Center(
-                  child: Text('Error occurred during data-fetching.'),
-                );
-              }
-            } else {
-              // Handle any error that occurred during the data loading process
-              return const Center(
-                child: Text('Error occurred.'),
-              );
-            }
-          }),
+                )
     );
   }
 
@@ -364,8 +341,8 @@ class _FilterMap extends State<FilterMap> {
       // Callback when the map is created
       onMapCreated: (controller) {
         setState(() {
-          mapController = controller;
-          customInfoWindowController.googleMapController = mapController;
+          _googleMapController = controller;
+          customInfoWindowController.googleMapController = _googleMapController;
         });
         // get the places with markers on the map
         fetchPlaces();
@@ -412,7 +389,7 @@ class _FilterMap extends State<FilterMap> {
                       child: Icon(Icons.add),
                     ),
                     onTap: () {
-                      mapController?.animateCamera(
+                      _googleMapController?.animateCamera(
                         CameraUpdate.zoomIn(),
                       );
                     },
@@ -431,7 +408,7 @@ class _FilterMap extends State<FilterMap> {
                       child: Icon(Icons.remove),
                     ),
                     onTap: () {
-                      mapController?.animateCamera(
+                      _googleMapController?.animateCamera(
                         CameraUpdate.zoomOut(),
                       );
                     },
@@ -450,7 +427,7 @@ class _FilterMap extends State<FilterMap> {
                       child: Icon(Icons.my_location),
                     ),
                     onTap: () {
-                      mapController?.animateCamera(
+                      _googleMapController?.animateCamera(
                         CameraUpdate.newCameraPosition(
                           CameraPosition(
                             target: LatLng(

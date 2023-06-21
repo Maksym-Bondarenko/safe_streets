@@ -23,7 +23,7 @@ class _FakeCallWidgetState extends State<FakeCallWidget> {
   @override
   void initState() {
     super.initState();
-    playAudio();
+    //playAudio();
   }
 
   @override
@@ -37,7 +37,7 @@ class _FakeCallWidgetState extends State<FakeCallWidget> {
   final audioPlayer = AudioPlayer();
 
   void playAudio() async {
-    await audioPlayer.play(AssetSource(audioFilePath));
+    //await audioPlayer.play(AssetSource(audioFilePath));
   }
 
   void stopAudio() async {
