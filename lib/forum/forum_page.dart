@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CardItem {
-  final String title;
-  final String subtitle;
-
-  CardItem(this.title, this.subtitle);
-}
-
+/// Page with forum for community
 class ForumPage extends StatefulWidget {
   const ForumPage({super.key});
 
@@ -19,12 +13,12 @@ class _ForumPageState extends State<ForumPage> {
   final List<CardItem> _cardItems = [
     CardItem('Garching', 'Munich'),
     CardItem('Schwabing', 'Munich'),
+    CardItem('Bogenhausen', 'Munich'),
     CardItem('Munich', 'Germany'),
     CardItem('Berlin', 'Germany'),
     CardItem('Bavaria', 'Germany'),
     CardItem('Frankfurt', 'Germany'),
-    CardItem('Germany', ''),
-    CardItem('Bogenhausen', 'Munich'),
+    CardItem('Germany', 'Europe'),
   ];
 
   List<CardItem> _filteredCardItems = [];
@@ -159,4 +153,11 @@ class _ForumPageState extends State<ForumPage> {
       ),
     );
   }
+}
+
+class CardItem {
+  final String title;
+  final String subtitle;
+
+  CardItem(this.title, this.subtitle);
 }

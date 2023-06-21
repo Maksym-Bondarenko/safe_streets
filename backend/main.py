@@ -3,11 +3,12 @@ import os
 from database import DBConnector
 from flask import Flask, jsonify, request
 from db_strcuts import User, Place, asdict
-
+import pandas as pd
 app = Flask(__name__)
 
 db_client = DBConnector()
 
+df_places = pd.read_csv('safe_points/places_data.csv')
 
 @app.route('/add/user', methods=['POST'])
 def create_user():
@@ -24,6 +25,9 @@ def get_all_users():
     users = [asdict(User(**row)) for row in result]
     return jsonify(users)
 
+@app.route("/get/places", methods=['GET'])
+def get_places():
+    return df_places.to_json(orient='records')
 
 # get user by firebase id
 @app.route("/get/users")

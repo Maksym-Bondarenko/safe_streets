@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'app.dart';
 import 'authentication/firebase_options.dart';
 
+/// Start of the Program, here will be asked all permissions and run the app
 void main() async {
   // load the environment variables
   await dotenv.load(fileName: "api_keys.env");
