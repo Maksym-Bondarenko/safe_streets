@@ -12,20 +12,19 @@ import '../../shared/global_functions.dart';
 /// between two points on the map
 class PathSearch extends StatefulWidget {
   final GoogleMapController? googleMapController;
-  final Function(Set<Marker> markers, Set<Polyline> polylines) onPathDataReceived;
+  final Function(Set<Marker> markers, Set<Polyline> polylines)
+      onPathDataReceived;
 
-  const PathSearch({
-    super.key,
-    required this.googleMapController,
-    required this.onPathDataReceived
-  });
+  const PathSearch(
+      {super.key,
+      required this.googleMapController,
+      required this.onPathDataReceived});
 
   @override
   State<StatefulWidget> createState() => _PathSearch();
 }
 
 class _PathSearch extends State<PathSearch> {
-
   final pathService = PathService();
 
   GoogleMapController? googleMapController;
@@ -79,7 +78,7 @@ class _PathSearch extends State<PathSearch> {
 
       setState(() {
         _currentAddress =
-        "${place.name}, ${place.locality}, ${place.postalCode}, ${place.country}";
+            "${place.name}, ${place.locality}, ${place.postalCode}, ${place.country}";
         startAddressController.text = _currentAddress;
         _startAddress = _currentAddress;
       });
@@ -89,21 +88,24 @@ class _PathSearch extends State<PathSearch> {
   }
 
   void setSourceAndDestinationIcons() async {
-    sourceIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 2.5),
-        "lib/assets/markers/path/start_marker.png");
-    destinationIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 2.5),
-        "lib/assets/markers/path/finish_marker.png");
+    getBytesFromAsset("lib/assets/markers/path_points/start_marker.png", 200)
+        .then((onValue) {
+      sourceIcon = BitmapDescriptor.fromBytes(onValue!);
+    });
+    getBytesFromAsset("lib/assets/markers/path_points/finish_marker.png", 200)
+        .then((onValue) {
+      destinationIcon = BitmapDescriptor.fromBytes(onValue!);
+    });
   }
 
   // Method for calculating the distance between two places
-  Future<bool> _calculateDistance(GoogleMapController? googleMapController) async {
+  Future<bool> _calculateDistance(
+      GoogleMapController? googleMapController) async {
     try {
       // Retrieving placemarks from addresses
       List<Location> startPlacemark = await locationFromAddress(_startAddress);
       List<Location> destinationPlacemark =
-      await locationFromAddress(_destinationAddress);
+          await locationFromAddress(_destinationAddress);
 
       // Use the retrieved coordinates of the current position,
       // instead of the address if the start position is user's
@@ -131,8 +133,7 @@ class _PathSearch extends State<PathSearch> {
           title: 'Start $startCoordinatesString',
           snippet: _startAddress,
         ),
-        // TODO: uncomment
-        // icon: sourceIcon,
+        icon: sourceIcon,
       );
 
       // Destination Location Marker
@@ -143,8 +144,7 @@ class _PathSearch extends State<PathSearch> {
           title: 'Destination $destinationCoordinatesString',
           snippet: _destinationAddress,
         ),
-        // TODO: uncomment
-        // icon: destinationIcon,
+        icon: destinationIcon,
       );
 
       // Adding the markers to the list
@@ -154,12 +154,12 @@ class _PathSearch extends State<PathSearch> {
       // add to the main-map via callback function
       _updatePathData();
 
-      print(
-        'START COORDINATES: ($startLatitude, $startLongitude)',
-      );
-      print(
-        'DESTINATION COORDINATES: ($destinationLatitude, $destinationLongitude)',
-      );
+      // print(
+      //   'START COORDINATES: ($startLatitude, $startLongitude)',
+      // );
+      // print(
+      //   'DESTINATION COORDINATES: ($destinationLatitude, $destinationLongitude)',
+      // );
 
       // Calculating to check that the position relative
       // to the frame, and pan & zoom the camera accordingly.
@@ -194,7 +194,8 @@ class _PathSearch extends State<PathSearch> {
         ),
       );
 
-      await setPolylines(startLatitude, startLongitude, destinationLatitude, destinationLongitude);
+      await setPolylines(startLatitude, startLongitude, destinationLatitude,
+          destinationLongitude);
 
       double totalDistance = 0.0;
 
@@ -214,7 +215,7 @@ class _PathSearch extends State<PathSearch> {
 
       setState(() {
         _placeDistance = totalDistance.toStringAsFixed(2);
-        print('DISTANCE: $_placeDistance km');
+        // print('DISTANCE: $_placeDistance km');
       });
 
       return true;
@@ -225,21 +226,19 @@ class _PathSearch extends State<PathSearch> {
   }
 
   // creates the set of polylines from the start point to the destination point
-  setPolylines(double startLatitude, double startLongitude, double destinationLatitude, double destinationLongitude) async {
+  setPolylines(double startLatitude, double startLongitude,
+      double destinationLatitude, double destinationLongitude) async {
     // TODO: move to service
-    PolylineResult result = await
-    polylinePoints.getRouteBetweenCoordinates(
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         dotenv.env['GOOGLE_MAPS_API_KEY']!,
         PointLatLng(startLatitude, startLongitude),
         PointLatLng(destinationLatitude, destinationLongitude),
-        travelMode: TravelMode.walking
-    );
-    if(result.points.isNotEmpty){
+        travelMode: TravelMode.walking);
+    if (result.points.isNotEmpty) {
       // loop through all PointLatLng points and convert them
       // to a list of LatLng, required by the Polyline
       for (var point in result.points) {
-        polylineCoordinates.add(
-            LatLng(point.latitude, point.longitude));
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       }
     }
     setState(() {
@@ -248,8 +247,7 @@ class _PathSearch extends State<PathSearch> {
       Polyline polyline = Polyline(
           polylineId: const PolylineId("poly"),
           color: const Color.fromARGB(255, 40, 122, 198),
-          points: polylineCoordinates
-      );
+          points: polylineCoordinates);
 
       // add the constructed polyline as a set of points
       // to the polyline set, which will eventually
@@ -260,13 +258,40 @@ class _PathSearch extends State<PathSearch> {
     });
   }
 
+  // cleans the path-markers, distance and polylines
+  void _cleanPath() {
+    setState(() {
+      _currentAddress = "";
+      _destinationAddress = "";
+      // startAddressController.text = "";
+      startAddressController.clear();
+      // destinationAddressController.text = "";
+      destinationAddressController.clear();
+      _polylines.clear();
+      markers.clear();
+      _placeDistance = null;
+      _updatePathData();
+    });
+  }
+
+  // Method for exchanging start and destination addresses
+  void _exchangeAddresses() {
+    // Swap the values of start and destination addresses
+    String tempAddress = _startAddress;
+    _startAddress = _destinationAddress;
+    _destinationAddress = tempAddress;
+
+    // Swap the values of start and destination text fields
+    startAddressController.text = _startAddress;
+    destinationAddressController.text = _destinationAddress;
+  }
+
   @override
   void initState() {
     super.initState();
     googleMapController = widget.googleMapController;
     _getCurrentLocation();
-    // TODO: uncomment
-    //setSourceAndDestinationIcons();
+    setSourceAndDestinationIcons();
   }
 
   @override
@@ -290,8 +315,8 @@ class _PathSearch extends State<PathSearch> {
       child: FractionallySizedBox(
         child: DraggableScrollableSheet(
           initialChildSize: 0.08,
-          minChildSize: 0.08,  // Minimum size when fully collapsed
-          maxChildSize: 0.35,    // Maximum size when fully expanded
+          minChildSize: 0.08, // Minimum size when fully collapsed
+          maxChildSize: 0.35, // Maximum size when fully expanded
           builder: (BuildContext context, ScrollController scrollController) {
             return Opacity(
               opacity: 0.8,
@@ -322,7 +347,7 @@ class _PathSearch extends State<PathSearch> {
                         const SizedBox(height: 10),
                         const Text(
                           'Get Safe Route',
-                          style: TextStyle(fontSize: 20.0),
+                          style: TextStyle(fontSize: 20.0, color: Colors.blue),
                         ),
                         const SizedBox(height: 10),
                         _textField(
@@ -332,6 +357,7 @@ class _PathSearch extends State<PathSearch> {
                           suffixIcon: IconButton(
                             icon: const Icon(Icons.my_location),
                             onPressed: () {
+                              _getAddress();
                               startAddressController.text = _currentAddress;
                               _startAddress = _currentAddress;
                             },
@@ -362,65 +388,100 @@ class _PathSearch extends State<PathSearch> {
                         const SizedBox(height: 10),
                         Visibility(
                           visible: _placeDistance == null ? false : true,
-                          child: Text(
-                            'DISTANCE: $_placeDistance km',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'DISTANCE: $_placeDistance km',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              GestureDetector(
+                                onTap: _cleanPath,
+                                child: const Icon(
+                                  Icons.cleaning_services,
+                                  color: Colors.grey,
+                                  size: 24.0,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         const SizedBox(height: 5),
-                        ElevatedButton(
-                          onPressed: (_startAddress != '' &&
-                              _destinationAddress != '')
-                              ? () async {
-                            startAddressFocusNode.unfocus();
-                            destinationAddressFocusNode.unfocus();
-                            setState(() {
-                              if (markers.isNotEmpty) markers.clear();
-                              if (_polylines.isNotEmpty) _polylines.clear();
-                              if (polylineCoordinates.isNotEmpty) {
-                                polylineCoordinates.clear();
-                              }
-                              _placeDistance = null;
-                              // add to the main-map via callback function
-                              _updatePathData();
-                            });
-
-                            _calculateDistance(googleMapController).then((isCalculated) {
-                              if (isCalculated) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Distance Calculated Successfully'),
-                                  ),
-                                );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Error Calculating Distance'),
-                                  ),
-                                );
-                              }
-                            });
-                          }
-                              : null,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'Show Route'.toUpperCase(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: _exchangeAddresses,
+                              child: const Icon(
+                                Icons.swap_vert,
+                                color: Colors.grey,
+                                size: 24.0,
                               ),
                             ),
-                          ),
+                            const SizedBox(width: 5),
+                            ElevatedButton(
+                              onPressed:
+                                  (_startAddress != '' && _destinationAddress != '')
+                                      ? () async {
+                                          startAddressFocusNode.unfocus();
+                                          destinationAddressFocusNode.unfocus();
+                                          setState(() {
+                                            if (markers.isNotEmpty) markers.clear();
+                                            if (_polylines.isNotEmpty) {
+                                              _polylines.clear();
+                                            }
+                                            if (polylineCoordinates.isNotEmpty) {
+                                              polylineCoordinates.clear();
+                                            }
+                                            _placeDistance = null;
+                                            // add to the main-map via callback function
+                                            _updatePathData();
+                                          });
+
+                                          _calculateDistance(googleMapController)
+                                              .then((isCalculated) {
+                                            if (isCalculated) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'Distance Calculated Successfully'),
+                                                ),
+                                              );
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                const SnackBar(
+                                                  content: Text(
+                                                      'Error Calculating Distance'),
+                                                ),
+                                              );
+                                            }
+                                          });
+                                        }
+                                      : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Show Route'.toUpperCase(),
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

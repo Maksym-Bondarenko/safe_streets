@@ -12,6 +12,7 @@ import '../shared/global_functions.dart';
 import '../ui/fake_call/fake_call.dart';
 import '../ui/path_search/pathSearch.dart';
 import '../ui/dialog/dialog_window.dart';
+import '../ui/sos/sos_window.dart';
 
 /// Main Page with the FilterMarkers-Map, including 3 types of Points
 class FilterMap extends StatefulWidget {
@@ -255,9 +256,12 @@ class _FilterMap extends State<FilterMap> {
     );
   }
 
-  // TODO: implement SOS-functionality
   void sosPressed() {
-    print('Pressed SOS');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => const SOSWidget()),
+    );
   }
 
   // TODO: implement share location functionality
@@ -270,54 +274,53 @@ class _FilterMap extends State<FilterMap> {
     //var height = MediaQuery.of(context).size.height;
     //var width = MediaQuery.of(context).size.width;
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: const Text('SafeStreets'),
-      ),
-      body: SafeArea(
-                  child: Stack(
-                    children: [
-                      // Google Map widget
-                      _buildGoogleMap(),
+        key: _scaffoldKey,
+        appBar: AppBar(
+          title: const Text('SafeStreets'),
+        ),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              // Google Map widget
+              _buildGoogleMap(),
 
-                      // Route-builder enables searching for points and building a navigation path between them
-                      PathSearch(
-                        googleMapController: _googleMapController,
-                        onPathDataReceived: onPathDataReceived,
-                      ),
+              // Route-builder enables searching for points and building a navigation path between them
+              PathSearch(
+                googleMapController: _googleMapController,
+                onPathDataReceived: onPathDataReceived,
+              ),
 
-                      // Show current location button and zoom-buttons
-                      Positioned(
-                        bottom: 30,
-                        right: 10,
-                        child: _buildCustomMapButtons(),
-                      ),
+              // Show current location button and zoom-buttons
+              Positioned(
+                bottom: 30,
+                right: 10,
+                child: _buildCustomMapButtons(),
+              ),
 
-                      // Toggle Buttons
-                      Positioned(
-                        top: 30,
-                        left: 10,
-                        child: _buildToggleButtons(),
-                      ),
+              // Toggle Buttons
+              Positioned(
+                top: 30,
+                left: 10,
+                child: _buildToggleButtons(),
+              ),
 
-                      // Custom Info Window
-                      CustomInfoWindow(
-                        controller: customInfoWindowController,
-                        width: 300,
-                        height: 300,
-                        offset: 50,
-                      ),
+              // Custom Info Window
+              CustomInfoWindow(
+                controller: customInfoWindowController,
+                width: 300,
+                height: 300,
+                offset: 50,
+              ),
 
-                      // Speed Dial
-                      Positioned(
-                        bottom: 30,
-                        left: 10,
-                        child: _buildSpeedDial(),
-                      ),
-                    ],
-                  ),
-                )
-    );
+              // Speed Dial
+              Positioned(
+                bottom: 30,
+                left: 10,
+                child: _buildSpeedDial(),
+              ),
+            ],
+          ),
+        ));
   }
 
   Widget _buildGoogleMap() {

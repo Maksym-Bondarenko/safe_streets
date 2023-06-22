@@ -47,3 +47,6 @@ app.*.map.json
 # to exclude files with API-keys to be published
 api_keys.env
 ios/Flutter/Debug.xcconfig
+
+# exclude backend secret config-file
+backend/config_secret.py

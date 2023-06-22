@@ -11,37 +11,44 @@ import 'base_service.dart';
 class PathService extends BaseService {
 
   // TODO: replace some functionality in pathSearch.dart with this service
-  Future<List<LatLng>> calculatePath(
-      String startAddress, String destinationAddress) async {
+
+  Future<List<LatLng>> getPolylineCoordinates(
+      double startLatitude,
+      double startLongitude,
+      double destinationLatitude,
+      double destinationLongitude) async {
+    PolylinePoints polylinePoints = PolylinePoints();
     List<LatLng> polylineCoordinates = [];
 
-    try {
-      List<Location> startPlacemark = await locationFromAddress(startAddress);
-      List<Location> destinationPlacemark =
-      await locationFromAddress(destinationAddress);
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      apiKey!,
+      PointLatLng(startLatitude, startLongitude),
+      PointLatLng(destinationLatitude, destinationLongitude),
+      travelMode: TravelMode.walking,
+    );
 
-      double startLatitude = startPlacemark[0].latitude;
-      double startLongitude = startPlacemark[0].longitude;
-      double destinationLatitude = destinationPlacemark[0].latitude;
-      double destinationLongitude = destinationPlacemark[0].longitude;
-
-      PolylineResult result = await PolylinePoints().getRouteBetweenCoordinates(
-        apiKey!,
-        PointLatLng(startLatitude, startLongitude),
-        PointLatLng(destinationLatitude, destinationLongitude),
-        travelMode: TravelMode.walking,
-      );
-
-      if (result.points.isNotEmpty) {
-        for (var point in result.points) {
-          polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-        }
+    if (result.points.isNotEmpty) {
+      for (var point in result.points) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       }
-    } catch (e) {
-      print(e);
     }
 
     return polylineCoordinates;
+  }
+
+  double calculateDistance(List<LatLng> polylineCoordinates) {
+    double totalDistance = 0.0;
+
+    for (int i = 0; i < polylineCoordinates.length - 1; i++) {
+      totalDistance += coordinateDistance(
+        polylineCoordinates[i].latitude,
+        polylineCoordinates[i].longitude,
+        polylineCoordinates[i + 1].latitude,
+        polylineCoordinates[i + 1].longitude,
+      );
+    }
+
+    return totalDistance;
   }
 
   // Formula for calculating distance between two coordinates
