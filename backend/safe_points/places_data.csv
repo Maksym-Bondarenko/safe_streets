@@ -1,0 +1,88 @@
+type,name,address,business_status,lng,lat
+hospital,PC-Hospital,"Goethestraße 41, 80336 München, Germany",OPERATIONAL,11.55891,48.1342369
+hospital,Urgence,"Prielmayerstraße 3, 80335 München, Germany",OPERATIONAL,11.5619688,48.140871
+hospital,Klinikum der Universität München,"Ziemssenstraße 5, 80336 München, Germany",OPERATIONAL,11.5612684,48.1321457
+hospital,Deutsche Gesellschaft für Klinische Neurophysiologie,"Theatinerstraße 44, 80333 München, Germany",OPERATIONAL,11.5762622,48.139921
+hospital,Klinik München,"Lindwurmstraße 4, 80337 München, Germany",OPERATIONAL,11.5588246,48.130374
+hospital,Schwabing 24h hospital,"Kölner Pl. 1, 80804 München, Germany",OPERATIONAL,11.5774328,48.1719559
+hospital,Red Cross Hospital,"Nymphenburger Str. 163, 80634 München, Germany",OPERATIONAL,11.5318951,48.15408350000001
+hospital,M1 private clinic AG,"Frauenplatz 7, 80331 München, Germany",OPERATIONAL,11.5737264,48.13807389999999
+hospital,Psychiatrie Werneck,"Odeonspl. 3, 80539 München, Germany",OPERATIONAL,11.5773983,48.1428673
+hospital,Endokrinolog,"Residenzstraße 3, 80333 München, Germany",OPERATIONAL,11.5775722,48.1388965
+hospital,Department of Anesthesiology,"Nußbaumstraße 20, 80336 München, Germany",OPERATIONAL,11.56157,48.13337
+hospital,Harlaching Hospital,"Sanatoriumspl. 2, 81545 München, Germany",OPERATIONAL,11.5576757,48.08547129999999
+hospital,München Klinik Schwabing,"Kölner Pl. 1, 80804 München, Germany",OPERATIONAL,11.5784488,48.1719365
+hospital,فرنك مستشفي الجامعي,"Frauenlobstraße 7, 80337 München, Germany",OPERATIONAL,11.564603,48.1301733
+hospital,Thomas Kirchner Klinikum Innenstadt Pathologisches Institut,"Thalkirchner Str. 36, 80337 München, Germany",OPERATIONAL,11.5655693,48.1300635
+hospital,Hospital Technology - Installation & Service GmbH,"Agnesstraße 12, 80798 München, Germany",OPERATIONAL,11.5705553,48.1574952
+hospital,Krankenhaus Martha-Maria München,"Wolfratshauser Str. 109, 81479 München, Germany",OPERATIONAL,11.5346467,48.0854811
+hospital,Unterstützerkreis Missions- krankenhaus Kapiri e.V.,"Tengstraße 12, 80798 München, Germany",OPERATIONAL,11.5688167,48.1565694
+hospital,Klinikum rechts der Isar der Technischen Universität München,"Ismaninger Str. 22, 81675 München, Germany",OPERATIONAL,11.6008283,48.13748589999999
+hospital,Hippokrates Medical Center,"Balanstraße 57, 81541 München, Germany",OPERATIONAL,11.599024,48.123028
+hospital,Arzt Fur Neurologie. PsychiTrie,"Sendlinger Str. 45A, 80331 München, Germany",OPERATIONAL,11.5684343,48.1342047
+hospital,Interdisziplinäres Centrum für Prävention psychischer Störungen,"Nußbaumstraße 7, 80336 München, Germany",OPERATIONAL,11.5594304,48.1326702
+hospital,مستشفى كلينكو,"80804 Munich, Germany",OPERATIONAL,11.5789779,48.1713152
+hospital,Krankenhaus Barmherzige Brüder München,"Romanstraße 93, 80639 München, Germany",OPERATIONAL,11.5098034,48.1561688
+hospital,Klinikum Dritter Orden,"Menzinger Str. 44, 80638 München, Germany",OPERATIONAL,11.504618,48.1654714
+hospital,Ospedale ludo,"Hirschauer Str. 6, 80538 München, Germany",OPERATIONAL,11.5962833,48.1514672
+hospital,Krankenhaus München-Schwabing 6. Abteilung Nieren- und Hochdruckerkrankungen,"Kölner Pl. 1, 80804 München, Germany",OPERATIONAL,11.5774229,48.17189219999999
+hospital,München Klinik Neuperlach,"Oskar-Maria-Graf-Ring 51, 81737 München, Germany",OPERATIONAL,11.6568482,48.094224
+hospital,"Helmholtzzentrum München, Hämatologikum,","Marchioninistr. 25, Hörsaal Ebene 1, Germany",OPERATIONAL,11.5944521,48.1271211
+hospital,عيادة د. هيرتلاند,"Steinerstraße 6, 81369 München, Germany",OPERATIONAL,11.539298,48.1042107
+hospital,Krankenhaus Neuwittelsbach,"Renatastraße 71A, 80639 München, Germany",OPERATIONAL,11.5257528,48.1568996
+hospital,NeuroIntegrative Medicine,"Angererstraße 9, 80796 München, Germany",OPERATIONAL,11.5724461,48.1661558
+hospital,Spitali Ledios,"Einsteinstraße 1, 81675 München, Germany",OPERATIONAL,11.5985148,48.1358854
+hospital,Krankenhaus München-Schwabing Institut für Medizinische Physik und Strahlenschutz,"Kölner Pl. 1, 80804 München, Germany",OPERATIONAL,11.5773809,48.1719723
+hospital,Traumland Intensivstation,"22, Ismaninger Str., 81675 München, Germany",OPERATIONAL,11.5997829,48.1360041
+hospital,Munich University Hospital sleep labs,"Ziemssenstraße 1, 80336 München, Germany",OPERATIONAL,11.5624306,48.1322283
+hospital,Mother’s Care Home,"Plievierpark 13-16, 81737 München, Germany",OPERATIONAL,11.650082,48.0963295
+hospital,مستشفى اثير,"Am Oberwiesenfeld 20, 80809 München, Germany",OPERATIONAL,11.5432921,48.188403
+hospital,Nimrodstraße Parkplatz,"80639 Munich, Germany",OPERATIONAL,11.5254793,48.1533133
+hospital,Hospital Brothers of Mercy Munich Emergency Room,"Romanstraße 93, 80639 München, Germany",OPERATIONAL,11.5104071,48.15590450000001
+hospital,مستشفي عمليه ظهري,"Am Isarkanal 30A, 81379 München, Germany",OPERATIONAL,11.5487931,48.1028573
+hospital,Rosa Motsiou,"Sonnenstraße 11, 80331 München, Germany",OPERATIONAL,11.5657024,48.1376979
+hospital,Station 2/10,"Ismaninger Str. 15, 81675 München, Germany",OPERATIONAL,11.5984515,48.13779570000001
+hospital,Augenklinik Augenambulanz,"81675 Munich, Germany",OPERATIONAL,11.5992239,48.13695509999999
+hospital,Großhadern Clinic,"Marchioninistraße 15, 81377 München, Germany",OPERATIONAL,11.4702951,48.1114214
+hospital,Qualiät im ärztliche labor,"Qualitätsspange, 80809 München, Germany",OPERATIONAL,11.5585613,48.1830762
+hospital,مستشفى جروس هاردن الجامعي,"Marchioninistraße 15, 81377 München, Germany",OPERATIONAL,11.468761,48.11134500000001
+hospital,Deutsches Mitonet e.V.,"Kölner Pl. 1, 80804 München, Germany",OPERATIONAL,11.5774328,48.1719559
+hospital,T.E.A.M. - Transluminale Endoskopische Arbeitsgemeinschaft München,"Marchioninistraße 15, 81377 München, Germany",OPERATIONAL,11.4711852,48.1110264
+hospital,مستشفي,"Romanstraße 84, 80639 München, Germany",OPERATIONAL,11.5096721,48.1554731
+hospital,Hospital Munich-Schwabing Institute of Clinical Chemistry,"Kölner Pl. 1, 80804 München, Germany",OPERATIONAL,11.5774709,48.1706477
+hospital,Münchner EEG-Tage,"Münchner Str. 52, 85774 München, Germany",OPERATIONAL,11.6372901,48.1891566
+hospital,Klinikum Fürstenfeldbruck,"Dachauer Str. 33, 82256 Fürstenfeldbruck, Germany",OPERATIONAL,11.2589712,48.1808693
+police,Federal police,"Bahnsteig 26, Arnulfstraße 1a, 80335 München, Germany",OPERATIONAL,11.5586964,48.1410074
+police,Bahnpolizei Hauptbahnhof,"Arnulfstraße 1, 80335 München, Germany",OPERATIONAL,11.55946,48.14100999999999
+police,Polizeipräsidium München,"Ettstraße 2, 80333 München, Germany",OPERATIONAL,11.5717414,48.13885560000001
+police,Landespolizei,"Bayerstraße 12, 80335 München, Germany",OPERATIONAL,11.5567882,48.1394579
+police,Bavarian Police - Ministry of the Interior,"Ludwigstraße 3, 80539 München, Germany",OPERATIONAL,11.5781024,48.1444166
+police,Police 11 Altstadt,"Hochbrückenstraße 7, 80331 München, Germany",OPERATIONAL,11.5802176,48.1368429
+police,Police 12 Maxvorstadt - Munich,"Türkenstraße 20, 80333 München, Germany",OPERATIONAL,11.5740329,48.1468449
+police,Federal Police Station Munich East (Ostbahnhof),"Orleanspl. 10, 81667 München, Germany",OPERATIONAL,11.604464,48.1277971
+police,Police 16,"Bayerstraße 14, 80335 München, Germany",OPERATIONAL,11.555208,48.1393485
+police,Bundespolizeidirektion München,"Infanteriestraße 6, 80797 München, Germany",OPERATIONAL,11.5580732,48.1575646
+police,Standesamt München,"Marienplatz 8, 80331 München, Germany",OPERATIONAL,11.5761399,48.1373363
+police,Munich Police 14 - Westend,"Beethovenstraße 5, 80336 München, Germany",OPERATIONAL,11.5545043,48.1319802
+police,Polizeiinspektion München - 22 - Bogenhausen,"Prinzregentenpl. 16, 81675 München, Germany",OPERATIONAL,11.6074086,48.1388079
+police,Polizeiinspektion München 15 - Sendling,"Treffauerstraße 56, 81373 München, Germany",OPERATIONAL,11.5178655,48.1178404
+police,PP München,"Ettstraße 2, 80333 München, Germany",OPERATIONAL,11.5715457,48.13898580000001
+police,Polizei-Schützen-Kameradschaft München e.V.,"Wildenholzener Str. 24, 81671 München, Germany",OPERATIONAL,11.6214964,48.1159774
+police,Polizeiinspektion München 41 - Laim,"Rapotostraße 1, 80687 München, Germany",OPERATIONAL,11.4988715,48.1430397
+police,PI Schubwesen Oberbayern,"St.-Quirin-Straße 2, 81549 München, Germany",OPERATIONAL,11.5871033,48.1038521
+police,Munich Police - 21 - Au,"Am Neudeck 1, 81541 München, Germany",OPERATIONAL,11.5842,48.1238314
+police,Munich police headquarters Mounted Police,"Schichtlstraße 46, 81929 München, Germany",OPERATIONAL,11.6659075,48.14573
+police,Bavarian Police: Riot Control Unit,"Rosenheimer Str. 130, 81669 München, Germany",OPERATIONAL,11.6064935,48.1198404
+police,Polizeiinspektion München - 43 - Olympiapark,"Moosacher Str. 77, 80809 München, Germany",OPERATIONAL,11.5534125,48.1857189
+police,Polizeistation München-Neuperlach,"Adenauerring 29, 81737 München, Germany",OPERATIONAL,11.6427179,48.104093
+police,Police 13 Schwabing,"Johann-Fichte-Straße 6, 80805 München, Germany",OPERATIONAL,11.587863,48.16940899999999
+police,Munich Police - 23 - Giesing,"Chiemgaustraße 2, 81549 München, Germany",OPERATIONAL,11.5826576,48.1043683
+police,Police Inspectorate 45 Pasing,"Heimburgstraße 19, 81243 München, Germany",OPERATIONAL,11.4447014,48.1482642
+police,Deutsche Polizeigewerkschaft,"Orleansstraße 4, 81669 München, Germany",OPERATIONAL,11.59754,48.123971
+police,Verkehrspolizeiinspektion Fürstenfeldbruck Dienstsitz,"Bergsonstraße 20, 81245 München, Germany",OPERATIONAL,11.4528176,48.1653362
+police,Police Station,"Dr.-Höfler-Straße 1, 85221 Dachau, Germany",OPERATIONAL,11.4273582,48.2631898
+police,Autobahnpolizeistation Oberdill,"82319 Starnberg, Germany",OPERATIONAL,11.4279039,48.0297479
+police,Polizeiinspektion München - 28 - Ottobrunn,"Haidgraben 1B, 85521 Ottobrunn, Germany",OPERATIONAL,11.6526211,48.0723205
+police,Police 47 Milbertshofen,"Knorrstraße 139, 80937 München, Germany",OPERATIONAL,11.5702373,48.1921946
+police,Verkehrspolizeiinspektion Hohenbrunn,"Putzbrunner Str. 100, 85662 Hohenbrunn, Germany",OPERATIONAL,11.7081679,48.0595401
+police,Polizeiinspektion Germering,"Waldstraße 32, 82110 Germering, Germany",OPERATIONAL,11.377394,48.125047
