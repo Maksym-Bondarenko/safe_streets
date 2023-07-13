@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:torch_light/torch_light.dart';
 
 class SOSWidget extends StatefulWidget {
   const SOSWidget({Key? key}) : super(key: key);
@@ -11,12 +12,13 @@ class SOSWidget extends StatefulWidget {
 
 class _SOSWidgetState extends State<SOSWidget>
     with SingleTickerProviderStateMixin {
+
+  bool _alarmIsOn = true;
   late AnimationController _animationController;
   late Animation<double> _animation;
   final audioPlayer = AudioPlayer();
   final audioFilePath = "audio/sos.wav";
 
-  // bool _isFlashOn = false;
 
   void playAudio() async {
     await audioPlayer.setReleaseMode(ReleaseMode.loop);
@@ -28,28 +30,34 @@ class _SOSWidgetState extends State<SOSWidget>
     await audioPlayer.stop();
   }
 
-  // TODO: find a solution to access the flashlight (torch)
-  // Future<void> _toggleFlashlight() async {
-  //   if (_isFlashOn) {
-  //     // Torch.turnOff();
-  //   } else {
-  //     // Torch.turnOn();
-  //   }
-  //
-  //   setState(() {
-  //     _isFlashOn = !_isFlashOn;
-  //   });
-  // }
+  // signaling via phone-torch for attention
+  void _startSignaling() async {
+    while (_alarmIsOn) {
+      await TorchLight.enableTorch();  // Turn on the torch
+      await Future.delayed(const Duration(milliseconds: 500)); // Wait for 0.5 seconds
+      await TorchLight.disableTorch(); // Turn off the torch
+      await Future.delayed(const Duration(milliseconds: 500)); // Wait for 0.5 seconds
+    }
+  }
 
-  void _stopAudioAndReturn() {
+  void _stopAudioLightAndReturn() {
+    setState(() {
+      _alarmIsOn = false;
+    });
     stopAudio();
+    TorchLight.disableTorch();
     Navigator.of(context).pop();
   }
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      _alarmIsOn= true;
+    });
     playAudio();
+    _startSignaling();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -60,8 +68,6 @@ class _SOSWidgetState extends State<SOSWidget>
         curve: Curves.easeInOut,
       ),
     );
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-    // _toggleFlashlight();
   }
 
   @override
@@ -70,6 +76,7 @@ class _SOSWidgetState extends State<SOSWidget>
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: SystemUiOverlay.values);
     stopAudio();
+    TorchLight.disableTorch();
     super.dispose();
   }
 
@@ -91,7 +98,7 @@ class _SOSWidgetState extends State<SOSWidget>
                     alignment: Alignment.topRight,
                     child: IconButton(
                       icon: const Icon(Icons.close, color: Colors.red, size: 50),
-                      onPressed: _stopAudioAndReturn,
+                      onPressed: _stopAudioLightAndReturn,
                     ),
                   ),
                   const SizedBox(height: 16),

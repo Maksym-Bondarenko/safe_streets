@@ -71,6 +71,7 @@ class SafePointsService extends BaseService {
         {
           customInfoWindowController.addInfoWindow!(
               PointInfoWindow(
+                  pointId: id,
                   mainType: MainType.safePoint,
                   subType: SafePoint.police,
                   title: name,
@@ -106,6 +107,7 @@ class SafePointsService extends BaseService {
         {
           customInfoWindowController.addInfoWindow!(
               PointInfoWindow(
+                  pointId: markerId,
                   mainType: mainType,
                   subType: subType,
                   title: title,

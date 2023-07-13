@@ -8,7 +8,21 @@ import '../intro_slider/intro_slider.dart';
 
 /// Authentication page (via mail or Google SSI)
 class AuthGate extends StatelessWidget {
-  const AuthGate({super.key});
+  AuthGate({super.key});
+
+  // TODO: custom login page with wait for email validation (https://medium.flutterdevs.com/email-verification-with-flutter-firebase-e127aad393c3)
+  // https://firebase.flutter.dev/docs/auth/usage/
+  // TODO: add iOS auth (https://firebase.google.com/docs/auth/ios/email-link-auth?hl=en&authuser=0)
+  final ActionCodeSettings acs = ActionCodeSettings(
+    // URL you want to redirect back to. The domain (www.example.com) for this
+    // URL must be whitelisted in the Firebase Console.
+      url: 'https://mysafestreets.org/',
+      dynamicLinkDomain: 'https://mysafestreets.page.link/RtQw',
+      androidPackageName: 'com.example.safe_streets',
+      iOSBundleId: 'com.example.safeStreets',
+      handleCodeInApp: true,
+      androidInstallApp: true,
+      androidMinimumVersion: '12');
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +33,10 @@ class AuthGate extends StatelessWidget {
         // Check if user is not authenticated
         if (!snapshot.hasData) {
           return SignInScreen(
-            providerConfigs: const [
-              EmailProviderConfiguration(),
-              GoogleProviderConfiguration(
+            providerConfigs: [
+              // const EmailProviderConfiguration(),
+              // EmailLinkProviderConfiguration(actionCodeSettings: acs),
+              const GoogleProviderConfiguration(
                   clientId:
                       "721653983645-tf0jcvomt95vakv9o6h8fome21d414bp.apps.googleusercontent.com"),
             ],
@@ -82,7 +97,6 @@ class AuthGate extends StatelessWidget {
             },
           );
         }
-
         // If user is authenticated, show the IntroSliderRules widget
         return const IntroSliderRules();
       },

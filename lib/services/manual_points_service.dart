@@ -12,16 +12,17 @@ import '../ui/infowindow/point_infowindow.dart';
 
 /// Service for fetching the manual (Danger- and Recommendations-) points
 class ManualPointsService extends BaseService {
+  // TODO: refactor, eliminate duplicates
 
   Future<void> createAndSavePoint(
-      LatLng latLng,
-      MainType mainType,
-      MapPoint subType,
-      String title,
-      String description,
-      CustomInfoWindowController customInfoWindowController,
-      Function(Marker) updateMarkers,
-      ) async {
+    LatLng latLng,
+    MainType mainType,
+    MapPoint subType,
+    String title,
+    String description,
+    CustomInfoWindowController customInfoWindowController,
+    Function(Marker) updateMarkers,
+  ) async {
     var latitude = latLng.latitude;
     var longitude = latLng.longitude;
     var markerId = "$mainType-$subType-$latitude-$longitude-$title";
@@ -41,6 +42,7 @@ class ManualPointsService extends BaseService {
       onTap: () {
         customInfoWindowController.addInfoWindow!(
           PointInfoWindow(
+            pointId: markerId,
             mainType: mainType,
             subType: subType,
             title: title,
@@ -79,7 +81,7 @@ class ManualPointsService extends BaseService {
       "long": longitude,
     };
 
-    // TODO: move all constants (urls) into the separate config-files
+    // do a PUT http-call to backend to store the point (and the user if it is not stored yet)
     try {
       var response = await http.get(
         Uri.parse("http://${host}:8080/get/users?firebase_id=${uid}"),
@@ -98,6 +100,65 @@ class ManualPointsService extends BaseService {
         headers: {"Content-Type": "application/json"},
         body: json.encode(placeBody),
       );
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> voteOnPoint(
+      String pointId,
+      Voting vote) async {
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    var uid = 'null';
+    var email = 'null';
+    var name = 'null';
+    if (user != null) {
+      uid = user.uid;
+      email = user.email.toString();
+      name = user.displayName.toString();
+    }
+
+    final Map<String, dynamic> userBody = {
+      "firebase_id": uid,
+      "full_name": name,
+      "email": email,
+    };
+
+    final Map<String, dynamic> voteBody = {
+      "firebase_user_id": uid,
+      "point_id": pointId
+    };
+
+    // do a PUT http-call to backend to store the vote (and the user if it is not stored yet)
+    try {
+      var response = await http.get(
+        Uri.parse("http://${host}:8080/get/users?firebase_id=${uid}"),
+      );
+
+      if (response.statusCode == 200 && response.body == "[]\n") {
+        await http.post(
+          Uri.parse("http://${host}:8080/add/user"),
+          headers: {"Content-Type": "application/json"},
+          body: json.encode(userBody),
+        );
+      }
+
+      if (vote == Voting.upvote) {
+        // like
+        response = await http.post(
+          Uri.parse("http://${host}:8080/update/place/likes"),
+          headers: {"Content-Type": "application/json"},
+          body: json.encode(voteBody),
+        );
+      } else if (vote == Voting.devote) {
+        // dislike
+        response = await http.post(
+          Uri.parse("http://${host}:8080/update/place/dislikes"),
+          headers: {"Content-Type": "application/json"},
+          body: json.encode(voteBody),
+        );
+      }
     } catch (e) {
       print(e);
     }

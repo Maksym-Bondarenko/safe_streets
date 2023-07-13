@@ -37,7 +37,7 @@ class MainSettings extends StatelessWidget implements PreferredSizeWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const AuthGate(),
+                          builder: (context) => AuthGate(),
                         ),
                       );
                     }),

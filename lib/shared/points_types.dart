@@ -322,3 +322,10 @@ extension SafePointDetails on SafePoint {
     return const Icon(Icons.health_and_safety, size: 50.0);
   }
 }
+
+// ****************************************************************************
+// Enum representing the Voting types on the point
+enum Voting {
+  upvote,
+  devote;
+}

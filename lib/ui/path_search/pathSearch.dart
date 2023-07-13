@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -71,9 +70,7 @@ class _PathSearch extends State<PathSearch> {
   // Method for retrieving the address
   Future<void> _getAddress() async {
     try {
-      List<Placemark> p = await placemarkFromCoordinates(
-          _currentPosition.latitude, _currentPosition.longitude);
-
+      List<Placemark> p = await getAddresses(_currentPosition);
       Placemark place = p[0];
 
       setState(() {
@@ -148,8 +145,10 @@ class _PathSearch extends State<PathSearch> {
       );
 
       // Adding the markers to the list
-      markers.add(startMarker);
-      markers.add(destinationMarker);
+      setState(() {
+        markers.add(startMarker);
+        markers.add(destinationMarker);
+      });
 
       // add to the main-map via callback function
       _updatePathData();
@@ -161,26 +160,17 @@ class _PathSearch extends State<PathSearch> {
       //   'DESTINATION COORDINATES: ($destinationLatitude, $destinationLongitude)',
       // );
 
-      // Calculating to check that the position relative
-      // to the frame, and pan & zoom the camera accordingly.
-      double miny = (startLatitude <= destinationLatitude)
-          ? startLatitude
-          : destinationLatitude;
-      double minx = (startLongitude <= destinationLongitude)
-          ? startLongitude
-          : destinationLongitude;
-      double maxy = (startLatitude <= destinationLatitude)
-          ? destinationLatitude
-          : startLatitude;
-      double maxx = (startLongitude <= destinationLongitude)
-          ? destinationLongitude
-          : startLongitude;
+      List<double> cameraCoordinates = pathService.getCameraCoordinates(
+          startLatitude,
+          startLongitude,
+          destinationLatitude,
+          destinationLongitude);
 
-      double southWestLatitude = miny;
-      double southWestLongitude = minx;
+      double southWestLatitude = cameraCoordinates[0];
+      double southWestLongitude = cameraCoordinates[1];
 
-      double northEastLatitude = maxy;
-      double northEastLongitude = maxx;
+      double northEastLatitude = cameraCoordinates[2];
+      double northEastLongitude = cameraCoordinates[3];
 
       // Accommodate the two locations within the
       // camera view of the map
@@ -204,14 +194,7 @@ class _PathSearch extends State<PathSearch> {
 
       // Calculating the total distance by adding the distance
       // between small segments
-      for (int i = 0; i < polylineCoordinates.length - 1; i++) {
-        totalDistance += pathService.coordinateDistance(
-          polylineCoordinates[i].latitude,
-          polylineCoordinates[i].longitude,
-          polylineCoordinates[i + 1].latitude,
-          polylineCoordinates[i + 1].longitude,
-        );
-      }
+      totalDistance = pathService.calculateDistance(polylineCoordinates);
 
       setState(() {
         _placeDistance = totalDistance.toStringAsFixed(2);
@@ -228,19 +211,12 @@ class _PathSearch extends State<PathSearch> {
   // creates the set of polylines from the start point to the destination point
   setPolylines(double startLatitude, double startLongitude,
       double destinationLatitude, double destinationLongitude) async {
-    // TODO: move to service
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        dotenv.env['GOOGLE_MAPS_API_KEY']!,
-        PointLatLng(startLatitude, startLongitude),
-        PointLatLng(destinationLatitude, destinationLongitude),
-        travelMode: TravelMode.walking);
-    if (result.points.isNotEmpty) {
-      // loop through all PointLatLng points and convert them
-      // to a list of LatLng, required by the Polyline
-      for (var point in result.points) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      }
-    }
+    polylineCoordinates = await pathService.getPolylineCoordinates(
+        startLatitude,
+        startLongitude,
+        destinationLatitude,
+        destinationLongitude);
+
     setState(() {
       // create a Polyline instance
       // with an id, an RGB color and the list of LatLng pairs
@@ -276,14 +252,16 @@ class _PathSearch extends State<PathSearch> {
 
   // Method for exchanging start and destination addresses
   void _exchangeAddresses() {
-    // Swap the values of start and destination addresses
-    String tempAddress = _startAddress;
-    _startAddress = _destinationAddress;
-    _destinationAddress = tempAddress;
+    setState(() {
+      // Swap the values of start and destination addresses
+      String tempAddress = _startAddress;
+      _startAddress = _destinationAddress;
+      _destinationAddress = tempAddress;
 
-    // Swap the values of start and destination text fields
-    startAddressController.text = _startAddress;
-    destinationAddressController.text = _destinationAddress;
+      // Swap the values of start and destination text fields
+      startAddressController.text = _startAddress;
+      destinationAddressController.text = _destinationAddress;
+    });
   }
 
   @override
@@ -424,46 +402,46 @@ class _PathSearch extends State<PathSearch> {
                             ),
                             const SizedBox(width: 5),
                             ElevatedButton(
-                              onPressed:
-                                  (_startAddress != '' && _destinationAddress != '')
-                                      ? () async {
-                                          startAddressFocusNode.unfocus();
-                                          destinationAddressFocusNode.unfocus();
-                                          setState(() {
-                                            if (markers.isNotEmpty) markers.clear();
-                                            if (_polylines.isNotEmpty) {
-                                              _polylines.clear();
-                                            }
-                                            if (polylineCoordinates.isNotEmpty) {
-                                              polylineCoordinates.clear();
-                                            }
-                                            _placeDistance = null;
-                                            // add to the main-map via callback function
-                                            _updatePathData();
-                                          });
-
-                                          _calculateDistance(googleMapController)
-                                              .then((isCalculated) {
-                                            if (isCalculated) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                  content: Text(
-                                                      'Distance Calculated Successfully'),
-                                                ),
-                                              );
-                                            } else {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                  content: Text(
-                                                      'Error Calculating Distance'),
-                                                ),
-                                              );
-                                            }
-                                          });
+                              onPressed: (_startAddress != '' &&
+                                      _destinationAddress != '')
+                                  ? () async {
+                                      startAddressFocusNode.unfocus();
+                                      destinationAddressFocusNode.unfocus();
+                                      setState(() {
+                                        if (markers.isNotEmpty) markers.clear();
+                                        if (_polylines.isNotEmpty) {
+                                          _polylines.clear();
                                         }
-                                      : null,
+                                        if (polylineCoordinates.isNotEmpty) {
+                                          polylineCoordinates.clear();
+                                        }
+                                        _placeDistance = null;
+                                        // add to the main-map via callback function
+                                        _updatePathData();
+                                      });
+
+                                      _calculateDistance(googleMapController)
+                                          .then((isCalculated) {
+                                        if (isCalculated) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  'Distance Calculated Successfully'),
+                                            ),
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  'Error Calculating Distance'),
+                                            ),
+                                          );
+                                        }
+                                      });
+                                    }
+                                  : null,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
                                 shape: RoundedRectangleBorder(

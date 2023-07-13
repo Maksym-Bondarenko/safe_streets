@@ -73,6 +73,8 @@ dependencies:
   flutter_dotenv: ^5.0.2
   audioplayers: ^4.1.0
   flutter_localization: ^0.1.12
+  torch_light: ^1.0.0
+  flutter_local_notifications: ^14.1.1
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:ui' as ui;
 
@@ -23,7 +25,7 @@ Future<Uint8List?> getBytesFromAsset(String path, int width) async {
 Future<Position> getCurrentLocation(GoogleMapController? googleMapController) async {
   try {
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    print('CURRENT POS: $position');
+    //print('CURRENT POS: $position');
     googleMapController?.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
@@ -36,4 +38,23 @@ Future<Position> getCurrentLocation(GoogleMapController? googleMapController) as
   } catch (e) {
     throw e;
   }
+}
+
+Future<List<Placemark>> getAddresses(Position currentPosition) async {
+  List<Placemark> places = await placemarkFromCoordinates(
+      currentPosition.latitude, currentPosition.longitude);
+
+  return places;
+}
+
+String? getUserId() {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final User? user = auth.currentUser;
+
+  return user?.uid;
+}
+
+String? getCreatorIdOfPoint(String pointId) {
+  // TODO: backend call
+  return FirebaseAuth.instance.currentUser?.uid;
 }

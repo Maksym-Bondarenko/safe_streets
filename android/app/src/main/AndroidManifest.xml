@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <queries>
         <intent>
             <action android:name="android.intent.action.SENDTO" />
@@ -16,6 +17,14 @@
         android:label="SafeStreets"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
+
+       <meta-data
+           android:name="com.dexterous.flutterlocalnotifications.smallIcon"
+           android:resource="@drawable/ic_notification" />
+       <meta-data
+           android:name="com.dexterous.flutterlocalnotifications.color"
+           android:resource="@android:color/transparent" />
+
 
        <!-- TODO: Add your Google Maps API key here -->
        <meta-data android:name="com.google.android.geo.API_KEY"

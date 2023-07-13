@@ -5,10 +5,12 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:custom_info_window/custom_info_window.dart';
-import 'package:safe_streets/ui/spinners/loading_spinner.dart';
+//import 'package:safe_streets/ui/spinners/loading_spinner.dart';
 
+import '../services/point_approaching.dart';
 import '../services/safe_points_service.dart';
 import '../shared/global_functions.dart';
+import '../shared/points_types.dart';
 import '../ui/fake_call/fake_call.dart';
 import '../ui/path_search/pathSearch.dart';
 import '../ui/dialog/dialog_window.dart';
@@ -33,23 +35,23 @@ class _FilterMap extends State<FilterMap> {
   static const CameraPosition _kInitialPosition = CameraPosition(
       target: _kMapMunichCenter, zoom: 10.0, tilt: 0, bearing: 0);
 
+  // for InfoWindow to the point
   final CustomInfoWindowController customInfoWindowController =
       CustomInfoWindowController();
 
+  GoogleMapController? _googleMapController;
+  late Position _currentPosition;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  GoogleMapController? _googleMapController;
-
-  late Position _currentPosition;
-
+  // polylines and markers (start, finish) for SafePath-feature
   Set<Polyline> polylines = {};
   Set<Marker> pathMarkers = {};
 
+  // all info-markers (danger, recommendation, safe)
   Set<Marker> currentlyActiveMarkers = {};
   Set<Marker> dangerPointsMarkers = {};
   Set<Marker> safePointsMarkers = {};
   Set<Marker> recommendationPointsMarkers = {};
-
   final Map<String, Marker> _policeMarkers = {};
   final Set<Marker> _dangerPointsMarkers = {};
   final Set<Marker> _safePointsMarkers = {};
@@ -57,6 +59,9 @@ class _FilterMap extends State<FilterMap> {
 
   // initial filters (danger-points, safe-points and tourists-points)
   final List<bool> _selectedFilters = <bool>[false, false, false];
+
+  // for switching the visibility of all controllers, buttons
+  bool _areControllersVisible = true;
 
   // visual of ToggleButtons
   static const List<Widget> filters = <Widget>[
@@ -121,20 +126,19 @@ class _FilterMap extends State<FilterMap> {
   /// set on map all Police Stations (SafePoints)
   Future<void> fetchPoliceStations() async {
     // Fetch police stations and using the service
-    // TODO: uncomment
-    //var policeStations = await safePointsService.fetchPoliceStations();
+    var policeStations = await safePointsService.fetchPoliceStations();
 
-    // iterate through the police stations and create a marker with InfoWindow for each
-    // for (final policeStation in policeStations) {
-    //   var name = policeStation["name"];
-    //   var marker = await safePointsService.getPoliceMarker(
-    //       policeStation, customInfoWindowController);
-    //
-    //   // add each police-office
-    //   setState(() {
-    //     _policeMarkers[name] = marker;
-    //   });
-    // }
+    //iterate through the police stations and create a marker with InfoWindow for each
+    for (final policeStation in policeStations) {
+      var name = policeStation["name"];
+      var marker = await safePointsService.getPoliceMarker(
+          policeStation, customInfoWindowController);
+
+      // add each police-office
+      setState(() {
+        _policeMarkers[name] = marker;
+      });
+    }
 
     // add police stations to set of safe points
     setState(() {
@@ -145,29 +149,28 @@ class _FilterMap extends State<FilterMap> {
   /// set on map all Custom Points (DangerPoints and RecommendationPoints)
   Future<void> fetchCustomPoints() async {
     // Fetch custom points using the service
-    // TODO: uncomment
-    //var customPoints = await safePointsService.fetchCustomPoints();
+    var customPoints = await safePointsService.fetchCustomPoints();
 
     // add all custom made points (DangerPoints and RecommendationPoints)
-    // for (final customPoint in customPoints) {
-    //   var mainType = getMainType(customPoint["main_type"]);
-    //   var marker = await safePointsService.getCustomMarker(
-    //       customPoint, customInfoWindowController);
-    //
-    //   // add each point to the set
-    //   setState(() {
-    //     switch (mainType) {
-    //       case MainType.dangerPoint:
-    //         _dangerPointsMarkers.add(marker);
-    //         break;
-    //       case MainType.recommendationPoint:
-    //         _recommendationPointsMarkers.add(marker);
-    //         break;
-    //       case MainType.safePoint:
-    //         _safePointsMarkers.add(marker);
-    //     }
-    //   });
-    // }
+    for (final customPoint in customPoints) {
+      var mainType = getMainType(customPoint["main_type"]);
+      var marker = await safePointsService.getCustomMarker(
+          customPoint, customInfoWindowController);
+
+      // add each point to the set
+      setState(() {
+        switch (mainType) {
+          case MainType.dangerPoint:
+            _dangerPointsMarkers.add(marker);
+            break;
+          case MainType.recommendationPoint:
+            _recommendationPointsMarkers.add(marker);
+            break;
+          case MainType.safePoint:
+            _safePointsMarkers.add(marker);
+        }
+      });
+    }
   }
 
   Future<void> showInformationDialog(
@@ -259,68 +262,91 @@ class _FilterMap extends State<FilterMap> {
   void sosPressed() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => const SOSWidget()),
+      MaterialPageRoute(builder: (context) => const SOSWidget()),
     );
   }
 
-  // TODO: implement share location functionality
-  void shareLocation() {
-    print('Pressed Share Location');
-  }
+  // void shareLocation() {
+  //   print('Pressed Share Location');
+  // }
 
   @override
   Widget build(BuildContext context) {
     //var height = MediaQuery.of(context).size.height;
     //var width = MediaQuery.of(context).size.width;
-    return Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: const Text('SafeStreets'),
-        ),
-        body: SafeArea(
-          child: Stack(
-            children: [
-              // Google Map widget
-              _buildGoogleMap(),
 
-              // Route-builder enables searching for points and building a navigation path between them
-              PathSearch(
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: const Text('SafeStreets'),
+      ),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // Google Map widget
+            _buildGoogleMap(),
+
+            // Route-builder enables searching for points and building a navigation path between them
+            Visibility(
+              visible: _areControllersVisible,
+              child: PathSearch(
                 googleMapController: _googleMapController,
                 onPathDataReceived: onPathDataReceived,
               ),
+            ),
 
-              // Show current location button and zoom-buttons
-              Positioned(
+            // service for showing the push-notifications when approaching to close to the point
+            Visibility(
+              visible: _areControllersVisible,
+              child: Positioned(
+                  top: 30,
+                  right: 10,
+                  child: PointApproaching(
+                    googleMapController: _googleMapController,
+                    currentlyActiveMarkers: currentlyActiveMarkers,
+                  )),
+            ),
+
+            // Show current location button and zoom-buttons
+            Visibility(
+              visible: _areControllersVisible,
+              child: Positioned(
                 bottom: 30,
                 right: 10,
                 child: _buildCustomMapButtons(),
               ),
+            ),
 
-              // Toggle Buttons
-              Positioned(
-                top: 30,
+            // Toggle Buttons
+            Visibility(
+              visible: _areControllersVisible,
+              child: Positioned(
+                top: 50,
                 left: 10,
                 child: _buildToggleButtons(),
               ),
+            ),
 
-              // Custom Info Window
-              CustomInfoWindow(
-                controller: customInfoWindowController,
-                width: 300,
-                height: 300,
-                offset: 50,
-              ),
-
-              // Speed Dial
-              Positioned(
+            Visibility(
+              visible: _areControllersVisible,
+              child: Positioned(
                 bottom: 30,
                 left: 10,
                 child: _buildSpeedDial(),
               ),
-            ],
-          ),
-        ));
+            ),
+
+            // Custom Info Window
+            CustomInfoWindow(
+              controller: customInfoWindowController,
+              width: 300,
+              height: 300,
+              offset: 50,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildGoogleMap() {
@@ -350,18 +376,19 @@ class _FilterMap extends State<FilterMap> {
         // get the places with markers on the map
         fetchPlaces();
       },
-      // Callback when long-pressing on the map
       onLongPress: (LatLng latLng) async {
         try {
           await showInformationDialog(latLng, context);
         } catch (e) {
-          // Handle the exception
           print('Error: $e');
         }
       },
-      // Callback when tapping on the map
       onTap: (position) {
         customInfoWindowController.hideInfoWindow!();
+        // trigger the visibility of controllers
+        setState(() {
+          _areControllersVisible = !_areControllersVisible;
+        });
       },
       // Callback when the camera is moved
       onCameraMove: (position) {
@@ -383,12 +410,12 @@ class _FilterMap extends State<FilterMap> {
             children: <Widget>[
               ClipOval(
                 child: Material(
-                  color: Colors.blue.shade100, // button color
+                  color: Colors.lightBlue.shade100, // button color
                   child: InkWell(
-                    splashColor: Colors.blue, // inkwell color
+                    splashColor: Colors.lightBlue, // inkwell color
                     child: const SizedBox(
-                      width: 50,
-                      height: 50,
+                      width: 30,
+                      height: 30,
                       child: Icon(Icons.add),
                     ),
                     onTap: () {
@@ -399,15 +426,15 @@ class _FilterMap extends State<FilterMap> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               ClipOval(
                 child: Material(
-                  color: Colors.blue.shade100, // button color
+                  color: Colors.lightBlue.shade100, // button color
                   child: InkWell(
-                    splashColor: Colors.blue, // inkwell color
+                    splashColor: Colors.lightBlue, // inkwell color
                     child: const SizedBox(
-                      width: 50,
-                      height: 50,
+                      width: 30,
+                      height: 30,
                       child: Icon(Icons.remove),
                     ),
                     onTap: () {
@@ -515,16 +542,16 @@ class _FilterMap extends State<FilterMap> {
           labelBackgroundColor: Colors.black,
         ),
 
-        // Share Location Button
-        SpeedDialChild(
-          child: const Icon(Icons.share_location, color: Colors.white),
-          backgroundColor: Colors.blue,
-          onTap: shareLocation,
-          label: 'Share Location',
-          labelStyle:
-              const TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
-          labelBackgroundColor: Colors.black,
-        ),
+        // // Share Location Button
+        // SpeedDialChild(
+        //   child: const Icon(Icons.share_location, color: Colors.white),
+        //   backgroundColor: Colors.blue,
+        //   onTap: shareLocation,
+        //   label: 'Share Location',
+        //   labelStyle:
+        //       const TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
+        //   labelBackgroundColor: Colors.black,
+        // ),
       ],
     );
   }

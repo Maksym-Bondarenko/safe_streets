@@ -75,7 +75,7 @@ class _MyAppState extends State<MyApp> {
           initialRoute: '/',
           routes: {
             '/home': (context) => const HomeScreen(),
-            '/auth': (context) => const AuthGate(),
+            '/auth': (context) => AuthGate(),
             '/intro': (context) => const IntroSlider(),
             '/ddsMap': (context) => const DDSMap(),
             '/filterMap': (context) =>
@@ -93,7 +93,7 @@ class _MyAppState extends State<MyApp> {
             return null;
           },
           // Set AuthGate as the initial screen of application
-          home: const AuthGate(),
+          home: AuthGate(),
           // Disable the debug mode banner
           debugShowCheckedModeBanner: false,
         );

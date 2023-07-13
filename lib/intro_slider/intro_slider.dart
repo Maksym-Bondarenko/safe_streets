@@ -26,7 +26,6 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
     );
   }
 
-  // TODO: Navigates to the home screen
   void _navigateToHome() {
     Navigator.pushNamed(context, '/home');
   }

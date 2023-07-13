@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:721653983645:android:48adff0befd024620c6774",
+        "mobilesdk_app_id": "1:721653983645:android:7e161de10ebb9d500c6774",
         "android_client_info": {
-          "package_name": "com.example.google_maps_in_flutter"
+          "package_name": "com.example.safe_streets"
         }
       },
       "oauth_client": [
