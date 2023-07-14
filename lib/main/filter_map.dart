@@ -11,6 +11,7 @@ import '../services/point_approaching.dart';
 import '../services/safe_points_service.dart';
 import '../shared/global_functions.dart';
 import '../shared/points_types.dart';
+import '../ui/bottom_menu/bottom_navigation_bar.dart';
 import '../ui/fake_call/fake_call.dart';
 import '../ui/path_search/pathSearch.dart';
 import '../ui/dialog/dialog_window.dart';
@@ -346,6 +347,7 @@ class _FilterMap extends State<FilterMap> {
           ],
         ),
       ),
+      bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
 

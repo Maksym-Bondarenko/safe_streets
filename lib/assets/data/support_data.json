@@ -1,0 +1,56 @@
+{
+  "countries": [
+    {
+      "id": "1",
+      "name": "France",
+      "majorPhoneNumbers": [
+        "17",
+        "18",
+        "15"
+      ],
+      "minorPhoneNumbers": [
+        "0810 202 805"
+      ],
+      "generalHelpLine": "112"
+    },
+    {
+      "id": "2",
+      "name": "Austria",
+      "majorPhoneNumbers": [
+        "000",
+        "000",
+        "000"
+      ],
+      "minorPhoneNumbers": [
+        "123 456"
+      ],
+      "generalHelpLine": "666 666 666"
+    },
+    {
+      "id": "3",
+      "name": "Switzerland",
+      "majorPhoneNumbers": [
+        "117",
+        "118",
+        "144"
+      ],
+      "minorPhoneNumbers": [
+        "0844 247 110"
+      ],
+      "generalHelpLine": "143"
+    },
+    {
+      "id": "4",
+      "name": "United Kingdom",
+      "majorPhoneNumbers": [
+        "999",
+        "999",
+        "999"
+      ],
+      "minorPhoneNumbers": [
+        "101"
+      ],
+      "generalHelpLine": "116 123"
+    }
+  ]
+}

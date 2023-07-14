@@ -16,14 +16,14 @@ class SafePointsService extends BaseService {
   Future<List<dynamic>> fetchPoliceStations() async {
     List<dynamic> policeStations = [];
 
-    try {
-      final response = await http.get(Uri.parse(
-          "https://maps.googleapis.com/maps/api/place/search/json?location=${munichCenterLat},${munichCenterLong}8&rankby=distance&types=police&sensor=false&key=${apiKey}"));
-      policeStations = json.decode(response.body)["results"];
-    } catch (e) {
-      print(e);
-      throw Exception("Failed to fetch police stations");
-    }
+    // try {
+    //   final response = await http.get(Uri.parse(
+    //       "https://maps.googleapis.com/maps/api/place/search/json?location=${munichCenterLat},${munichCenterLong}8&rankby=distance&types=police&sensor=false&key=${apiKey}"));
+    //   policeStations = json.decode(response.body)["results"];
+    // } catch (e) {
+    //   print(e);
+    //   throw Exception("Failed to fetch police stations");
+    // }
 
     return policeStations;
   }
@@ -32,15 +32,15 @@ class SafePointsService extends BaseService {
   Future<List<dynamic>> fetchCustomPoints() async {
     List<dynamic> customPoints = [];
 
-    try {
-      final response = await http.get(Uri.parse("http://${host}:8080/get/all_places"));
-      if (response.statusCode == 200) {
-        customPoints = json.decode(response.body);
-      }
-    } catch (e) {
-      print(e);
-      throw Exception("Failed to fetch custom points");
-    }
+    // try {
+    //   final response = await http.get(Uri.parse("http://${host}:8080/get/all_places"));
+    //   if (response.statusCode == 200) {
+    //     customPoints = json.decode(response.body);
+    //   }
+    // } catch (e) {
+    //   print(e);
+    //   throw Exception("Failed to fetch custom points");
+    // }
 
     return customPoints;
   }

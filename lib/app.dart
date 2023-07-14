@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:provider/provider.dart';
-import 'package:safe_streets/forum/forum_page.dart';
-import 'package:safe_streets/main/dds_map.dart';
+import 'package:safe_streets/info_pages/dds_map.dart';
+import 'package:safe_streets/info_pages/settings_page.dart';
 import 'package:safe_streets/main/filter_map.dart';
-import 'package:safe_streets/shared/map_controller_provider.dart';
+import 'package:safe_streets/main/support_page.dart';
+import 'package:safe_streets/shared/app_state.dart';
 import 'package:safe_streets/ui/fake_call/fake_call.dart';
 
 import 'authentication/auth_gate.dart';
 import 'i18n/app_locale.dart';
-import 'main/home_screen.dart';
+import 'main/forum/forum_page.dart';
+import 'main/home_page.dart';
+import 'main/profile_page.dart';
 
 /// Here the app is built and navigated to the @{AuthGate}
 class MyApp extends StatefulWidget {
@@ -55,11 +58,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     // Notifier for providing global access to the Google Maps Controller
     return ChangeNotifierProvider(
-      create: (_) => MapControllerProvider(),
+      create: (_) => AppState(),
       // MaterialApp widget represents the root of application
-      child: Consumer<MapControllerProvider>(
-          builder: (context, mapControllerProvider, _) {
-        final mapController = mapControllerProvider.controller;
+      child: Consumer<AppState>(
+          builder: (context, appStateProvider, _) {
+        final mapController = appStateProvider.controller;
         return MaterialApp(
           supportedLocales: _localization.supportedLocales,
           localizationsDelegates: _localization.localizationsDelegates,
@@ -74,14 +77,17 @@ class _MyAppState extends State<MyApp> {
           ),
           initialRoute: '/',
           routes: {
-            '/home': (context) => const HomeScreen(),
+            '/home': (context) => const HomePage(),
             '/auth': (context) => AuthGate(),
+            '/profile': (context) => const ProfilePage(),
+            '/support': (context) => const SupportPage(),
+            // '/settings': (context) => SettingsPage(),
             '/intro': (context) => const IntroSlider(),
             '/ddsMap': (context) => const DDSMap(),
             '/filterMap': (context) =>
                 FilterMap(googleMapController: mapController),
             '/forum': (context) => const ForumPage(),
-            '/fakeCall': (context) => const FakeCallWidget(callerName: 'Dad'),
+            '/fakeCall': (context) => const FakeCallWidget(callerName: 'Honey'),
           },
           // handle the case where FilterMap is accessed from other places.
           onGenerateRoute: (settings) {

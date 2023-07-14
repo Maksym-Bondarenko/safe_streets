@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../ui/bottom_menu/bottom_navigation_bar.dart';
+
 /// Page with forum for community
 class ForumPage extends StatefulWidget {
   const ForumPage({super.key});
@@ -151,6 +153,7 @@ class _ForumPageState extends State<ForumPage> {
           ),
         ],
       ),
+      bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
 }

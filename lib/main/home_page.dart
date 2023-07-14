@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
-import '../forum/forum_page.dart';
-import '../info_pages/support_page.dart';
-import 'dds_map.dart';
-import 'main_settings.dart';
+import 'forum/forum_page.dart';
+import 'support_page.dart';
+import '../ui/bottom_menu/bottom_navigation_bar.dart';
+import '../info_pages/dds_map.dart';
 
 /// Home-screen after authentication, containing dashboard with main information,
 /// settings, and navigation to further pages
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const MainSettings(),
+      appBar: AppBar(
+        title: const Text('SafeStreets'),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -103,6 +105,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: const BottomNavigationBarWidget(),
     );
   }
 }
