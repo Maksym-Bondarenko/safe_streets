@@ -76,6 +76,9 @@ dependencies:
   torch_light: ^1.0.0
   flutter_local_notifications: ^14.1.1
   shimmer: ^3.0.0
+  share_plus: ^7.0.2
+  camera: ^0.10.5+2
+  path_provider: ^2.0.15
 
 dev_dependencies:
   flutter_test:

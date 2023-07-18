@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../other_pages/dds_map.dart';
 import 'forum/forum_page.dart';
 import 'support_page.dart';
 import '../ui/bottom_menu/bottom_navigation_bar.dart';
-import '../info_pages/dds_map.dart';
 
 /// Home-screen after authentication, containing dashboard with main information,
 /// settings, and navigation to further pages

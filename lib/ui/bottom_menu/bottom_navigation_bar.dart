@@ -34,9 +34,9 @@ class BottomNavigationBarWidget extends StatelessWidget {
           case 4:
             Navigator.pushNamed(context, '/profile');
             break;
-          // case 5:
-          //   Navigator.pushNamed(context, '/settings');
-          //   break;
+          case 5:
+            Navigator.pushNamed(context, '/settings');
+            break;
         }
       },
       backgroundColor: Colors.white,

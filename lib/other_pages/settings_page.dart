@@ -1,19 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
-  final bool notificationsEnabled;
-  final int selectedThemeIndex;
-  final Function(bool) onToggleNotifications;
-  final void Function(int?)? onChangeTheme;
-  final List<String> themeNames;
-
   const SettingsPage({
     Key? key,
-    required this.notificationsEnabled,
-    required this.selectedThemeIndex,
-    required this.onToggleNotifications,
-    required this.onChangeTheme,
-    required this.themeNames,
   }) : super(key: key);
 
   @override
@@ -21,6 +10,13 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  late bool notificationsEnabled;
+  late int selectedThemeIndex;
+  late Function(bool) onToggleNotifications;
+  late void Function(int?)? onChangeTheme;
+  late List<String> themeNames;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,12 +27,12 @@ class _SettingsPageState extends State<SettingsPage> {
         children: [
           SwitchListTile(
             title: const Text('Notifications'),
-            value: widget.notificationsEnabled,
-            onChanged: widget.onToggleNotifications,
+            value: notificationsEnabled,
+            onChanged: onToggleNotifications,
           ),
           ListTile(
             title: const Text('Theme'),
-            subtitle: Text(widget.themeNames[widget.selectedThemeIndex]),
+            subtitle: Text(themeNames[selectedThemeIndex]),
             onTap: () {
               showDialog(
                 context: context,
@@ -45,12 +41,12 @@ class _SettingsPageState extends State<SettingsPage> {
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: List<Widget>.generate(
-                      widget.themeNames.length,
+                      themeNames.length,
                       (index) => RadioListTile(
-                        title: Text(widget.themeNames[index]),
+                        title: Text(themeNames[index]),
                         value: index,
-                        groupValue: widget.selectedThemeIndex,
-                        onChanged: widget.onChangeTheme,
+                        groupValue: selectedThemeIndex,
+                        onChanged: onChangeTheme,
                       ),
                     ),
                   ),

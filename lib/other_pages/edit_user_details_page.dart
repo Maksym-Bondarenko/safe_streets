@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 
 class EditUserDetailsPage extends StatefulWidget {
-  final String name;
-  final String email;
-  final String phoneNumber;
 
   const EditUserDetailsPage({
     Key? key,
-    required this.name,
-    required this.email,
-    required this.phoneNumber,
   }) : super(key: key);
 
   @override
@@ -17,6 +11,10 @@ class EditUserDetailsPage extends StatefulWidget {
 }
 
 class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
+  late String name;
+  late String email;
+  late String phoneNumber;
+
   final _formKey = GlobalKey<FormState>();
   late String _name;
   late String _email;
@@ -25,9 +23,9 @@ class _EditUserDetailsPageState extends State<EditUserDetailsPage> {
   @override
   void initState() {
     super.initState();
-    _name = widget.name;
-    _email = widget.email;
-    _phoneNumber = widget.phoneNumber;
+    _name = name;
+    _email = email;
+    _phoneNumber = phoneNumber;
   }
 
   @override

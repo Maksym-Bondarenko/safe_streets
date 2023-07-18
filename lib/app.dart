@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:provider/provider.dart';
-import 'package:safe_streets/info_pages/dds_map.dart';
-import 'package:safe_streets/info_pages/settings_page.dart';
-import 'package:safe_streets/main/filter_map.dart';
-import 'package:safe_streets/main/support_page.dart';
+import 'package:safe_streets/other_pages/dds_map.dart';
+import 'package:safe_streets/other_pages/settings_page.dart';
+import 'package:safe_streets/main_pages/filter_map.dart';
+import 'package:safe_streets/main_pages/support_page.dart';
 import 'package:safe_streets/shared/app_state.dart';
 import 'package:safe_streets/ui/fake_call/fake_call.dart';
+import 'package:safe_streets/ui/page_animation/custom_page_transition.dart';
 
 import 'authentication/auth_gate.dart';
 import 'i18n/app_locale.dart';
-import 'main/forum/forum_page.dart';
-import 'main/home_page.dart';
-import 'main/profile_page.dart';
+import 'main_pages/forum/forum_page.dart';
+import 'main_pages/home_page.dart';
+import 'main_pages/profile_page.dart';
+import 'other_pages/ai_camera.dart';
+import 'other_pages/edit_user_details_page.dart';
 
 /// Here the app is built and navigated to the @{AuthGate}
 class MyApp extends StatefulWidget {
@@ -74,20 +77,29 @@ class _MyAppState extends State<MyApp> {
             primaryColor: Colors.lightBlue,
             scaffoldBackgroundColor: Colors.white,
             useMaterial3: false,
+            // for custom page-transition
+            pageTransitionsTheme: PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: CustomPageTransitionsBuilder(),
+                TargetPlatform.iOS: CustomPageTransitionsBuilder(),
+              },
+            ),
           ),
           initialRoute: '/',
           routes: {
-            '/home': (context) => const HomePage(),
-            '/auth': (context) => AuthGate(),
-            '/profile': (context) => const ProfilePage(),
-            '/support': (context) => const SupportPage(),
-            // '/settings': (context) => SettingsPage(),
             '/intro': (context) => const IntroSlider(),
-            '/ddsMap': (context) => const DDSMap(),
+            '/auth': (context) => AuthGate(),
+            '/home': (context) => const HomePage(),
+            '/profile': (context) => const ProfilePage(),
             '/filterMap': (context) =>
                 FilterMap(googleMapController: mapController),
             '/forum': (context) => const ForumPage(),
+            '/support': (context) => const SupportPage(),
+            '/settings': (context) => const SettingsPage(),
+            '/ddsMap': (context) => const DDSMap(),
+            '/edit_user': (context) => const EditUserDetailsPage(),
             '/fakeCall': (context) => const FakeCallWidget(callerName: 'Honey'),
+            '/ai_camera': (context) => const AiCameraPage(),
           },
           // handle the case where FilterMap is accessed from other places.
           onGenerateRoute: (settings) {
