@@ -1,3 +1,7 @@
+# Flutter Native Splash Package (https://pub.dev/packages/flutter_native_splash)
+# After setting up the configuration, run the package:
+# dart run flutter_native_splash:create --path=flutter_native_splash.yaml
+
 flutter_native_splash:
   # This package generates native code to customize Flutter's default white native splash screen
   # with background color and splash image.
@@ -11,23 +15,23 @@ flutter_native_splash:
   # splash screen to a png image.  This is useful for gradients. The image will be stretch to the
   # size of the app. Only one parameter can be used, color and background_image cannot both be set.
   #color: "#42a5f5"
-  background_image: lib/assets/images/logo_big.png
+  background_image: "lib/assets/images/logo_big.png"
 
   # Optional parameters are listed below.  To enable a parameter, uncomment the line by removing
   # the leading # character.
 
   # The image parameter allows you to specify an image used in the splash screen.  It must be a
   # png file and should be sized for 4x pixel density.
-  image: lib/assets/logos/logo_white_transparent_background.png
+  image: "lib/assets/logos/logo_white_transparent_background.png"
 
   # The branding property allows you to specify an image used as branding in the splash screen.
   # It must be a png file. It is supported for Android, iOS and the Web.  For Android 12,
   # see the Android 12 section below.
-  branding: lib/assets/images/logo_small.png
+  branding: "lib/assets/images/logo_small.png"
 
   # To position the branding image at the bottom of the screen you can use bottom, bottomRight,
   # and bottomLeft. The default values is bottom if not specified or specified something else.
-  branding_mode: bottom
+  branding_mode: "bottom"
 
   # The color_dark, background_image_dark, image_dark, branding_dark are parameters that set the background
   # and image when the device is in dark mode. If they are not specified, the app will use the
@@ -36,8 +40,8 @@ flutter_native_splash:
   # set.
   #color_dark: "#042a49"
   #background_image_dark: "assets/dark-background.png"
-  image_dark: lib/assets/logos/main_logo_inverted.png
-  branding_dark: lib/assets/images/logo_small.png
+  image_dark: "lib/assets/logos/main_logo_inverted.png"
+  branding_dark: "lib/assets/images/logo_small.png"
 
   # Android 12 handles the splash screen differently than previous versions.  Please visit
   # https://developer.android.com/guide/topics/ui/splash-screen

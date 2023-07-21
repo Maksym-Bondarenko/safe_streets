@@ -9,12 +9,12 @@ class TermsAndConditions extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Terms & Conditions'),
       ),
-      body: Padding(
-          padding: const EdgeInsets.all(10.0),
+      body: const Padding(
+          padding: EdgeInsets.all(10.0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
                   'Terms and Conditions',
                   style: TextStyle(

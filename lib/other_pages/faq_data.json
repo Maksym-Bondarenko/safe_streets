@@ -1,0 +1,14 @@
+[
+  {
+    "question": "How can the app help you feel safer?",
+    "answer": "Informative points and rank-based maps provide you with information regarding potential danger that might occur while getting around the city on your own."
+  },
+  {
+    "question": "What is the difference between the two listed types of maps?",
+    "answer": "Filter-based maps are providing 3 types of informative points, while rank-based maps are showing city areas, divided by different danger colours."
+  },
+  {
+    "question": "What are three types of points about?",
+    "answer": "Danger is a high recommendation to avoid the place. Recommendation is a medium recommendation to be careful. Safe is an open public place, which might be used as a shelter in case of emergency."
+  }
+]

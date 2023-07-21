@@ -30,6 +30,9 @@ class _SupportPage extends State<SupportPage> {
       countries = List<Map<String, dynamic>>.from(jsonData['countries'])
           .map((country) => CountryData.fromJson(country))
           .toList();
+
+      // Sort countries alphabetically based on the 'name' field
+      countries.sort((a, b) => a.name.compareTo(b.name));
     });
   }
 

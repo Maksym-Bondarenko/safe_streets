@@ -215,12 +215,14 @@ class _PointInfoWindowState extends State<PointInfoWindow>
             ),
           ),
           const SizedBox(width: 10.0),
-          Text(
-            widget.mainType.name,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20.0,
-              color: mainColor,
+          Flexible(
+            child: Text(
+              widget.mainType.name,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0,
+                color: mainColor,
+              ),
             ),
           ),
           const SizedBox(width: 10.0),

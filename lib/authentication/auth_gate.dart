@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
 
-import '../other_pages/terms_and_conditions.dart';
+import '../other_pages/legal/terms_and_conditions.dart';
 import '../intro_slider/intro_slider.dart';
 
 /// Authentication page (via mail or Google SSI)

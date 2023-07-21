@@ -42,7 +42,8 @@ class BottomNavigationBarWidget extends StatelessWidget {
       backgroundColor: Colors.white,
       selectedItemColor: Colors.blue,
       unselectedItemColor: Colors.grey,
-      elevation: 2.0,
+      elevation: 4.0,
+      iconSize: 30.0,
       showSelectedLabels: true,
       items: const [
         BottomNavigationBarItem(

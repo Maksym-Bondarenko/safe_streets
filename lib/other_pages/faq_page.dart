@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class FaqPage extends StatefulWidget {
@@ -8,19 +10,23 @@ class FaqPage extends StatefulWidget {
 }
 
 class _FaqPageState extends State<FaqPage> {
-  // List of questions
-  List<String> questions = [
-    'How can the app help you feel safer?',
-    'What is the difference between the two listed types of maps?',
-    'What are three types of points about?',
-  ];
+  List<FaqData> faqs = [];
 
-  // Corresponding list of answers
-  List<String> answers = [
-    'Informative points and rank-based maps (currently are not integrated in our app, as it is under development for Flutter) provide you with information regarding potential danger that might occur while getting around the city on your own.',
-    'Filter-based maps are providing 3 types of informative points, while rank-based maps are showing city areas, divided by different danger colours.',
-    'Danger is a high recommendation to avoid the place. Recommendation is a medium recommendation to be careful. Safe is an open public place, which might be used as a shelter in case of emergency.',
-  ];
+  @override
+  void initState() {
+    super.initState();
+    loadFaqData();
+  }
+
+  Future<void> loadFaqData() async {
+    String jsonString = await DefaultAssetBundle.of(context)
+        .loadString('assets/faq_data.json');
+    List<dynamic> jsonData = jsonDecode(jsonString);
+
+    setState(() {
+      faqs = jsonData.map((data) => FaqData.fromJson(data)).toList();
+    });
+  }
 
   int _selectedIndex = -1;
 
@@ -33,7 +39,7 @@ class _FaqPageState extends State<FaqPage> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView.builder(
-          itemCount: questions.length,
+          itemCount: faqs.length,
           itemBuilder: (context, index) {
             return Card(
               shape: RoundedRectangleBorder(
@@ -43,7 +49,7 @@ class _FaqPageState extends State<FaqPage> {
               child: ExpansionTile(
                 // Question title
                 title: Text(
-                  questions[index],
+                  faqs[index].question,
                   style: const TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -61,7 +67,7 @@ class _FaqPageState extends State<FaqPage> {
                     padding: const EdgeInsets.all(16.0),
                     // Answer text
                     child: Text(
-                      answers[index],
+                      faqs[index].answer,
                       style: const TextStyle(fontSize: 16.0),
                     ),
                   ),
@@ -74,3 +80,18 @@ class _FaqPageState extends State<FaqPage> {
     );
   }
 }
+
+class FaqData {
+  final String question;
+  final String answer;
+
+  FaqData({required this.question, required this.answer});
+
+  factory FaqData.fromJson(Map<String, dynamic> json) {
+    return FaqData(
+      question: json['question'],
+      answer: json['answer'],
+    );
+  }
+}
+

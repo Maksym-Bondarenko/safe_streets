@@ -3,8 +3,6 @@ import 'package:flutterfire_ui/auth.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../authentication/auth_gate.dart';
-import '../other_pages/edit_user_details_page.dart';
-import '../other_pages/settings_page.dart';
 import '../shared/points_types.dart';
 import '../ui/bottom_menu/bottom_navigation_bar.dart';
 import '../ui/contributions/contribution.dart';
@@ -149,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/edit_user');
+                Navigator.pushNamed(context, '/account_activity');
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.blue,
@@ -158,13 +156,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.all(12.0),
               ),
               child: const Icon(
-                Icons.edit,
+                Icons.local_activity,
                 size: 32.0,
               ),
             ),
             const SizedBox(height: 8.0),
             const Text(
-              'Edit Profile',
+              'Account Activity',
               style: TextStyle(
                 fontSize: 12.0,
                 fontWeight: FontWeight.bold,
@@ -203,7 +201,7 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/settings');
+                Navigator.pushNamed(context, '/newsletter');
               },
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.blue,
@@ -212,13 +210,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.all(12.0),
               ),
               child: const Icon(
-                Icons.settings,
+                Icons.newspaper,
                 size: 32.0,
               ),
             ),
             const SizedBox(height: 8.0),
             const Text(
-              'Profile Settings',
+              'Newsletter',
               style: TextStyle(
                 fontSize: 12.0,
                 fontWeight: FontWeight.bold,
