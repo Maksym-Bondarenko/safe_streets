@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:safe_streets/shared/shared_preferences.dart';
 
 /// AppState is a state management solution using Provider to store some
 /// variables globally and make them accessible to all pages that need them.
@@ -27,4 +28,17 @@ class AppState extends ChangeNotifier {
     _currentIndex = index;
     notifyListeners();
   }
+
+  // model class for dark theme provider
+  DarkThemePreference darkThemePreference = DarkThemePreference();
+  bool _darkTheme = false;
+
+  bool get darkTheme => _darkTheme;
+
+  set darkTheme(bool value) {
+    _darkTheme = value;
+    darkThemePreference.setDarkTheme(value);
+    notifyListeners();
+  }
+
 }

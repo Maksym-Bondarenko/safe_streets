@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../../shared/app_state.dart';
 import '../setting_settings_bar.dart';
 
 class AppearanceSettingsScreen extends StatefulWidget {
@@ -14,6 +16,7 @@ class _AppearanceSettingsScreenState extends State<AppearanceSettingsScreen> {
   AppTheme selectedTheme = AppTheme.light;
   FontSize selectedFontSize = FontSize.medium;
   Language selectedLanguage = Language.english;
+
   bool _hasChanges = false;
 
   void _selectTheme(AppTheme? theme) {
@@ -21,7 +24,6 @@ class _AppearanceSettingsScreenState extends State<AppearanceSettingsScreen> {
       setState(() {
         selectedTheme = theme;
         _hasChanges = true;
-        // TODO: change the theme globally!
       });
     }
   }
@@ -45,11 +47,25 @@ class _AppearanceSettingsScreenState extends State<AppearanceSettingsScreen> {
   }
 
   void _saveSettings() {
-    // Save the selected settings
+    final appState = Provider.of<AppState>(context, listen: false);
+
+    if (selectedTheme == AppTheme.dark) {
+      appState.darkTheme = true;
+    } else {
+      appState.darkTheme = false;
+    }
+
+    setState(() {
+      _hasChanges = false;
+    });
   }
 
   void _cancelSettings() {
     // Discard the changes
+
+    setState(() {
+      _hasChanges = false;
+    });
   }
 
   @override

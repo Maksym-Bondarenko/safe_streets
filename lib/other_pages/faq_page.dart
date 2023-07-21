@@ -20,7 +20,7 @@ class _FaqPageState extends State<FaqPage> {
 
   Future<void> loadFaqData() async {
     String jsonString = await DefaultAssetBundle.of(context)
-        .loadString('assets/faq_data.json');
+        .loadString('lib/assets/data/faq_data.json');
     List<dynamic> jsonData = jsonDecode(jsonString);
 
     setState(() {

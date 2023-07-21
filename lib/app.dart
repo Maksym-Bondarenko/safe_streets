@@ -8,8 +8,8 @@ import 'package:safe_streets/other_pages/settings/settings_page.dart';
 import 'package:safe_streets/main_pages/filter_map.dart';
 import 'package:safe_streets/main_pages/support_page.dart';
 import 'package:safe_streets/shared/app_state.dart';
+import 'package:safe_streets/shared/theme_data.dart';
 import 'package:safe_streets/ui/fake_call/fake_call.dart';
-import 'package:safe_streets/ui/page_animation/custom_page_transition.dart';
 
 import 'authentication/auth_gate.dart';
 import 'i18n/app_locale.dart';
@@ -36,9 +36,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final FlutterLocalization _localization = FlutterLocalization.instance;
+  AppState themeChangeProvider = AppState();
 
   @override
   void initState() {
+    // get theme (dark/light)
+    getCurrentAppTheme();
+    // get localization
     _localization.init(
       mapLocales: [
         const MapLocale(
@@ -60,6 +64,11 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  void getCurrentAppTheme() async {
+    themeChangeProvider.darkTheme =
+    await themeChangeProvider.darkThemePreference.getTheme();
+  }
+
   // the setState function here is a must to add
   void _onTranslatedLanguage(Locale? locale) {
     setState(() {});
@@ -71,31 +80,19 @@ class _MyAppState extends State<MyApp> {
     return ChangeNotifierProvider(
       create: (context) => AppState(),
       child: Consumer<AppState>(
-          builder: (context, appStateProvider, _) {
+          builder: (BuildContext context, AppState appStateProvider, _) {
         final mapController = appStateProvider.controller;
+        final isDarkTheme = appStateProvider.darkTheme;
+
         // MaterialApp widget represents the root of application
         return MaterialApp(
           supportedLocales: _localization.supportedLocales,
           localizationsDelegates: _localization.localizationsDelegates,
           title: "SafeStreets",
-          // Define the theme for application
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            primaryColorDark: Colors.indigo,
-            primaryColor: Colors.lightBlue,
-            scaffoldBackgroundColor: Colors.white,
-            useMaterial3: false,
-            // for custom page-transition
-            pageTransitionsTheme: PageTransitionsTheme(
-              builders: {
-                TargetPlatform.android: CustomPageTransitionsBuilder(),
-                TargetPlatform.iOS: CustomPageTransitionsBuilder(),
-              },
-            ),
-          ),
+          theme: Styles.themeData(isDarkTheme, context),
           // define routes via names to enable navigation by 'Navigator.pushNamed'
           initialRoute: '/',
-          routes: {
+          routes: <String, WidgetBuilder> {
             '/intro': (context) => const IntroSlider(),
             '/auth': (context) => AuthGate(),
             '/home': (context) => const HomePage(),
@@ -149,7 +146,6 @@ class _MyAppState extends State<MyApp> {
                 return MaterialPageRoute(builder: (_) => const NotFoundPage());
             }
           },
-          // Set AuthGate as the initial screen of application
           home: AuthGate(),
           // Disable the debug mode banner
           debugShowCheckedModeBanner: false,

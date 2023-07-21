@@ -8,8 +8,15 @@ class NewsletterPage extends StatelessWidget {
     NewsPost(
       title: 'New Feature Release',
       content: 'We are excited to announce the release of our new feature!',
-      imageUrl: 'https://example.com/image1.jpg',
+      imageUrl: 'https://storage.googleapis.com/cms-storage-bucket/91ac167d372b41248755.png',
       link: 'https://flutter.dev/news',
+      publicationDate: 'September 15, 2023',
+    ),
+    NewsPost(
+      title: 'Version 1.0.0 Release',
+      content: 'We are excited to announce the start of Alpha-Testing phase!',
+      imageUrl: 'https://mysafestreets.org/static/media/home-banner-image.fd3d8816518e14481e81.png',
+      link: 'https://mysafestreets.org/',
       publicationDate: 'September 1, 2023',
     ),
     // Add more news posts here
@@ -70,6 +77,13 @@ class NewsletterPage extends StatelessWidget {
                 height: 200,
                 width: double.infinity,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  // Display a placeholder image or an error message here
+                  return const Placeholder(
+                    fallbackHeight: 200,
+                    fallbackWidth: double.infinity,
+                  );
+                },
               ),
             const SizedBox(height: 12),
             Text(

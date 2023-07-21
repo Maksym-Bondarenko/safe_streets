@@ -16,26 +16,24 @@ class BottomNavigationBarWidget extends StatelessWidget {
       currentIndex: currentIndex,
       onTap: (index) {
         appState.setIndex(index);
-
-        // Navigation logic
         switch (index) {
           case 0:
-            Navigator.pushNamed(context, '/home');
+            Navigator.popAndPushNamed(context, '/home');
             break;
           case 1:
-            Navigator.pushNamed(context, '/support');
+            Navigator.popAndPushNamed(context, '/support');
             break;
           case 2:
-            Navigator.pushNamed(context, '/forum');
+            Navigator.popAndPushNamed(context, '/forum');
             break;
           case 3:
-            Navigator.pushNamed(context, '/filterMap');
+            Navigator.popAndPushNamed(context, '/filterMap');
             break;
           case 4:
-            Navigator.pushNamed(context, '/profile');
+            Navigator.popAndPushNamed(context, '/profile');
             break;
           case 5:
-            Navigator.pushNamed(context, '/settings');
+            Navigator.popAndPushNamed(context, '/settings');
             break;
         }
       },
