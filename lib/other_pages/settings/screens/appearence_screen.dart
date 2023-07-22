@@ -14,6 +14,7 @@ class AppearanceSettingsScreen extends StatefulWidget {
 
 class _AppearanceSettingsScreenState extends State<AppearanceSettingsScreen> {
   AppTheme selectedTheme = AppTheme.light;
+  AppTheme selectedMapTheme = AppTheme.light;
   FontSize selectedFontSize = FontSize.medium;
   Language selectedLanguage = Language.english;
 
@@ -23,6 +24,15 @@ class _AppearanceSettingsScreenState extends State<AppearanceSettingsScreen> {
     if (theme != null) {
       setState(() {
         selectedTheme = theme;
+        _hasChanges = true;
+      });
+    }
+  }
+
+  void _selectMapTheme(AppTheme? theme) {
+    if (theme != null) {
+      setState(() {
+        selectedMapTheme = theme;
         _hasChanges = true;
       });
     }
@@ -82,6 +92,20 @@ class _AppearanceSettingsScreenState extends State<AppearanceSettingsScreen> {
             trailing: DropdownButton<AppTheme>(
               value: selectedTheme,
               onChanged: _selectTheme,
+              items: AppTheme.values.map((theme) {
+                return DropdownMenuItem<AppTheme>(
+                  value: theme,
+                  child: Text(theme.displayName),
+                );
+              }).toList(),
+            ),
+          ),
+          ListTile(
+            title: const Text('Map Theme'),
+            subtitle: const Text('Choose the theme for the map'),
+            trailing: DropdownButton<AppTheme>(
+              value: selectedTheme,
+              onChanged: _selectMapTheme,
               items: AppTheme.values.map((theme) {
                 return DropdownMenuItem<AppTheme>(
                   value: theme,

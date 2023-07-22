@@ -9,8 +9,8 @@ class Styles {
         TextTheme? textTheme,
         Color? dividerColor,
       }) {
-    final primarySwatch = isDarkTheme ? Colors.blue
-        : Colors.indigo;
+    final primarySwatch = isDarkTheme ? Colors.indigo
+        : Colors.blue;
     final primaryColor = isDarkTheme ? Colors.lightBlue
         : Colors.lightBlueAccent;
     final backgroundColor = isDarkTheme ? Colors.black
@@ -23,8 +23,10 @@ class Styles {
         : Colors.grey[300];
 
     final theme = ThemeData(
+      primarySwatch: primarySwatch,
       primaryColorDark: primarySwatch[900]!,
       primaryColor: primaryColor,
+      backgroundColor: backgroundColor,
       scaffoldBackgroundColor: scaffoldBackgroundColor,
       indicatorColor: isDarkTheme ? const Color(0xff0E1D36)
           : const Color(0xffCBDCF8),
@@ -37,7 +39,7 @@ class Styles {
       disabledColor: Colors.grey,
       cardColor: cardColor,
       canvasColor: canvasColor,
-      brightness: isDarkTheme ? Brightness.dark : Brightness.light,
+      // brightness: isDarkTheme ? Brightness.dark : Brightness.light,
       buttonTheme: Theme.of(context).buttonTheme.copyWith(
         colorScheme: isDarkTheme ? const ColorScheme.dark()
             : const ColorScheme.light(),
@@ -55,7 +57,8 @@ class Styles {
           TargetPlatform.android: const FadeUpwardsPageTransitionsBuilder(),
           TargetPlatform.iOS: CustomPageTransitionsBuilder(),
         },
-      ), colorScheme: ColorScheme.fromSwatch(primarySwatch: primarySwatch).copyWith(background: backgroundColor),
+      ),
+      colorScheme: ColorScheme.fromSwatch(primarySwatch: primarySwatch).copyWith(background: backgroundColor),
       // TODO: Add other parameters and customize further as needed
     );
 
