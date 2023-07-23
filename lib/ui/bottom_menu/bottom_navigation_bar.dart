@@ -18,22 +18,22 @@ class BottomNavigationBarWidget extends StatelessWidget {
         appState.setIndex(index);
         switch (index) {
           case 0:
-            Navigator.popAndPushNamed(context, '/home');
+            Navigator.pushNamed(context, '/home');
             break;
           case 1:
-            Navigator.popAndPushNamed(context, '/support');
+            Navigator.pushNamed(context, '/support');
             break;
           case 2:
-            Navigator.popAndPushNamed(context, '/forum');
+            Navigator.pushNamed(context, '/channels');
             break;
           case 3:
-            Navigator.popAndPushNamed(context, '/filterMap');
+            Navigator.pushNamed(context, '/filterMap');
             break;
           case 4:
-            Navigator.popAndPushNamed(context, '/profile');
+            Navigator.pushNamed(context, '/profile');
             break;
           case 5:
-            Navigator.popAndPushNamed(context, '/settings');
+            Navigator.pushNamed(context, '/settings');
             break;
         }
       },
@@ -54,7 +54,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.forum),
-          label: 'Forum',
+          label: 'Channels',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.map),

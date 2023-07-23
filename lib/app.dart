@@ -13,7 +13,7 @@ import 'package:safe_streets/ui/fake_call/fake_call.dart';
 
 import 'authentication/auth_gate.dart';
 import 'i18n/app_locale.dart';
-import 'main_pages/forum/forum_page.dart';
+import 'main_pages/channels/news_channel_page.dart';
 import 'main_pages/home_page.dart';
 import 'main_pages/profile_page.dart';
 import 'other_pages/ai_camera.dart';
@@ -99,7 +99,7 @@ class _MyAppState extends State<MyApp> {
             '/profile': (context) => const ProfilePage(),
             '/filterMap': (context) =>
                 FilterMap(googleMapController: mapController),
-            '/forum': (context) => const ForumPage(),
+            '/channels': (context) => const NewsChannelPage(),
             '/support': (context) => const SupportPage(),
             '/settings': (context) => const SettingsPage(),
             '/account_settings': (context) => const AccountSettingsScreen(),
@@ -129,9 +129,9 @@ class _MyAppState extends State<MyApp> {
               case '/support':
                 appState.setIndex(1);
                 return MaterialPageRoute(builder: (_) => const SupportPage());
-              case '/forum':
+              case '/channels':
                 appState.setIndex(2);
-                return MaterialPageRoute(builder: (_) => const ForumPage());
+                return MaterialPageRoute(builder: (_) => const NewsChannelPage());
               case '/filterMap':
                 appState.setIndex(3);
                 return MaterialPageRoute(builder: (_) => FilterMap(googleMapController: mapController));

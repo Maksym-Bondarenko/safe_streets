@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../other_pages/dds_map.dart';
-import 'forum/forum_page.dart';
+import 'channels/news_channel_page.dart';
 import 'support_page.dart';
 import '../ui/bottom_menu/bottom_navigation_bar.dart';
 
@@ -50,7 +50,7 @@ class HomePage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const ForumPage(),
+                              builder: (context) => const NewsChannelPage(),
                             ),
                           );
                         },
