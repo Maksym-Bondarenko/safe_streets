@@ -1,0 +1,112 @@
+[
+  {
+    "id": "munich",
+    "city": "Munich",
+    "country": "Germany",
+    "latitude": 48.1351,
+    "longitude": 11.5820,
+    "radius": 10000,
+    "safetyIndex": 8.5,
+    "year": "2022",
+    "info": "Munich, a vibrant city in Germany, boasts a relatively low crime rate and a high overall safety index. With its well-maintained infrastructure, efficient public transportation, and strong emphasis on law enforcement, Munich provides residents and visitors alike with a secure urban environment to explore its rich cultural heritage and modern amenities."
+  },
+  {
+    "id": "berlin",
+    "city": "Berlin",
+    "country": "Germany",
+    "latitude": 52.5200,
+    "longitude": 13.4050,
+    "radius": 12000,
+    "safetyIndex": 7.8,
+    "year": "2022",
+    "info": "Berlin, the dynamic capital of Germany, features a diverse urban landscape with a moderate crime rate and a favorable overall safety index. Its efficient public services, vibrant cultural scene, and progressive urban planning contribute to a generally secure atmosphere for residents and tourists to enjoy its historical landmarks and contemporary offerings."
+  },
+  {
+    "id": "vienna",
+    "city": "Vienna",
+    "country": "Austria",
+    "latitude": 48.2082,
+    "longitude": 16.3738,
+    "radius": 9000,
+    "safetyIndex": 9.2,
+    "year": "2022",
+    "info": "Vienna, the enchanting capital of Austria, boasts a commendable safety record with a low crime rate and a high overall safety index. Its well-maintained public spaces, rich cultural heritage, and efficient urban infrastructure create a secure environment for residents and visitors to explore its imperial history and modern attractions."
+  },
+  {
+    "id": "london",
+    "city": "London",
+    "country": "United Kingdom",
+    "latitude": 51.5074,
+    "longitude": -0.1278,
+    "radius": 15000,
+    "safetyIndex": 7.2,
+    "year": "2022",
+    "info": "London, the bustling capital of the United Kingdom, maintains a moderate safety index with a diverse and dynamic urban atmosphere. While offering a plethora of historical sites, cultural attractions, and modern amenities, London's safety efforts continue to provide a secure environment for both residents and visitors."
+  },
+  {
+    "id": "zurich",
+    "city": "Zurich",
+    "country": "Switzerland",
+    "latitude": 47.3769,
+    "longitude": 8.5417,
+    "radius": 8000,
+    "safetyIndex": 9.5,
+    "year": "2022",
+    "info": "Zurich, the picturesque city in Switzerland, boasts an exceptionally high safety index and a low crime rate. With its efficient public services, pristine environment, and well-maintained urban infrastructure, Zurich offers residents and tourists a secure and tranquil setting to enjoy its scenic beauty and cultural richness."
+  },
+  {
+    "id": "frankfurt",
+    "city": "Frankfurt",
+    "country": "Germany",
+    "latitude": 50.1109,
+    "longitude": 8.6821,
+    "radius": 11000,
+    "safetyIndex": 7.9,
+    "year": "2022",
+    "info": "Frankfurt, a prominent city in Germany, maintains a moderate safety index with a well-developed urban environment. Its robust economic activities, cultural diversity, and modern infrastructure contribute to a generally secure atmosphere, allowing residents and visitors to engage in both business and leisure activities."
+  },
+  {
+    "id": "hamburg",
+    "city": "Hamburg",
+    "country": "Germany",
+    "latitude": 53.5511,
+    "longitude": 9.9937,
+    "radius": 13000,
+    "safetyIndex": 7.6,
+    "year": "2022",
+    "info": "Hamburg, a vibrant port city in Germany, maintains a moderate safety index with a blend of maritime heritage and modern urban development. With its active cultural scene, bustling trade, and efficient public services, Hamburg offers a secure and lively environment for residents and tourists to explore its attractions."
+  },
+  {
+    "id": "hannover",
+    "city": "Hannover",
+    "country": "Germany",
+    "latitude": 52.3759,
+    "longitude": 9.7320,
+    "radius": 10000,
+    "safetyIndex": 8.1,
+    "year": "2022",
+    "info": "Hannover, a charming city in Germany, maintains a favorable safety index with a well-organized urban landscape. Its rich history, cultural events, and efficient transportation options contribute to a secure environment, providing residents and visitors with opportunities to explore the city's attractions and natural beauty."
+  },
+  {
+    "id": "moscow",
+    "city": "Moscow",
+    "country": "Russia",
+    "latitude": 55.7558,
+    "longitude": 37.6173,
+    "radius": 15000,
+    "safetyIndex": 0.0,
+    "year": "2023",
+    "info": "Moscow, the capital of the terrorist-country who started the full-scaled war against Ukraine. It is especially dangerous for foreigners and even locals to be there with current politic system."
+  },
+  {
+    "id": "st_petersburg",
+    "city": "St. Petersburg",
+    "country": "Russia",
+    "latitude": 59.9343,
+    "longitude": 30.3351,
+    "radius": 12000,
+    "safetyIndex": 0.0,
+    "year": "2023",
+    "info": "St. Petersburg, second biggest city of the terrorist-country who started the full-scaled war against Ukraine. It is especially dangerous for foreigners and even locals to be there with current politic system."
+  }
+]

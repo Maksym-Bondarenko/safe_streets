@@ -4,19 +4,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
+import '../shared/app_state.dart';
 import '../shared/global_functions.dart';
+import '../shared/points_types.dart';
 import 'notifications_service.dart';
 
 /// Service for showing the notification when users approaches near to the point
 class PointApproaching extends StatefulWidget {
-  final GoogleMapController? googleMapController;
-  final Set<Marker>? currentlyActiveMarkers;
-
-  const PointApproaching(
-      {super.key,
-      required this.googleMapController,
-      required this.currentlyActiveMarkers});
+  const PointApproaching({super.key});
 
   @override
   State<PointApproaching> createState() => _PointApproaching();
@@ -25,21 +22,24 @@ class PointApproaching extends StatefulWidget {
 class _PointApproaching extends State<PointApproaching> {
   bool areNotificationsEnabled = false;
   final NotificationsService notificationService = NotificationsService();
+
   // positionStream needs to be initialised, otherwise there is an error
   late StreamSubscription<Position>? positionStream = null;
   GoogleMapController? googleMapController;
+  late AppState appState;
   late Position _currentPosition;
   Set<Marker>? _currentlyActiveMarkers = {};
+
   // set radius of getting notified when approaching to the point to 50m
   final double _notificationRadius = 50.0;
 
   @override
   initState() {
     super.initState();
-    googleMapController = widget.googleMapController;
-    _currentlyActiveMarkers = widget.currentlyActiveMarkers;
+    appState = Provider.of<AppState>(context, listen: false);
+    googleMapController = appState.controller;
+    _currentlyActiveMarkers = appState.activeMarkers;
     _getCurrentLocation();
-    print(_currentlyActiveMarkers);
   }
 
   @override
@@ -76,31 +76,45 @@ class _PointApproaching extends State<PointApproaching> {
     // Set up the location change subscription
     positionStream = Geolocator.getPositionStream(
             locationSettings: const LocationSettings(
-                accuracy: LocationAccuracy.best, distanceFilter: 0))
+                accuracy: LocationAccuracy.best, distanceFilter: 10))
         .listen((Position position) {
-
-      // TODO: check distance, if it is nearby -> create a Notification
-      _loadNotification();
+      // update active markers from appState
+      _currentlyActiveMarkers = appState.activeMarkers;
+      // check all active markers
+      for (var point in _currentlyActiveMarkers!) {
+        // check the radius and TODO if point-notifications are enabled
+        if (_isLocationWithinRadius(
+            _currentPosition, point.position, _notificationRadius)) {
+          _loadNotification(point);
+        }
+      }
     });
   }
 
   // performs the showing of notification with given parameters on user's device
-  void _loadNotification() async {
-    // TODO: check if current location is near of some points (get them)
-    await notificationService.showLocalNotification("Danger-point is nearby!",
-        "Be careful, some point you turned notifications on is nearby!");
+  void _loadNotification(Marker point) async {
+    // MainType.dangerPoint-DangerPoint.lightPoint-48.258038049510475-11.657517068088055-test
+    final String pointId = point.markerId.value;
 
-    for (var point in _currentlyActiveMarkers!) {
-      print(point);
-      // check the radius and TODO if point-notifications are enabled
-      if (_isLocationWithinRadius(
-          _currentPosition, point.position, _notificationRadius)) {
-        // show notification with point-info
-        String title = "${point.infoWindow.toString()}";
-        String description = "${point.toString()}";
-        await notificationService.showLocalNotification(title, description);
-      }
-    }
+    // Find the index of the first dash character '-'
+    int typeIndex = pointId.indexOf('-');
+    final String pointTypeString = pointId.substring(0, typeIndex);
+    final MainType pointType = getMainTypeFromString(pointTypeString);
+
+    // Find the index of the second dash character '-' starting from the position after the first dash
+    int subTypeIndex = pointId.indexOf('-', typeIndex + 1);
+    final String pointSubTypeString =
+        pointId.substring(typeIndex + 1, subTypeIndex);
+    final MapPoint pointSubType = getSubTypeFromString(pointSubTypeString, pointSubTypeString);
+
+    // Find the index of the last dash character '-'
+    int titleIndex = pointId.lastIndexOf('-');
+
+    final String pointTitle = pointId.substring(titleIndex + 1);
+
+    await notificationService.showLocalNotification(
+        "${pointType.name} is nearby!",
+        "Be careful, some point (${pointSubType.name}) with title '$pointTitle' is nearby!");
   }
 
   // check if the given location near the given point (with lat and lng) in a given radius
@@ -134,39 +148,36 @@ class _PointApproaching extends State<PointApproaching> {
   @override
   Widget build(BuildContext context) {
     return ClipOval(
-        child: Material(
-          color: Colors.purple.shade200,
-          child: InkWell(
-            splashColor: Colors.purple, // inkwell color
-            child: SizedBox(
-              width: 50,
-              height: 50,
-              child: (areNotificationsEnabled)
-                  ? const Icon(Icons.notifications_on)
-                  : const Icon(Icons.notifications_off),
-            ),
-            onTap: () {
-              if (areNotificationsEnabled) {
-                // disable notifications
-                setState(() {
-                  areNotificationsEnabled = false;
-                });
-                // stop receiving location updates
-                positionStream?.cancel();
-              } else {
-                // enable notifications
-                setState(() {
-                  areNotificationsEnabled = true;
-
-                  print(_currentlyActiveMarkers);
-
-                });
-                // start notifications services for continuous tracking and notifications
-                startService();
-              }
-            },
+      child: Material(
+        color: Colors.purple.shade200,
+        child: InkWell(
+          splashColor: Colors.purple, // inkwell color
+          child: SizedBox(
+            width: 50,
+            height: 50,
+            child: (areNotificationsEnabled)
+                ? const Icon(Icons.notifications_on)
+                : const Icon(Icons.notifications_off),
           ),
+          onTap: () {
+            if (areNotificationsEnabled) {
+              // disable notifications
+              setState(() {
+                areNotificationsEnabled = false;
+              });
+              // stop receiving location updates
+              positionStream?.cancel();
+            } else {
+              // enable notifications
+              setState(() {
+                areNotificationsEnabled = true;
+              });
+              // start notifications services for continuous tracking and notifications
+              startService();
+            }
+          },
         ),
-      );
+      ),
+    );
   }
 }

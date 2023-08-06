@@ -40,6 +40,21 @@ MainType getMainType(String mainType) {
   }
 }
 
+// get main-type by the name in id
+// (e.g. for pointApproaching where type is encoded as string within pointId)
+MainType getMainTypeFromString(String mainType) {
+  switch (mainType) {
+    case "MainType.dangerPoint":
+      return MainType.dangerPoint;
+    case "MainType.recommendationPoint":
+      return MainType.recommendationPoint;
+    case "MainType.safePoint":
+      return MainType.safePoint;
+    default:
+      return MainType.dangerPoint;
+  }
+}
+
 // get the sub-type of the point by name
 MapPoint getSubType(String subType, String mainType) {
   switch (subType) {
@@ -86,6 +101,57 @@ MapPoint getSubType(String subType, String mainType) {
       return RecommendationPoint.other;
     default:
       return DangerPoint.other;
+  }
+}
+
+// get sub-type by the name in id
+// (e.g. for pointApproaching where subtype is encoded as string within pointId)
+MapPoint getSubTypeFromString(String subType, String mainType) {
+  switch (subType) {
+    // Danger Points
+    case "DangerPoint.lightPoint":
+      return DangerPoint.lightPoint;
+    case "DangerPoint.cleanlinessPoint":
+      return DangerPoint.cleanlinessPoint;
+    case "DangerPoint.peoplePoint":
+      return DangerPoint.peoplePoint;
+    case "DangerPoint.animalsPoint":
+      return DangerPoint.animalsPoint;
+    case "DangerPoint.roadPoint":
+      return DangerPoint.roadPoint;
+    case "DangerPoint.childrenPoint":
+      return DangerPoint.childrenPoint;
+    case "DangerPoint.surroundingsPoint":
+      return DangerPoint.surroundingsPoint;
+    case "DangerPoint.other":
+      return DangerPoint.other;
+
+    // Recommendation Points
+    case "RecommendationPoint.intrusivePeople":
+      return RecommendationPoint.intrusivePeople;
+    case "RecommendationPoint.culturalReligiousSpecifics":
+      return RecommendationPoint.culturalReligiousSpecifics;
+    case "RecommendationPoint.badTransport":
+      return RecommendationPoint.badTransport;
+    case "RecommendationPoint.attentionToBelongings":
+      return RecommendationPoint.attentionToBelongings;
+    case "RecommendationPoint.crowdedEvent":
+      return RecommendationPoint.crowdedEvent;
+
+    // Safe Points
+    case "SafePoint.restaurant":
+      return SafePoint.restaurant;
+    case "SafePoint.police":
+      return SafePoint.police;
+    case "SafePoint.grocery":
+      return SafePoint.grocery;
+
+    // Other types
+    default:
+      if (mainType == "MainType.dangerPoint") {
+        return DangerPoint.other;
+      }
+      return RecommendationPoint.other;
   }
 }
 

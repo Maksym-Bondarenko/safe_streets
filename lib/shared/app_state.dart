@@ -18,6 +18,29 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  // currentlyActiveMarkers are point-markers (danger/recommendation) that are
+  // currently shown on the map after filtering.
+  // Also, they ar used for push-up notifications when approaching to them.
+  Set<Marker> _activeMarkers = {};
+
+  Set<Marker> get activeMarkers => _activeMarkers;
+
+  set activeMarkers(Set<Marker> activeMarkers) {
+    _activeMarkers = activeMarkers;
+    notifyListeners();
+  }
+
+  // destination address is needed for pathSearch's place-picker
+  // and transfer address from map to pathSearch
+  String _destinationAddress = "";
+
+  String get destinationAddress => _destinationAddress;
+
+  set destinationAddress(String destinationAddress) {
+    _destinationAddress = destinationAddress;
+    notifyListeners();
+  }
+
   // currentIndex shows the currently active page on the bottom-bar
   // navigation menu to enable the navigation across app with one click
   int _currentIndex = 0;

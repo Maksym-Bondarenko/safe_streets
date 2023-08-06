@@ -9,7 +9,7 @@
         "15"
       ],
       "minorPhoneNumbers": [
-        "0810 202 805"
+        "116 000"
       ],
       "generalHelpLine": "112"
     },
@@ -17,14 +17,14 @@
       "id": "2",
       "name": "Austria",
       "majorPhoneNumbers": [
-        "000",
-        "000",
-        "000"
+        "133",
+        "122",
+        "144"
       ],
       "minorPhoneNumbers": [
-        "123 456"
+        "112 123"
       ],
-      "generalHelpLine": "666 666 666"
+      "generalHelpLine": "112"
     },
     {
       "id": "3",
@@ -35,9 +35,9 @@
         "144"
       ],
       "minorPhoneNumbers": [
-        "0844 247 110"
+        "147"
       ],
-      "generalHelpLine": "143"
+      "generalHelpLine": "112"
     },
     {
       "id": "4",
@@ -48,9 +48,23 @@
         "999"
       ],
       "minorPhoneNumbers": [
-        "101"
+        "101",
+        "111"
       ],
-      "generalHelpLine": "116 123"
+      "generalHelpLine": "112"
+    },
+    {
+      "id": "5",
+      "name": "Germany",
+      "majorPhoneNumbers": [
+        "110",
+        "112",
+        "112"
+      ],
+      "minorPhoneNumbers": [
+        "115"
+      ],
+      "generalHelpLine": "116 117"
     }
   ]
 }
