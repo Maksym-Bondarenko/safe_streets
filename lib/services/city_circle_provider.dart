@@ -13,18 +13,25 @@ class CityCirclesProvider {
     for (var cityData in jsonData) {
       double safetyIndex = cityData['safetyIndex'];
 
-      Color fillColor = Colors.greenAccent;
-      Color strokeColor = Colors.green;
+      // for safetyIndex [9, 10]
+      Color fillColor = Colors.tealAccent;
+      Color strokeColor = Colors.teal;
 
       if (safetyIndex < 5) {
         fillColor = Colors.redAccent;
         strokeColor = Colors.red;
+      } else if (safetyIndex < 6) {
+        fillColor = Colors.deepOrangeAccent;
+        strokeColor = Colors.deepOrange;
       } else if (safetyIndex < 7) {
         fillColor = Colors.orangeAccent;
         strokeColor = Colors.orange;
       } else if (safetyIndex < 8) {
         fillColor = Colors.yellowAccent;
         strokeColor = Colors.yellow;
+      } else if (safetyIndex < 9) {
+        fillColor = Colors.greenAccent;
+        strokeColor = Colors.green;
       }
 
       circles.add(
@@ -35,10 +42,9 @@ class CityCirclesProvider {
           fillColor: fillColor.withOpacity(0.3),
           strokeColor: strokeColor,
           strokeWidth: 2,
-          zIndex: 0,
-          // show summarized information about the city by clicking
+          // show summarized info about the city by clicking on circle-area
           onTap: () {
-            print("pressed");
+            print('circle tapped');
 
             showModalBottomSheet(
               context: context,

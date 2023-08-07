@@ -62,7 +62,7 @@ class _FilterMap extends State<FilterMap> {
   Set<Marker> dangerPointsMarkers = {};
   Set<Marker> safePointsMarkers = {};
   Set<Marker> recommendationPointsMarkers = {};
-  final Set<Circle> infoAreaCircles = {};
+  late Set<Circle> infoAreaCircles = {};
   final Map<String, Marker> _policeMarkers = {};
   final Set<Marker> _dangerPointsMarkers = {};
   final Set<Marker> _safePointsMarkers = {};
