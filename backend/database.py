@@ -40,8 +40,8 @@ class DBConnector(object):
         dbname = "safestreets"
         user = "admin"
         password = ""
-        # host = "localhost"
-        host = "host.docker.internal"
+        host = "localhost"
+        # host = "host.docker.internal"
         port = "5432"  # Default PostgreSQL port
 
         # Establish a connection
