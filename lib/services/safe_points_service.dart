@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:safe_streets/services/base_service.dart';
-import 'package:http/http.dart' as http;
 
 import '../shared/global_functions.dart';
 import '../shared/points_types.dart';
@@ -46,7 +45,7 @@ class SafePointsService extends BaseService {
   }
 
   /// returns the marker of police station with filled data
-  Future<Marker> getPoliceMarker(policeStation, customInfoWindowController) async {
+  Future<Marker> getPoliceMarker(policeStation) async {
     // TODO: fix bug (does not change the marker to SafePoint, shows original one)
     BitmapDescriptor safeMarkerIcon = BitmapDescriptor.defaultMarker;
 
@@ -69,22 +68,14 @@ class SafePointsService extends BaseService {
         icon: safeMarkerIcon,
         onTap: () =>
         {
-          customInfoWindowController.addInfoWindow!(
-              PointInfoWindow(
-                  pointId: id,
-                  mainType: MainType.safePoint,
-                  subType: SafePoint.police,
-                  title: name,
-                  description: "Address: ${address}",
-                  votes: 0),
-              LatLng(latitude, longitude))
+
         });
 
     return marker;
   }
 
   /// returns the custom marker with filled data
-  Future<Marker> getCustomMarker(customPoint, customInfoWindowController) async {
+  Future<Marker> getCustomMarker(customPoint, Function onTapCallback) async {
     var mainType = getMainType(customPoint["main_type"]);
     var subType = getSubType(customPoint["sub_type"], customPoint["main_type"]);
     var latLng =
@@ -99,22 +90,24 @@ class SafePointsService extends BaseService {
       customMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
     });
 
+    PointInfoWindow infoWindow;
     final marker = Marker(
         markerId: MarkerId(markerId),
         position: latLng,
         icon: customMarkerIcon,
-        onTap: () =>
+        onTap: ()
         {
-          customInfoWindowController.addInfoWindow!(
-              PointInfoWindow(
-                  pointId: markerId,
-                  mainType: mainType,
-                  subType: subType,
-                  title: title,
-                  description: description,
-                  votes: 0),
-              latLng)
-        });
+          infoWindow = PointInfoWindow(
+            pointId: markerId,
+            mainType: mainType,
+            subType: subType,
+            title: title,
+            description: description,
+            votes: 42,
+          );
+          onTapCallback(infoWindow);
+        }
+    );
 
     return marker;
   }

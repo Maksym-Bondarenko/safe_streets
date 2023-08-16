@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:safe_streets/shared/points_types.dart';
 import 'package:safe_streets/shared/shared_preferences.dart';
+
+import '../ui/infowindow/point_infowindow.dart';
 
 /// AppState is a state management solution using Provider to store some
 /// variables globally and make them accessible to all pages that need them.
@@ -27,6 +30,23 @@ class AppState extends ChangeNotifier {
 
   set activeMarkers(Set<Marker> activeMarkers) {
     _activeMarkers = activeMarkers;
+    notifyListeners();
+  }
+
+  // currently active (= selected) infoWindow of the marker
+  PointInfoWindow _currentlySelectedPoint = PointInfoWindow(
+      pointId: '',
+      mainType: MainType.recommendationPoint,
+      subType: RecommendationPoint.other,
+      title: '',
+      description: '',
+      votes: 0
+  );
+
+  PointInfoWindow get currentlySelectedPoint => _currentlySelectedPoint;
+
+  set currentlySelectedPoint(PointInfoWindow infoWindow) {
+    _currentlySelectedPoint = infoWindow;
     notifyListeners();
   }
 

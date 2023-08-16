@@ -5,7 +5,6 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:custom_info_window/custom_info_window.dart';
 import 'package:provider/provider.dart';
 //import 'package:safe_streets/ui/spinners/loading_spinner.dart';
 
@@ -17,6 +16,7 @@ import '../shared/global_functions.dart';
 import '../shared/points_types.dart';
 import '../ui/bottom_menu/bottom_navigation_bar.dart';
 import '../ui/fake_call/fake_call.dart';
+import '../ui/infowindow/point_infowindow.dart';
 import '../ui/path_search/pathSearch.dart';
 import '../ui/dialog/dialog_window.dart';
 import '../ui/sos/sos_window.dart';
@@ -39,12 +39,10 @@ class _FilterMap extends State<FilterMap> {
   static const CameraPosition _kInitialPosition = CameraPosition(
       target: _kMapMunichCenter, zoom: 10.0, tilt: 0, bearing: 0);
   LatLng? _currentCameraPosition;
+
   String destinationLocation = "";
   bool isDestinationPickerVisible = false;
-
-  // for InfoWindow to the point
-  final CustomInfoWindowController customInfoWindowController =
-      CustomInfoWindowController();
+  bool _isInfoWindowVisible = false;
 
   late AppState appState;
   GoogleMapController? _googleMapController;
@@ -146,8 +144,7 @@ class _FilterMap extends State<FilterMap> {
     //iterate through the police stations and create a marker with InfoWindow for each
     for (final policeStation in policeStations) {
       var name = policeStation["name"];
-      var marker = await safePointsService.getPoliceMarker(
-          policeStation, customInfoWindowController);
+      var marker = await safePointsService.getPoliceMarker(policeStation);
 
       // add each police-office
       setState(() {
@@ -169,8 +166,7 @@ class _FilterMap extends State<FilterMap> {
     // add all custom made points (DangerPoints and RecommendationPoints)
     for (final customPoint in customPoints) {
       var mainType = getMainType(customPoint["main_type"]);
-      var marker = await safePointsService.getCustomMarker(
-          customPoint, customInfoWindowController);
+      var marker = await safePointsService.getCustomMarker(customPoint, _onMarkerTap);
 
       // add each point to the set
       setState(() {
@@ -188,6 +184,20 @@ class _FilterMap extends State<FilterMap> {
     }
   }
 
+  void _onMarkerTap(PointInfoWindow infoWindow) {
+    setState(() {
+      // toggle the visibility of infoWindow, passing the fetched data
+      appState.currentlySelectedPoint = infoWindow;
+      _toggleInfoWindowVisibility();
+    });
+  }
+
+  void _toggleInfoWindowVisibility() {
+    setState(() {
+      _isInfoWindowVisible = !_isInfoWindowVisible;
+    });
+  }
+
   Future<void> showInformationDialog(
       LatLng latLng, BuildContext context) async {
     return await showDialog(
@@ -196,8 +206,9 @@ class _FilterMap extends State<FilterMap> {
           return StatefulBuilder(builder: (context, setState) {
             return DialogWindow(
                 latLng: latLng,
-                customInfoWindowController: customInfoWindowController,
-                updateMarkers: (marker) => addCustomMarker(marker));
+                updateMarkers: (marker) => addCustomMarker(marker),
+                onTapCallback: (infoWindow) => _onMarkerTap(infoWindow)
+            );
           });
         });
   }
@@ -270,7 +281,6 @@ class _FilterMap extends State<FilterMap> {
 
   @override
   void dispose() {
-    customInfoWindowController.dispose();
     infoAreaCircles.clear();
     super.dispose();
   }
@@ -326,7 +336,7 @@ class _FilterMap extends State<FilterMap> {
 
             // Route-builder enables searching for points and building a navigation path between them
             Visibility(
-              visible: _areControllersVisible,
+              visible: false,
               child: PathSearch(
                 onPathDataReceived: onPathDataReceived,
                 onDestinationPickerClicked: _onDestinationPickerClicked,
@@ -371,11 +381,9 @@ class _FilterMap extends State<FilterMap> {
             ),
 
             // Custom Info Window
-            CustomInfoWindow(
-              controller: customInfoWindowController,
-              width: 300,
-              height: 300,
-              offset: 50,
+            Visibility(
+              visible: _isInfoWindowVisible,
+              child: appState.currentlySelectedPoint,
             ),
 
             // destination-picker for the PathSearch
@@ -421,7 +429,6 @@ class _FilterMap extends State<FilterMap> {
       onMapCreated: (controller) {
         setState(() {
           _googleMapController = controller;
-          customInfoWindowController.googleMapController = _googleMapController;
         });
         // get the places with markers on the map
         _fetchPlaces();
@@ -434,7 +441,7 @@ class _FilterMap extends State<FilterMap> {
         }
       },
       onTap: (position) {
-        customInfoWindowController.hideInfoWindow!();
+        _toggleInfoWindowVisibility();
         // trigger the visibility of controllers
         // setState(() {
         //   _areControllersVisible = !_areControllersVisible;
@@ -442,7 +449,6 @@ class _FilterMap extends State<FilterMap> {
       },
       // Callback when the camera is moved
       onCameraMove: (position) {
-        customInfoWindowController.onCameraMove!();
         setState(() {
           _currentCameraPosition = position.target;
         });

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:safe_streets/services/manual_points_service.dart';
 import 'package:safe_streets/shared/points_types.dart';
 
-import '../../shared/global_functions.dart';
-
 /// Info-Window of a Point-Marker
 /// including point-type, subtype, title, description, icon and votes
 class PointInfoWindow extends StatefulWidget {
@@ -28,44 +26,32 @@ class PointInfoWindow extends StatefulWidget {
   _PointInfoWindowState createState() => _PointInfoWindowState();
 }
 
-class _PointInfoWindowState extends State<PointInfoWindow>
-    with SingleTickerProviderStateMixin {
+class _PointInfoWindowState extends State<PointInfoWindow> {
   late ManualPointsService pointsService = ManualPointsService();
 
   // TODO: fetch initial value from backend
-  late bool notificationsEnabled = true;
-
   late Color mainColor;
-
-  // for animation of the icon
-  late AnimationController _animationController;
-
-  List<dynamic> comments = [];
+  // Maintain toggle states for action buttons
+  bool markToggled = false;
+  bool muteToggled = false;
+  bool forwardToggled = false;
+  bool hideToggled = false;
+  String imagePath = 'lib/assets/images/';
+  late List<Comment> comments;
 
   @override
   void initState() {
     super.initState();
     setState(() {
+      // set color according to the point-type
       mainColor = Color.fromRGBO(widget.subType.colorR, widget.subType.colorG,
           widget.subType.colorB, 1.0);
-
-      // initialise the animation controller (for point-icon)
-      _animationController = AnimationController(
-        vsync: this,
-        duration: const Duration(milliseconds: 500),
-      );
+      _fetchComments();
     });
-  }
-
-  // animate (zoom-in, zoom-out) the point-icon
-  void _animateIcon() async {
-    await _animationController.forward();
-    await _animationController.reverse();
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
     super.dispose();
   }
 
@@ -88,86 +74,232 @@ class _PointInfoWindowState extends State<PointInfoWindow>
     // todo: disable new voting on points (only un-voting)
   }
 
-  void _triggerNotifications() {
-    setState(() {
-      notificationsEnabled = !notificationsEnabled;
-    });
-    // toaster-message
-    String toastMessage = (notificationsEnabled)
-        ? "Notifications were enabled"
-        : "Notifications were disabled";
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          content: Text(toastMessage),
-          duration: const Duration(seconds: 1),
-          backgroundColor: Colors.blue),
-    );
-
-    // TODO: sent http put request to the backend
+  Future<void> _fetchComments() async {
+    comments = <Comment>[
+      Comment('${imagePath}logo_small.png', 'John', 'This is a great place!'),
+      Comment('${imagePath}logo_small.png', 'Emma', 'I love this spot.'),
+      Comment('${imagePath}logo_small.png', 'Eve', 'Do not go there!'),
+    ];
   }
 
-  Future<List<dynamic>> _fetchComments() async {
-    // TODO: call to backend
-    // Implement the logic to fetch the comments
-    // from the server or any other source
-    // For now, we'll return a hardcoded list of comments
+  void _markFunction() {
+    // TODO: Implement the logic for the 'Mark' badge
+  }
 
-    // Simulating a network delay
-    await Future.delayed(const Duration(seconds: 2));
+  void _muteFunction() {
+    // TODO: Implement the logic for the 'Mute' badge
+  }
 
-    // Return a list of dummy comments
-    return [];
+  void _forwardFunction() {
+    // TODO: Implement the logic for the 'Forward' badge
+  }
+
+  void _hideFunction() {
+    // TODO: Implement the logic for the 'Hide' badge
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: InkWell(
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        onTap: () => _animateIcon(), // Pass the BuildContext here
-        child: Column(
-          children: <Widget>[
-            _buildPointIcon(context), // Pass the BuildContext here
-            const SizedBox(height: 5.0),
-            _buildInfoCard(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Icon of Point (according to the type and sub-type)
-  Widget _buildPointIcon(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return Transform.scale(
-          scale: 1.0 - _animationController.value * 0.2,
-          child: child,
-        );
-      },
-      child: GestureDetector(
-        onTap: _animateIcon,
-        child: Container(
-          decoration: BoxDecoration(
+    return DraggableScrollableSheet(
+      initialChildSize: 0.5,
+      minChildSize: 0.2,
+      maxChildSize: 0.5,
+      builder: (BuildContext context, ScrollController scrollController) {
+        return Container(
+          decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-            boxShadow: [
-              BoxShadow(
-                color: mainColor,
-                spreadRadius: 10,
-                blurRadius: 10,
-                offset: const Offset(0, 0),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(20),
+            ),
+          ),
+          child: Column(
+            children: <Widget>[
+              // Drag handle
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 4.0,
+                  width: 40.0,
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.circular(2.0),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // main part includes title, votes, description
+                      _buildMainPart(),
+
+                      // action part includes scrollable button-badges
+                      _buildActionPart(),
+
+                      // comment part includes comments to the point
+                      _buildCommentsPart(),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            child: Image(
-              image: AssetImage(widget.subType.markerSrc),
-              width: 80,
-              height: 80,
+        );
+      },
+    );
+  }
+
+  Widget _buildMainPart() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            widget.title,
+            style: TextStyle(
+                fontSize: 24, fontWeight: FontWeight.bold, color: mainColor),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  InkWell(
+                    onTap: _incrementVotes,
+                    child: const Icon(Icons.thumb_up_outlined),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text('100'),
+                  const SizedBox(width: 20),
+                  InkWell(
+                    onTap: _decrementVotes,
+                    child: const Icon(Icons.thumb_down_outlined),
+                  ),
+                  const SizedBox(width: 8),
+                  const Text('20'),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Description',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+        SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          scrollDirection: Axis.vertical,
+          child: Text(
+            widget.description,
+            style: const TextStyle(fontSize: 16),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionPart() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 50,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            children: [
+              _buildToggleBadge(
+                text: 'Mark',
+                icon: Icons.star,
+                toggledIcon: Icons.star_outline,
+                toggled: markToggled,
+                onTap: () {
+                  setState(() {
+                    markToggled = !markToggled;
+                  });
+                  _markFunction();
+                },
+              ),
+              _buildToggleBadge(
+                text: 'Mute',
+                icon: Icons.notifications_off,
+                toggledIcon: Icons.notifications,
+                toggled: muteToggled,
+                onTap: () {
+                  setState(() {
+                    muteToggled = !muteToggled;
+                  });
+                  _muteFunction();
+                },
+              ),
+              _buildToggleBadge(
+                text: 'Forward',
+                icon: Icons.forward,
+                toggled: forwardToggled,
+                toggledIcon: Icons.forward_outlined,
+                onTap: () {
+                  setState(() {
+                    forwardToggled = !forwardToggled;
+                  });
+                  _forwardFunction();
+                },
+              ),
+              _buildToggleBadge(
+                text: 'Hide',
+                icon: Icons.visibility,
+                toggledIcon: Icons.visibility_off,
+                toggled: hideToggled,
+                onTap: () {
+                  setState(() {
+                    hideToggled = !hideToggled;
+                  });
+                  _hideFunction();
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildToggleBadge({
+    required String text,
+    required IconData icon,
+    required IconData toggledIcon,
+    required bool toggled,
+    required VoidCallback onTap,
+  }) {
+    Color badgeColor = toggled ? Colors.blue : Colors.grey;
+    IconData badgeIcon = toggled ? toggledIcon : icon;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: badgeColor,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+              child: Row(
+                children: [
+                  Icon(badgeIcon, color: Colors.white),
+                  Text(text, style: const TextStyle(color: Colors.white, fontSize: 20)),
+                ],
+              ),
             ),
           ),
         ),
@@ -175,174 +307,70 @@ class _PointInfoWindowState extends State<PointInfoWindow>
     );
   }
 
-  // Main Body of InfoWindow
-  Widget _buildInfoCard() {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 10.0),
-      elevation: 10.0,
-      surfaceTintColor: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-          children: <Widget>[
-            _buildMainType(),
-            _buildTitle(),
-            _buildDescription(),
-            _buildVoteRow(),
-            _buildCommentsSection()
+  Widget _buildCommentsPart() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Divider(),
+        const SizedBox(height: 10),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            for (var comment in comments)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundImage: AssetImage(comment.userImage),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            comment.userName,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            comment.text.length > 30
+                                ? '${comment.text.substring(0, 30)}...' // Truncate long comments
+                                : comment.text,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
           ],
         ),
-      ),
-    );
-  }
-
-  // Type Row
-  Widget _buildMainType() {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // icon showing if point was created by current user
-          Visibility(
-            visible: getUserId() == getCreatorIdOfPoint(widget.pointId),
-            child: const InkWell(
-              child: Tooltip(
-                message: 'This point was created by you',
-                child:
-                    Icon(Icons.person_pin, color: Colors.blueAccent, size: 15),
-              ),
-            ),
-          ),
-          const SizedBox(width: 10.0),
-          Flexible(
+        const SizedBox(height: 10),
+        const Divider(),
+        const Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
             child: Text(
-              widget.mainType.name,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20.0,
-                color: mainColor,
-              ),
+            'See All Comments',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(width: 10.0),
-          // enabling/disabling notifications on this point
-          IconButton(
-            onPressed: _triggerNotifications,
-            icon: notificationsEnabled
-                ? const Icon(Icons.notifications_on, color: Colors.green)
-                : const Icon(Icons.notifications_off, color: Colors.red),
-            iconSize: 15,
-          ),
-        ],
-      ),
-    );
-  }
-
-  //Title Row
-  Widget _buildTitle() {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Flexible(
-            child: Text(
-              widget.title,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 14.0,
-                color: mainColor,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Description Area
-  Widget _buildDescription() {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Flexible(
-            child: Text(
-              widget.description,
-              style: const TextStyle(
-                fontSize: 12.0,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Vote Row
-  Widget _buildVoteRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // decrement-vote button
-        IconButton(
-          onPressed: _decrementVotes,
-          icon: const Icon(Icons.remove),
-          color: Colors.black,
-          iconSize: 15,
-        ),
-        // amount of votes
-        Text(
-          'Total votes: ${widget.votes}',
-          style: const TextStyle(fontSize: 10),
-        ),
-        // increment-vote button
-        IconButton(
-          onPressed: _incrementVotes,
-          icon: const Icon(Icons.add),
-          color: Colors.black,
-          iconSize: 15,
+    ),
         ),
       ],
     );
   }
+}
 
-  Widget _buildCommentsSection() {
-    return Row(
-      children: [
-        IconButton(
-          onPressed: () {
-            // Fetch comments from the server or any other source
-            _fetchComments().then((commentList) {
-              // Update the comments list and rebuild the widget
-              setState(() {
-                comments = commentList;
-              });
-            });
-          },
-          icon: const Icon(Icons.comment),
-          color: Colors.black,
-          iconSize: 15,
-        ),
-        Text(
-          'Total comments: ${comments.length}',
-          style: const TextStyle(fontSize: 10),
-        ),
-      ],
-    );
+class Comment {
+  final String userImage;
+  final String userName;
+  final String text;
 
-    // return Column(
-    //   children: [
-    //     for (var comment in comments)
-    //       ListTile(
-    //         title: Text(comment.message),
-    //         subtitle: Text(
-    //           'Author: ${comment.author}\nDate: ${comment.date.toString()}',
-    //         ),
-    //       ),
-    //   ],
-    // );
-  }
+  Comment(this.userImage, this.userName, this.text);
 }

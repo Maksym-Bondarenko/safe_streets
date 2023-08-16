@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:custom_info_window/custom_info_window.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:safe_streets/services/base_service.dart';
@@ -20,8 +19,8 @@ class ManualPointsService extends BaseService {
     MapPoint subType,
     String title,
     String description,
-    CustomInfoWindowController customInfoWindowController,
     Function(Marker) updateMarkers,
+    Function(PointInfoWindow) onTapCallback
   ) async {
     var latitude = latLng.latitude;
     var longitude = latLng.longitude;
@@ -35,22 +34,21 @@ class ManualPointsService extends BaseService {
       customMarkerIcon = BitmapDescriptor.fromBytes(onValue!);
     });
 
+    PointInfoWindow infoWindow;
     updateMarkers(Marker(
       markerId: MarkerId(markerId),
       position: LatLng(latitude, longitude),
       icon: customMarkerIcon,
       onTap: () {
-        customInfoWindowController.addInfoWindow!(
-          PointInfoWindow(
-            pointId: markerId,
-            mainType: mainType,
-            subType: subType,
-            title: title,
-            description: description,
-            votes: votes,
-          ),
-          LatLng(latitude, longitude),
+        infoWindow = PointInfoWindow(
+          pointId: markerId,
+          mainType: mainType,
+          subType: subType,
+          title: title,
+          description: description,
+          votes: votes,
         );
+        onTapCallback(infoWindow);
       },
     ));
 

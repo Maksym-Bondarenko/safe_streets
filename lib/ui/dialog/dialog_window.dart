@@ -4,19 +4,21 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../services/manual_points_service.dart';
 import '../../shared/points_types.dart';
+import '../infowindow/point_infowindow.dart';
 
 /// Class creates a Dialog-Window for a custom Point (DangerPoint or InformationPoint)
 /// after providing all information regarding Point, it will be created and putted on the map with a Custom Info-Window
 class DialogWindow extends StatefulWidget {
   final LatLng latLng;
-  final CustomInfoWindowController customInfoWindowController;
   final Function(Marker) updateMarkers;
+  final Function(PointInfoWindow) onTapCallback;
 
-  const DialogWindow(
-      {super.key,
-      required this.latLng,
-      required this.customInfoWindowController,
-      required this.updateMarkers});
+  const DialogWindow({
+    super.key,
+    required this.latLng,
+    required this.updateMarkers,
+    required this.onTapCallback,
+  });
 
   @override
   _DialogWindowState createState() => _DialogWindowState();
@@ -199,8 +201,8 @@ class _DialogWindowState extends State<DialogWindow> {
             _subType,
             titleController.value.text,
             descriptionController.value.text,
-            widget.customInfoWindowController,
             widget.updateMarkers,
+            widget.onTapCallback,
           ).then((_) {
             // Close the dialog
             Navigator.of(context).pop();
