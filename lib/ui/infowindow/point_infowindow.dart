@@ -152,6 +152,7 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
     );
   }
 
+  // point-type, title, voting and description
   Widget _buildMainPart() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,6 +210,7 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
     );
   }
 
+  // row of action toggle-buttons to the selected point
   Widget _buildActionPart() {
     return Column(
       children: [
@@ -219,6 +221,7 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
             children: [
               _buildToggleBadge(
                 text: 'Mark',
+                toggleText: 'Unmark',
                 icon: Icons.star,
                 toggledIcon: Icons.star_outline,
                 toggled: markToggled,
@@ -231,6 +234,7 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
               ),
               _buildToggleBadge(
                 text: 'Mute',
+                toggleText: 'Unmute',
                 icon: Icons.notifications_off,
                 toggledIcon: Icons.notifications,
                 toggled: muteToggled,
@@ -243,6 +247,7 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
               ),
               _buildToggleBadge(
                 text: 'Forward',
+                toggleText: 'Unforward',
                 icon: Icons.forward,
                 toggled: forwardToggled,
                 toggledIcon: Icons.forward_outlined,
@@ -255,6 +260,7 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
               ),
               _buildToggleBadge(
                 text: 'Hide',
+                toggleText: 'Unhide',
                 icon: Icons.visibility,
                 toggledIcon: Icons.visibility_off,
                 toggled: hideToggled,
@@ -272,13 +278,16 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
     );
   }
 
+  // element of toggle-badge that changes the visual by toggling it
   Widget _buildToggleBadge({
     required String text,
+    required String toggleText,
     required IconData icon,
     required IconData toggledIcon,
     required bool toggled,
     required VoidCallback onTap,
   }) {
+    String badgeText = toggled ? toggleText : text;
     Color badgeColor = toggled ? Colors.blue : Colors.grey;
     IconData badgeIcon = toggled ? toggledIcon : icon;
 
@@ -297,7 +306,7 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
               child: Row(
                 children: [
                   Icon(badgeIcon, color: Colors.white),
-                  Text(text, style: const TextStyle(color: Colors.white, fontSize: 20)),
+                  Text(badgeText, style: const TextStyle(color: Colors.white, fontSize: 20)),
                 ],
               ),
             ),
@@ -307,6 +316,7 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
     );
   }
 
+  // section with comments: top-comments and button to show all
   Widget _buildCommentsPart() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

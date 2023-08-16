@@ -58,6 +58,14 @@ class _PathSearch extends State<PathSearch> {
   Set<Polyline> _polylines = {};
   List<LatLng> polylineCoordinates = [];
 
+  bool isPathSearchShown = false;
+
+  void _togglePathSearch() {
+    setState(() {
+      isPathSearchShown = !isPathSearchShown;
+    });
+  }
+
   // pass the markers and polylines to the callback function
   void _updatePathData() {
     widget.onPathDataReceived(markers, _polylines);
@@ -313,6 +321,48 @@ class _PathSearch extends State<PathSearch> {
 
   @override
   Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: isPathSearchShown ? showPathSearchContainer() : showPlaceholder()),
+    );
+  }
+
+  // show toggle-button for pathSearch container
+  Widget showPlaceholder() {
+    return ElevatedButton(
+          onPressed: _togglePathSearch,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+          ),
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.search,
+                color: Colors.white, // Icon color
+              ),
+              SizedBox(width: 10.0),
+              Text(
+                'Find Safe Path',
+                style: TextStyle(
+                  color: Colors.white, // Text color
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+      ),
+    );
+  }
+
+  // show the full info-container with start/destination and actions
+  Widget showPathSearchContainer() {
     //var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     final googleMapController = appState.controller;
@@ -320,202 +370,164 @@ class _PathSearch extends State<PathSearch> {
     // Show the place input fields & button for showing the route
     // consumer for picking destination-address is needed
     return Consumer<AppState>(builder: (context, appState, _) {
-      return Align(
-        alignment: Alignment.topCenter,
-        child: FractionallySizedBox(
-          child: DraggableScrollableSheet(
-            initialChildSize: 0.08,
-            minChildSize: 0.08, // Minimum size when fully collapsed
-            maxChildSize: 0.35, // Maximum size when fully expanded
-            builder: (BuildContext context, ScrollController scrollController) {
-              return Opacity(
-                opacity: 0.8,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20.0),
-                      topRight: Radius.circular(20.0),
-                    ),
+      return Container(
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.5),
+          borderRadius: const BorderRadius.all(
+            Radius.circular(20.0),
+          ),
+        ),
+        child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                _textField(
+                  label: 'Start',
+                  hint: 'Choose starting point',
+                  prefixIcon: const Icon(Icons.start),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.my_location),
+                    onPressed: () {
+                      _getAddress();
+                      startAddressController.text = _currentAddress;
+                      _startAddress = _currentAddress;
+                    },
                   ),
-                  child: SingleChildScrollView(
-                    controller: scrollController,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          // horizontal line to show that widget is draggable
-                          Container(
-                            height: 4.0,
-                            width: 40.0,
-                            decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(2.0),
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          const Text(
-                            'Get Safe Route',
-                            style:
-                                TextStyle(fontSize: 20.0, color: Colors.blue),
-                          ),
-                          const SizedBox(height: 10),
-                          _textField(
-                            label: 'Start',
-                            hint: 'Choose starting point',
-                            prefixIcon: const Icon(Icons.start),
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.my_location),
-                              onPressed: () {
-                                _getAddress();
-                                startAddressController.text = _currentAddress;
-                                _startAddress = _currentAddress;
-                              },
-                            ),
-                            controller: startAddressController,
-                            focusNode: startAddressFocusNode,
-                            width: width,
-                            locationCallback: (String value) {
-                              setState(() {
-                                _startAddress = value;
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 10),
-                          _textField(
-                            label: 'Destination',
-                            hint: 'Choose destination',
-                            prefixIcon: const Icon(Icons.flag),
-                            suffixIcon: IconButton(
-                              icon: const Icon(Icons.location_pin),
-                              onPressed: () {
-                                // show destination-picker with address-field
-                                widget.onDestinationPickerClicked();
-                                // update the field when clicking on accept-button
-                                // on destination-picker field
-                                destinationAddressController.text =
-                                    appState.destinationAddress;
-                                _destinationAddress =
-                                    appState.destinationAddress;
-                              },
-                            ),
-                            controller: destinationAddressController,
-                            focusNode: destinationAddressFocusNode,
-                            width: width,
-                            locationCallback: (String value) {
-                              setState(() {
-                                _destinationAddress = value;
-                              });
-                            },
-                          ),
-                          const SizedBox(height: 10),
-                          Visibility(
-                            visible: _placeDistance == null ? false : true,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'DISTANCE: $_placeDistance km',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: _exchangeAddresses,
-                                child: const Icon(
-                                  Icons.swap_vert,
-                                  color: Colors.grey,
-                                  size: 24.0,
-                                ),
-                              ),
-                              const SizedBox(width: 5),
-                              ElevatedButton(
-                                onPressed: (_startAddress != '' &&
-                                        _destinationAddress != '')
-                                    ? () async {
-                                        startAddressFocusNode.unfocus();
-                                        destinationAddressFocusNode.unfocus();
-                                        setState(() {
-                                          if (markers.isNotEmpty) {
-                                            markers.clear();
-                                          }
-                                          if (_polylines.isNotEmpty) {
-                                            _polylines.clear();
-                                          }
-                                          if (polylineCoordinates.isNotEmpty) {
-                                            polylineCoordinates.clear();
-                                          }
-                                          _placeDistance = null;
-                                          // add to the main-map via callback function
-                                          _updatePathData();
-                                        });
-
-                                        _calculateDistance(googleMapController)
-                                            .then((isCalculated) {
-                                          if (isCalculated) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                content: Text(
-                                                    'Distance Calculated Successfully'),
-                                              ),
-                                            );
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                content: Text(
-                                                    'Error Calculating Distance'),
-                                              ),
-                                            );
-                                          }
-                                        });
-                                      }
-                                    : null,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Show Route'.toUpperCase(),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: _cleanPath,
-                                child: const Icon(
-                                  Icons.cleaning_services,
-                                  color: Colors.grey,
-                                  size: 24.0,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                  controller: startAddressController,
+                  focusNode: startAddressFocusNode,
+                  width: width,
+                  locationCallback: (String value) {
+                    setState(() {
+                      _startAddress = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 10),
+                _textField(
+                  label: 'Destination',
+                  hint: 'Choose destination',
+                  prefixIcon: const Icon(Icons.flag),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.location_pin),
+                    onPressed: () {
+                      // show destination-picker with address-field
+                      widget.onDestinationPickerClicked();
+                      // update the field when clicking on accept-button
+                      // on destination-picker field
+                      destinationAddressController.text =
+                          appState.destinationAddress;
+                      _destinationAddress = appState.destinationAddress;
+                    },
+                  ),
+                  controller: destinationAddressController,
+                  focusNode: destinationAddressFocusNode,
+                  width: width,
+                  locationCallback: (String value) {
+                    setState(() {
+                      _destinationAddress = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 10),
+                Visibility(
+                  visible: _placeDistance == null ? false : true,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'DISTANCE: $_placeDistance km',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
-              );
-            },
-          ),
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: _exchangeAddresses,
+                      child: const Icon(
+                        Icons.swap_vert,
+                        color: Colors.grey,
+                        size: 24.0,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    ElevatedButton(
+                      onPressed: (_startAddress != '' &&
+                              _destinationAddress != '')
+                          ? () async {
+                              startAddressFocusNode.unfocus();
+                              destinationAddressFocusNode.unfocus();
+                              setState(() {
+                                if (markers.isNotEmpty) {
+                                  markers.clear();
+                                }
+                                if (_polylines.isNotEmpty) {
+                                  _polylines.clear();
+                                }
+                                if (polylineCoordinates.isNotEmpty) {
+                                  polylineCoordinates.clear();
+                                }
+                                _placeDistance = null;
+                                // add to the main-map via callback function
+                                _updatePathData();
+                              });
+
+                              _calculateDistance(googleMapController)
+                                  .then((isCalculated) {
+                                if (isCalculated) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Distance Calculated Successfully'),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Error Calculating Distance'),
+                                    ),
+                                  );
+                                }
+                              });
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Show Route'.toUpperCase(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _togglePathSearch();
+                        _cleanPath();
+                      },
+                      child: const Icon(
+                        Icons.cleaning_services,
+                        color: Colors.grey,
+                        size: 24.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
         ),
       );
     });

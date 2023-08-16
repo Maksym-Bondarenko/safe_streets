@@ -194,7 +194,9 @@ class _FilterMap extends State<FilterMap> {
 
   void _toggleInfoWindowVisibility() {
     setState(() {
-      _isInfoWindowVisible = !_isInfoWindowVisible;
+      if(appState.currentlySelectedPoint.pointId.isNotEmpty) {
+        _isInfoWindowVisible = !_isInfoWindowVisible;
+      }
     });
   }
 
@@ -336,7 +338,7 @@ class _FilterMap extends State<FilterMap> {
 
             // Route-builder enables searching for points and building a navigation path between them
             Visibility(
-              visible: false,
+              visible: _areControllersVisible,
               child: PathSearch(
                 onPathDataReceived: onPathDataReceived,
                 onDestinationPickerClicked: _onDestinationPickerClicked,
