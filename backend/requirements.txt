@@ -6,3 +6,4 @@ cloud-sql-python-connector==1.2.0
 flask
 gunicorn
 pandas
+psycopg2

@@ -4,20 +4,28 @@ from google.cloud.sql.connector import Connector
 import sqlalchemy
 import config
 from db_strcuts import User, Place
+import psycopg2
 
 
 class DBConnector(object):
-    def __init__(self):
+    def __init__(self, is_google_DB=False):
         # initialize Connector object
-        self.connector = Connector()
+        self.is_google_DB = is_google_DB
+        if self.is_google_DB:
+            self.connector = Connector()
 
-        self.pool = sqlalchemy.create_engine(
-            "postgresql+pg8000://",
-            creator=self.get_conn,
-        )
-        self.pool.dialect.description_encoding = None
+            self.pool = sqlalchemy.create_engine(
+                "postgresql+pg8000://",
+                creator=self.get_conn_google,
+            )
+            self.pool.dialect.description_encoding = None
+        else:
+            self.connector = self.get_conn_local()
 
-    def get_conn(self) -> pg8000.dbapi.Connection:
+    def __del__(self):
+        self.connector.close()
+
+    def get_conn_google(self) -> pg8000.dbapi.Connection:
         conn: pg8000.dbapi.Connection = self.connector.connect(
             config.instance_connection_name,
             "pg8000",
@@ -28,20 +36,58 @@ class DBConnector(object):
         )
         return conn
 
+    def get_conn_local(self):
+        dbname = "safestreets"
+        user = "admin"
+        password = ""
+        # host = "localhost"
+        host = "host.docker.internal"
+        port = "5432"  # Default PostgreSQL port
+
+        # Establish a connection
+        # try:
+        connection = psycopg2.connect(
+            dbname=dbname, user=user, password=password, host=host, port=port
+        )
+        return connection
+
+    def execute_query(self, query):
+        if self.is_google_DB:
+            raise "Only for local connection now"
+        else:
+            try:
+                cursor = self.connector.cursor()
+                cursor.execute(query)
+
+                # Fetch all the rows
+                rows = cursor.fetchall()
+                self.connector.commit()
+            except Exception as e:
+                self.connector.rollback()
+                raise psycopg2.DatabaseError(str(e))
+        return rows
+
     def get_all_users(self):
-        with self.pool.connect() as db_conn:
-            return db_conn.execute(
-                sqlalchemy.text("SELECT id, firebase_id, full_name, email,  created_at from users")).fetchall()
+        q = "SELECT id, firebase_user_id, full_name, email from users"
+        if self.is_google_DB:
+            with self.pool.connect() as db_conn:
+                return db_conn.execute(
+                    sqlalchemy.text(q)).fetchall()
+        else:
+            return self.execute_query(q)
 
-    def get_users(self, firebase_id):
+    def get_users(self, firebase_user_id):
         q = f"""
-        SELECT id, firebase_id, full_name, email,  created_at from users where firebase_id = '{firebase_id}'
+        SELECT id, firebase_user_id, full_name, email,  created_at from users where firebase_user_id = '{firebase_user_id}'
         """
-        with self.pool.connect() as db_conn:
-            return db_conn.execute(
-                sqlalchemy.text(q)).fetchall()
+        if self.is_google_DB:
+            with self.pool.connect() as db_conn:
+                return db_conn.execute(
+                    sqlalchemy.text(q)).fetchall()
+        else:
+            self.execute_query(q)
 
-    def get_all_places(self, main_type, sub_type, firebase_user_id):
+    def get_places(self, main_type, sub_type, firebase_user_id):
         q = "SELECT id, firebase_user_id, title, main_type, sub_type, n_likes, n_dislikes, comment, lat, long, created_at from places"
         if (main_type is not None) and (sub_type is not None):
             q += f" where main_type = '{main_type}' and sub_type='{sub_type}' "
@@ -55,57 +101,85 @@ class DBConnector(object):
         elif firebase_user_id is not None:
             q += f" and firebase_user_id='{firebase_user_id}' "
 
-        with self.pool.connect() as db_conn:
-            return db_conn.execute(
-                sqlalchemy.text(q)).fetchall()
+        if self.is_google_DB:
+            with self.pool.connect() as db_conn:
+                return db_conn.execute(
+                    sqlalchemy.text(q)).fetchall()
+        else:
+            return self.execute_query(q)
 
     def add_user(self, user: User):
         query = f"""
-        Insert into Users (firebase_id, full_name, email) values 
-                             ('{user.firebase_id}', '{user.full_name}', '{user.email}')   
+        Insert into users (firebase_user_id, full_name, email) values 
+                             ('{user.firebase_user_id}', '{user.full_name}', '{user.email}')  returning id 
         """
-        with self.pool.connect() as db_conn:
-            return db_conn.execute(
-                sqlalchemy.text(query))
+        if self.is_google_DB:
+            with self.pool.connect() as db_conn:
+                return db_conn.execute(
+                    sqlalchemy.text(query))
+        else:
+            return self.execute_query(query)
 
     def add_location(self, place: Place):
         query = f"""
         Insert into places (firebase_user_id, title, main_type, sub_type, comment, lat, long) values 
                              ('{place.firebase_user_id}', '{place.title}','{place.main_type}', '{place.sub_type}',
-                             '{place.comment}', '{place.lat}', '{place.long}')   
+                             '{place.comment}', '{place.lat}', '{place.long}') returning id   
         """
-        with self.pool.connect() as db_conn:
-            return db_conn.execute(
-                sqlalchemy.text(query))
+        if self.is_google_DB:
+            with self.pool.connect() as db_conn:
+                return db_conn.execute(
+                    sqlalchemy.text(query))
+        else:
+            return self.execute_query(query)
 
     def update_like(self, id):
-        query = f"""
+        q = f"""
         UPDATE places 
         SET n_likes = n_likes + 1
         WHERE id = {id};
         """
-        with self.pool.connect() as db_conn:
-            return db_conn.execute(
-                sqlalchemy.text(query))
+        if self.is_google_DB:
+            with self.pool.connect() as db_conn:
+                return db_conn.execute(
+                    sqlalchemy.text(q))
+        else:
+            return self.execute_query(q)
 
     def udpate_dislike(self, id):
-        query = f"""
+        q = f"""
         UPDATE places 
         SET n_dislikes = n_dislikes + 1
         WHERE id = {id};
         """
-        with self.pool.connect() as db_conn:
-            return db_conn.execute(
-                sqlalchemy.text(query))
+        if self.is_google_DB:
+            with self.pool.connect() as db_conn:
+                return db_conn.execute(
+                    sqlalchemy.text(q))
+        else:
+            return self.execute_query(q)
 
-    def delete_user(self, id):
-        with self.pool.connect() as db_conn:
-            return db_conn.execute(sqlalchemy.text(f"delete from users where id = {id}"))
+    def delete_user(self, firebase_user_id):
+        q = f"delete from users where firebase_user_id = {firebase_user_id}"
+        if self.is_google_DB:
+            with self.pool.connect() as db_conn:
+                return db_conn.execute(sqlalchemy.text(q))
+        else:
+            return self.execute_query(q)
 
     def delete_firebase_user_id(self, id):
-        with self.pool.connect() as db_conn:
-            return db_conn.execute(sqlalchemy.text(f"delete from users where firebase_id = '{id}'"))
+        q = f"delete from users where firebase_user_id = '{id}'"
+        if self.is_google_DB:
+            with self.pool.connect() as db_conn:
+                return db_conn.execute(sqlalchemy.text(q))
+        else:
+            return self.execute_query(q)
 
     def delete_place(self, id):
-        with self.pool.connect() as db_conn:
-            return db_conn.execute(sqlalchemy.text(f"delete from places where id = {id}"))
+        q = f"delete from places where id = {id}"
+
+        if self.is_google_DB:
+            with self.pool.connect() as db_conn:
+                return db_conn.execute(sqlalchemy.text(q))
+        else:
+            return self.execute_query(q)
