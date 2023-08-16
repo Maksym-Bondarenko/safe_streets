@@ -39,7 +39,7 @@ class DBConnector(object):
     def get_conn_local(self):
         dbname = "safestreets"
         user = "admin"
-        password = ""
+        password = "1234"
         host = "localhost"
         # host = "host.docker.internal"
         port = "5432"  # Default PostgreSQL port
