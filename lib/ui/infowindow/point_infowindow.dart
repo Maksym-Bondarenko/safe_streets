@@ -98,6 +98,10 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
     // TODO: Implement the logic for the 'Hide' badge
   }
 
+  void _deletePoint() {
+    // TODO
+  }
+
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
@@ -116,7 +120,7 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
             children: <Widget>[
               // Drag handle
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Container(
                   height: 4.0,
                   width: 40.0,
@@ -218,7 +222,7 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
           height: 50,
           child: ListView(
             scrollDirection: Axis.horizontal,
-            children: [
+            children: <Widget> [
               _buildToggleBadge(
                 text: 'Mark',
                 toggleText: 'Unmark',
@@ -246,19 +250,6 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
                 },
               ),
               _buildToggleBadge(
-                text: 'Forward',
-                toggleText: 'Unforward',
-                icon: Icons.forward,
-                toggled: forwardToggled,
-                toggledIcon: Icons.forward_outlined,
-                onTap: () {
-                  setState(() {
-                    forwardToggled = !forwardToggled;
-                  });
-                  _forwardFunction();
-                },
-              ),
-              _buildToggleBadge(
                 text: 'Hide',
                 toggleText: 'Unhide',
                 icon: Icons.visibility,
@@ -271,6 +262,29 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
                   _hideFunction();
                 },
               ),
+              GestureDetector(
+                onTap: _deletePoint,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+                        child: Row(
+                          children: [
+                            Icon(Icons.delete, color: Colors.white),
+                            Text('Delete', style: TextStyle(color: Colors.white, fontSize: 20)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ),

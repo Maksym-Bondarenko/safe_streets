@@ -8,7 +8,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 //import 'package:safe_streets/ui/spinners/loading_spinner.dart';
 
-import '../services/city_circle_provider.dart';
 import '../services/point_approaching.dart';
 import '../services/safe_points_service.dart';
 import '../shared/app_state.dart';
@@ -56,11 +55,9 @@ class _FilterMap extends State<FilterMap> {
 
   // all info-markers (danger, recommendation, safe, info-areas)
   Set<Marker> currentlyActiveMarkers = {};
-  Set<Circle> currentlyActiveCircles = {};
   Set<Marker> dangerPointsMarkers = {};
   Set<Marker> safePointsMarkers = {};
   Set<Marker> recommendationPointsMarkers = {};
-  late Set<Circle> infoAreaCircles = {};
   final Map<String, Marker> _policeMarkers = {};
   final Set<Marker> _dangerPointsMarkers = {};
   final Set<Marker> _safePointsMarkers = {};
@@ -77,19 +74,7 @@ class _FilterMap extends State<FilterMap> {
     // set GoogleMapController to the global one across the components
     _googleMapController = widget.googleMapController;
     _getCurrentLocation();
-    // load info area circles from JSON
-    _loadInfoAreaCircles();
     updatePointsVisibility();
-  }
-
-  Future<void> _loadInfoAreaCircles() async {
-    // Load circles from JSON file
-    Set<Circle> circles = await CityCirclesProvider.getCirclesFromJson(context);
-
-    // Add the circles to the infoAreaCircles set
-    setState(() {
-      infoAreaCircles.addAll(circles);
-    });
   }
 
   void _getCurrentLocation() async {
@@ -271,11 +256,6 @@ class _FilterMap extends State<FilterMap> {
             currentlyActiveMarkers.difference(safePointsMarkers);
       });
     }
-    if (_selectedFilters[3]) {
-      currentlyActiveCircles = infoAreaCircles;
-    } else {
-      currentlyActiveCircles = {};
-    }
     // update shared appState
     final appState = Provider.of<AppState>(context, listen: false);
     appState.activeMarkers = currentlyActiveMarkers;
@@ -283,7 +263,6 @@ class _FilterMap extends State<FilterMap> {
 
   @override
   void dispose() {
-    infoAreaCircles.clear();
     super.dispose();
   }
 
@@ -318,6 +297,10 @@ class _FilterMap extends State<FilterMap> {
           ? MapType.satellite
           : MapType.normal;
     });
+  }
+
+  void _showDetailedPointsMenu() {
+    // TODO: navigate to screen with selection of points sub-types
   }
 
   @override
@@ -367,7 +350,6 @@ class _FilterMap extends State<FilterMap> {
               visible: _areControllersVisible,
               child: Positioned(
                 top: 50,
-                left: 10,
                 child: _buildToggleButtons(),
               ),
             ),
@@ -426,7 +408,6 @@ class _FilterMap extends State<FilterMap> {
       zoomGesturesEnabled: true,
       tiltGesturesEnabled: true,
       indoorViewEnabled: false,
-      circles: currentlyActiveCircles,
       // Callback when the map is created
       onMapCreated: (controller) {
         setState(() {
@@ -568,82 +549,120 @@ class _FilterMap extends State<FilterMap> {
     );
   }
 
+  // badge-buttons to filter through point-types: danger, recommendation, safe
   Widget _buildToggleButtons() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          // Toggle Buttons for filters
-          ToggleButtons(
-            direction: Axis.vertical,
-            onPressed: (int index) {
-              // All buttons are selectable.
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: <Widget>[
+          _buildToggleBadge(
+            text: 'Danger Points',
+            icon: Icons.notification_important,
+            toggledIcon: Icons.notification_important_outlined,
+            toggled: _selectedFilters[0],
+            onTap: () {
               setState(() {
-                _selectedFilters[index] = !_selectedFilters[index];
-                updatePointsVisibility();
+                _selectedFilters[0] = !_selectedFilters[0];
               });
+              updatePointsVisibility();
             },
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-            selectedBorderColor: Colors.black,
-            selectedColor: Colors.lightBlueAccent,
-            fillColor: Colors.lightGreenAccent,
-            color: Colors.white,
-            borderColor: Colors.blue,
-            constraints: const BoxConstraints(
-              minHeight: 50.0,
-              minWidth: 50.0,
-            ),
-            isSelected: _selectedFilters,
-            children: List.generate(filters.length, (index) {
-              return Container(
-                color: _selectedFilters[index]
-                    ? _getSelectedColor(index)
-                    : Colors.blue[200],
-                child: filters[index],
-              );
-            }),
           ),
+          _buildToggleBadge(
+            text: 'Recommendation Points',
+            icon: Icons.question_mark,
+            toggledIcon: Icons.question_mark_outlined,
+            toggled: _selectedFilters[1],
+            onTap: () {
+              setState(() {
+                _selectedFilters[1] = !_selectedFilters[1];
+              });
+              updatePointsVisibility();
+            },
+          ),
+          _buildToggleBadge(
+            text: 'Safe Points',
+            icon: Icons.handshake,
+            toggledIcon: Icons.handshake_outlined,
+            toggled: _selectedFilters[2],
+            onTap: () {
+              setState(() {
+                _selectedFilters[2] = !_selectedFilters[2];
+              });
+              updatePointsVisibility();
+            },
+          ),
+          GestureDetector(
+            onTap: _showDetailedPointsMenu,
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                    child: Row(
+                      children: [
+                        Icon(Icons.more_horiz, color: Colors.black, size: 12),
+                        Text('More',
+                            style: TextStyle(color: Colors.black, fontSize: 12)),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
   }
 
-  // for selecting the right background-color for toggle-buttons
-  Color _getSelectedColor(int index) {
-    if (index == 0) {
-      return Colors.redAccent;
-    } else if (index == 1) {
-      return Colors.yellowAccent;
-    } else if (index == 2) {
-      return Colors.greenAccent;
-    } else if (index == 3) {
-      _toggleInfoAreaCirclesVisibility();
-      return Colors.orangeAccent;
-    } else {
-      return Colors.blueAccent[700]!; // Default blue if index is out of range
-    }
+  // element of toggle-badge that changes the visual by toggling it
+  Widget _buildToggleBadge({
+    required String text,
+    required IconData icon,
+    required IconData toggledIcon,
+    required bool toggled,
+    required VoidCallback onTap,
+  }) {
+    Color badgeColor = toggled ? Colors.blue : Colors.grey.shade300;
+    IconData badgeIcon = toggled ? toggledIcon : icon;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: badgeColor,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+              child: Row(
+                children: [
+                  Icon(badgeIcon, color: Colors.black, size: 12),
+                  Text(text,
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight:
+                              toggled ? FontWeight.bold : FontWeight.normal)),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
-
-  bool _isAreaInfoVisible = false;
-
-  void _toggleInfoAreaCirclesVisibility() {
-    setState(() {
-      _isAreaInfoVisible = !_isAreaInfoVisible;
-    });
-  }
-
-  // visual of ToggleButtons
-  static List<Widget> filters = const <Widget>[
-    Icon(Icons.notification_important, size: 50.0),
-    Icon(Icons.question_mark, size: 50.0),
-    Icon(Icons.handshake, size: 50.0),
-    Icon(Icons.info, size: 50.0),
-  ];
 
   // initial filters (danger-points, safe-points and tourists-points)
-  final List<bool> _selectedFilters = <bool>[false, false, false, false];
+  final List<bool> _selectedFilters = <bool>[false, false, false];
 
   Widget _buildSpeedDial() {
     return SpeedDial(
