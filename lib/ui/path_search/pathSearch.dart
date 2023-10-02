@@ -334,27 +334,27 @@ class _PathSearch extends State<PathSearch> {
     return ElevatedButton(
           onPressed: _togglePathSearch,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
+              borderRadius: BorderRadius.circular(30.0),
             ),
             padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+            elevation: 10,
           ),
           child: const Row(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.max,
             children: [
+              Text(
+                'Find place',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 15.0,
+                ),
+              ),
+              Spacer(),
               Icon(
                 Icons.search,
-                color: Colors.white, // Icon color
-              ),
-              SizedBox(width: 10.0),
-              Text(
-                'Find Safe Path',
-                style: TextStyle(
-                  color: Colors.white, // Text color
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                ),
+                color: Colors.black,
               ),
             ],
       ),
@@ -452,7 +452,7 @@ class _PathSearch extends State<PathSearch> {
                       onTap: _exchangeAddresses,
                       child: const Icon(
                         Icons.swap_vert,
-                        color: Colors.grey,
+                        color: Colors.tealAccent,
                         size: 24.0,
                       ),
                     ),
@@ -498,7 +498,7 @@ class _PathSearch extends State<PathSearch> {
                             }
                           : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Colors.teal,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20.0),
                         ),
@@ -521,7 +521,7 @@ class _PathSearch extends State<PathSearch> {
                       },
                       child: const Icon(
                         Icons.cleaning_services,
-                        color: Colors.grey,
+                        color: Colors.tealAccent,
                         size: 24.0,
                       ),
                     ),
@@ -573,7 +573,7 @@ class _PathSearch extends State<PathSearch> {
               Radius.circular(10.0),
             ),
             borderSide: BorderSide(
-              color: Colors.blue.shade300,
+              color: Colors.teal.shade300,
               width: 2,
             ),
           ),

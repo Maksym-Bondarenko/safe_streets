@@ -70,7 +70,7 @@ class AuthGate extends StatelessWidget {
                       const TextSpan(text: 'By signing in, you agree to our '),
                       TextSpan(
                           text: 'Terms and Conditions',
-                          style: const TextStyle(color: Colors.blue),
+                          style: const TextStyle(color: Colors.teal),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
                               // Navigate to the Terms and Conditions page

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -66,6 +67,8 @@ class _FilterMap extends State<FilterMap> {
   // for switching the visibility of all controllers, buttons
   bool _areControllersVisible = true;
 
+  String customMapStyle = '';
+
   @override
   initState() {
     super.initState();
@@ -73,6 +76,7 @@ class _FilterMap extends State<FilterMap> {
     destinationLocation = appState.destinationAddress;
     // set GoogleMapController to the global one across the components
     _googleMapController = widget.googleMapController;
+    _loadCustomMapStyle();
     _getCurrentLocation();
     updatePointsVisibility();
   }
@@ -86,6 +90,15 @@ class _FilterMap extends State<FilterMap> {
     } catch (e) {
       print(e);
     }
+  }
+
+  void _loadCustomMapStyle() async {
+    // Load the custom map style JSON file from assets
+    final String style = await rootBundle.loadString('lib/assets/data/map_styling.json');
+
+    setState(() {
+      customMapStyle = style;
+    });
   }
 
   // callback-function from the PathSearch to show the start/destination
@@ -183,21 +196,6 @@ class _FilterMap extends State<FilterMap> {
         _isInfoWindowVisible = !_isInfoWindowVisible;
       }
     });
-  }
-
-  Future<void> showInformationDialog(
-      LatLng latLng, BuildContext context) async {
-    return await showDialog(
-        context: context,
-        builder: (context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return DialogWindow(
-                latLng: latLng,
-                updateMarkers: (marker) => addCustomMarker(marker),
-                onTapCallback: (infoWindow) => _onMarkerTap(infoWindow)
-            );
-          });
-        });
   }
 
   // callback function for adding a custom marker (DangerPoint or InformationPoint)
@@ -319,20 +317,42 @@ class _FilterMap extends State<FilterMap> {
             // Google Map widget
             _buildGoogleMap(),
 
-            // Route-builder enables searching for points and building a navigation path between them
-            Visibility(
-              visible: _areControllersVisible,
-              child: PathSearch(
-                onPathDataReceived: onPathDataReceived,
-                onDestinationPickerClicked: _onDestinationPickerClicked,
-              ),
-            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Route-builder enables searching for points and building a navigation path between them
+                Visibility(
+                  visible: _areControllersVisible,
+                  child: PathSearch(
+                    onPathDataReceived: onPathDataReceived,
+                    onDestinationPickerClicked: _onDestinationPickerClicked,
+                  ),
+                ),
 
-            // service for showing the push-notifications when approaching to close to the point
-            Visibility(
-              visible: _areControllersVisible,
-              child: const Positioned(
-                  top: 30, right: 10, child: PointApproaching()),
+                // Toggle Buttons (point-types)
+                Visibility(
+                  visible: _areControllersVisible,
+                  child: Positioned(
+                    top: 50,
+                    child: _buildToggleButtons(),
+                  ),
+                ),
+
+                // service for showing the push-notifications when approaching to close to the point
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Visibility(
+                        visible: _areControllersVisible,
+                        child: const PointApproaching(),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
 
             // Show current location button and zoom-buttons
@@ -345,22 +365,33 @@ class _FilterMap extends State<FilterMap> {
               ),
             ),
 
-            // Toggle Buttons (point-types)
-            Visibility(
-              visible: _areControllersVisible,
-              child: Positioned(
-                top: 50,
-                child: _buildToggleButtons(),
-              ),
-            ),
 
-            // speed-dial for actions: fake-call, sos, location-sharing
-            Visibility(
-              visible: _areControllersVisible,
-              child: Positioned(
-                bottom: 30,
-                left: 10,
-                child: _buildSpeedDial(),
+            // // speed-dial for actions: fake-call, sos, location-sharing
+            // Visibility(
+            //   visible: _areControllersVisible,
+            //   child: Positioned(
+            //     bottom: 30,
+            //     left: 10,
+            //     child: _buildSpeedDial(),
+            //   ),
+            // ),
+
+            Positioned(
+              bottom: 30,
+              left: 10,
+              child: ClipOval(
+                child: Material(
+                  color: Colors.red,
+                  child: InkWell(
+                    splashColor: Colors.white,
+                    onTap: sosPressed,
+                    child: const SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: Icon(Icons.sos, color: Colors.white, size: 30),
+                    ),
+                  ),
+                ),
               ),
             ),
 
@@ -411,21 +442,30 @@ class _FilterMap extends State<FilterMap> {
       // Callback when the map is created
       onMapCreated: (controller) {
         setState(() {
+          controller.setMapStyle(customMapStyle);
           _googleMapController = controller;
         });
         // get the places with markers on the map
         _fetchPlaces();
       },
       onLongPress: (LatLng latLng) async {
-        try {
-          await showInformationDialog(latLng, context);
-        } catch (e) {
-          print('Error: $e');
-        }
+        // Show the PointCreationWindow when there's a long press
+        showModalBottomSheet(
+          context: context,
+          enableDrag: true,
+          showDragHandle: true,
+          builder: (BuildContext context) {
+            return PointCreationWindow(
+              latLng: latLng,
+              updateMarkers: (marker) => addCustomMarker(marker),
+              onTapCallback: (infoWindow) => _onMarkerTap(infoWindow)
+            );
+          },
+        );
       },
       onTap: (position) {
         _toggleInfoWindowVisibility();
-        // trigger the visibility of controllers
+        // // trigger the visibility of controllers
         // setState(() {
         //   _areControllersVisible = !_areControllersVisible;
         // });
@@ -465,9 +505,9 @@ class _FilterMap extends State<FilterMap> {
             children: <Widget>[
               ClipOval(
                 child: Material(
-                  color: Colors.blueAccent.shade100,
+                  color: Colors.white,
                   child: InkWell(
-                    splashColor: Colors.blueAccent,
+                    splashColor: Colors.white70,
                     onTap: _toggleMapType,
                     child: const SizedBox(
                       width: 50,
@@ -480,9 +520,9 @@ class _FilterMap extends State<FilterMap> {
               const SizedBox(height: 20),
               ClipOval(
                 child: Material(
-                  color: Colors.lightBlue.shade100,
+                  color: Colors.white,
                   child: InkWell(
-                    splashColor: Colors.lightBlue,
+                    splashColor: Colors.white70,
                     child: const SizedBox(
                       width: 30,
                       height: 30,
@@ -499,9 +539,9 @@ class _FilterMap extends State<FilterMap> {
               const SizedBox(height: 10),
               ClipOval(
                 child: Material(
-                  color: Colors.lightBlue.shade100,
+                  color: Colors.white,
                   child: InkWell(
-                    splashColor: Colors.lightBlue,
+                    splashColor: Colors.white70,
                     child: const SizedBox(
                       width: 30,
                       height: 30,
@@ -518,9 +558,9 @@ class _FilterMap extends State<FilterMap> {
               const SizedBox(height: 20),
               ClipOval(
                 child: Material(
-                  color: Colors.blueAccent.shade100,
+                  color: Colors.white,
                   child: InkWell(
-                    splashColor: Colors.blueAccent,
+                    splashColor: Colors.white70,
                     child: const SizedBox(
                       width: 50,
                       height: 50,
@@ -594,20 +634,20 @@ class _FilterMap extends State<FilterMap> {
           GestureDetector(
             onTap: _showDetailedPointsMenu,
             child: Padding(
-              padding: const EdgeInsets.all(4.0),
+              padding: const EdgeInsets.all(5.0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: Colors.black,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Center(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                     child: Row(
                       children: [
-                        Icon(Icons.more_horiz, color: Colors.black, size: 12),
+                        Icon(Icons.more_horiz, color: Colors.white, size: 15),
                         Text('More',
-                            style: TextStyle(color: Colors.black, fontSize: 12)),
+                            style: TextStyle(color: Colors.white, fontSize: 15)),
                       ],
                     ),
                   ),
@@ -628,13 +668,24 @@ class _FilterMap extends State<FilterMap> {
     required bool toggled,
     required VoidCallback onTap,
   }) {
-    Color badgeColor = toggled ? Colors.blue : Colors.grey.shade300;
+    Color badgeColor = Colors.white;
+    if(toggled) {
+      if(text == "Danger Points") {
+        badgeColor = Colors.redAccent;
+      } else if(text == "Recommendation Points") {
+        badgeColor = Colors.yellowAccent;
+      } else if(text == "Safe Points") {
+        badgeColor = Colors.greenAccent;
+      } else {
+        badgeColor = Colors.tealAccent;
+      }
+    }
     IconData badgeIcon = toggled ? toggledIcon : icon;
 
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(8.0),
         child: Container(
           decoration: BoxDecoration(
             color: badgeColor,
@@ -642,14 +693,14 @@ class _FilterMap extends State<FilterMap> {
           ),
           child: Center(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
               child: Row(
                 children: [
-                  Icon(badgeIcon, color: Colors.black, size: 12),
+                  Icon(badgeIcon, color: Colors.black, size: 15),
                   Text(text,
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: 12,
+                          fontSize: 15,
                           fontWeight:
                               toggled ? FontWeight.bold : FontWeight.normal)),
                 ],
@@ -664,48 +715,48 @@ class _FilterMap extends State<FilterMap> {
   // initial filters (danger-points, safe-points and tourists-points)
   final List<bool> _selectedFilters = <bool>[false, false, false];
 
-  Widget _buildSpeedDial() {
-    return SpeedDial(
-      animatedIcon: AnimatedIcons.menu_arrow,
-      animatedIconTheme: const IconThemeData(size: 25.0),
-      backgroundColor: Colors.blue[600],
-      visible: true,
-      direction: SpeedDialDirection.up,
-      curve: Curves.fastOutSlowIn,
-      children: [
-        // Fake-Call Button
-        SpeedDialChild(
-            child: const Icon(Icons.call, color: Colors.white),
-            backgroundColor: Colors.blue,
-            onTap: fakeCallPressed,
-            label: 'Fake-Call',
-            labelStyle: const TextStyle(
-                fontWeight: FontWeight.w500, color: Colors.white),
-            labelBackgroundColor: Colors.black),
-        // SOS Button
-        SpeedDialChild(
-          child: const Icon(Icons.sos, color: Colors.white),
-          backgroundColor: Colors.blue,
-          onTap: sosPressed,
-          label: 'SOS',
-          labelStyle:
-              const TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
-          labelBackgroundColor: Colors.black,
-        ),
-
-        // // Share Location Button
-        // SpeedDialChild(
-        //   child: const Icon(Icons.share_location, color: Colors.white),
-        //   backgroundColor: Colors.blue,
-        //   onTap: shareLocation,
-        //   label: 'Share Location',
-        //   labelStyle:
-        //       const TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
-        //   labelBackgroundColor: Colors.black,
-        // ),
-      ],
-    );
-  }
+  // Widget _buildSpeedDial() {
+  //   return SpeedDial(
+  //     animatedIcon: AnimatedIcons.menu_arrow,
+  //     animatedIconTheme: const IconThemeData(size: 25.0),
+  //     backgroundColor: Colors.teal[600],
+  //     visible: true,
+  //     direction: SpeedDialDirection.up,
+  //     curve: Curves.fastOutSlowIn,
+  //     children: [
+  //       // Fake-Call Button
+  //       SpeedDialChild(
+  //           child: const Icon(Icons.call, color: Colors.white),
+  //           backgroundColor: Colors.teal,
+  //           onTap: fakeCallPressed,
+  //           label: 'Fake-Call',
+  //           labelStyle: const TextStyle(
+  //               fontWeight: FontWeight.w500, color: Colors.white),
+  //           labelBackgroundColor: Colors.black),
+  //       // SOS Button
+  //       SpeedDialChild(
+  //         child: const Icon(Icons.sos, color: Colors.white),
+  //         backgroundColor: Colors.teal,
+  //         onTap: sosPressed,
+  //         label: 'SOS',
+  //         labelStyle:
+  //             const TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
+  //         labelBackgroundColor: Colors.black,
+  //       ),
+  //
+  //       // // Share Location Button
+  //       // SpeedDialChild(
+  //       //   child: const Icon(Icons.share_location, color: Colors.white),
+  //       //   backgroundColor: Colors.teal,
+  //       //   onTap: shareLocation,
+  //       //   label: 'Share Location',
+  //       //   labelStyle:
+  //       //       const TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
+  //       //   labelBackgroundColor: Colors.black,
+  //       // ),
+  //     ],
+  //   );
+  // }
 
   _buildDestinationSafePathPicker() {
     return Consumer<AppState>(builder: (context, appState, _) {

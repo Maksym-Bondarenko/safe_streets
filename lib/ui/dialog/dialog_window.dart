@@ -6,14 +6,14 @@ import '../../../services/manual_points_service.dart';
 import '../../shared/points_types.dart';
 import '../infowindow/point_infowindow.dart';
 
-/// Class creates a Dialog-Window for a custom Point (DangerPoint or InformationPoint)
+/// Window for a custom Point (DangerPoint or InformationPoint)
 /// after providing all information regarding Point, it will be created and putted on the map with a Custom Info-Window
-class DialogWindow extends StatefulWidget {
+class PointCreationWindow extends StatefulWidget {
   final LatLng latLng;
   final Function(Marker) updateMarkers;
   final Function(PointInfoWindow) onTapCallback;
 
-  const DialogWindow({
+  const PointCreationWindow({
     super.key,
     required this.latLng,
     required this.updateMarkers,
@@ -21,11 +21,10 @@ class DialogWindow extends StatefulWidget {
   });
 
   @override
-  _DialogWindowState createState() => _DialogWindowState();
+  _PointCreationWindowState createState() => _PointCreationWindowState();
 }
 
-class _DialogWindowState extends State<DialogWindow> {
-
+class _PointCreationWindowState extends State<PointCreationWindow> {
   // service for operating the manual points and backend endpoints
   final manualPointsService = ManualPointsService();
 
@@ -34,6 +33,7 @@ class _DialogWindowState extends State<DialogWindow> {
 
   // main custom point-type (DangerPoint or InformationPoint)
   var _mainType = MainType.dangerPoint;
+  late Color mainColor = Colors.black;
 
   // sub-type of custom point (hang on `_mainType`)
   late List<MapPoint> _subPointTypes = DangerPoint.values;
@@ -47,6 +47,20 @@ class _DialogWindowState extends State<DialogWindow> {
       TextEditingController(text: "");
 
   BitmapDescriptor customMarkerIcon = BitmapDescriptor.defaultMarker;
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      mainColor = Color.fromRGBO(
+          _subType.colorR, _subType.colorG, _subType.colorB, 1.0);
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   // set values of `_subType` according to selected `_mainType`
   void _onMainPointTypeSelected(MainType? newValue) {
@@ -66,64 +80,101 @@ class _DialogWindowState extends State<DialogWindow> {
           _subType = _subPointTypes.first;
           break;
       }
+      // set the color
+      mainColor = Color.fromRGBO(
+          _subType.colorR, _subType.colorG, _subType.colorB, 1.0);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      scrollable: true,
-      title: const Text('Create a Point'),
-      content: Form(
-        key: formKey,
+    return SingleChildScrollView(
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(20),
+          ),
+        ),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            _buildMainTypeDropdown(),
-            _buildSubTypeDropdown(),
-            _buildTitleTextField(),
-            _buildDescriptionTextField(),
+            // Title
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Create a Point',
+                style: TextStyle(
+                    fontSize: 24, fontWeight: FontWeight.bold, color: mainColor),
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // Drop-downs and text-fields
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _buildMainTypeDropdown(),
+                    _buildSubTypeDropdown(),
+                    _buildTitleTextField(),
+                    _buildDescriptionTextField(),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+
+            // Submit-button
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _buildSubmitButton(context),
+            ),
           ],
         ),
       ),
-      actions: <Widget>[
-        _buildSubmitButton(context),
-      ],
     );
   }
 
   // Drop-down with selecting of main point-type
   Widget _buildMainTypeDropdown() {
     // forbid choosing 'safePoint' as a manual Point-Type
-    final allowedTypes = MainType.values.where((type) => type != MainType.safePoint);
+    final allowedTypes =
+        MainType.values.where((type) => type != MainType.safePoint);
 
     return Row(
+      mainAxisSize: MainAxisSize.max,
       children: [
-        DropdownButton<MainType>(
-          value: _mainType,
-          hint: const Text('Select Point-type'),
-          icon: const Icon(Icons.arrow_drop_down),
-          elevation: 15,
-          underline: Container(
-            height: 2,
-            color: Colors.blueAccent,
-          ),
-          items: allowedTypes.map<DropdownMenuItem<MainType>>(
-                (MainType value) {
-              return DropdownMenuItem<MainType>(
-                value: value,
-                child: Text(value.name),
-              );
+        Expanded(
+          child: DropdownButton<MainType>(
+            value: _mainType,
+            hint: const Text('Select Point-type'),
+            icon: const Icon(Icons.arrow_drop_down),
+            elevation: 15,
+            underline: Container(
+              height: 2,
+              color: Colors.tealAccent,
+            ),
+            items: allowedTypes.map<DropdownMenuItem<MainType>>(
+              (MainType value) {
+                return DropdownMenuItem<MainType>(
+                  value: value,
+                  child: Text(value.name),
+                );
+              },
+            ).toList(),
+            onChanged: (MainType? value) {
+              setState(() {
+                _mainType = value!;
+                _onMainPointTypeSelected(value);
+              });
             },
-          ).toList(),
-          onChanged: (MainType? value) {
-            setState(() {
-              _mainType = value!;
-              _onMainPointTypeSelected(value);
-            });
-          },
+          ),
         ),
       ],
     );
@@ -132,29 +183,32 @@ class _DialogWindowState extends State<DialogWindow> {
   // Drop-down with selecting of point sub-type (based on main type)
   Widget _buildSubTypeDropdown() {
     return Row(
+      mainAxisSize: MainAxisSize.max,
       children: [
-        DropdownButton<MapPoint>(
-          value: _subType,
-          hint: const Text('Select sub-type'),
-          icon: const Icon(Icons.arrow_drop_down),
-          elevation: 15,
-          underline: Container(
-            height: 2,
-            color: Colors.blueAccent,
-          ),
-          items: _subPointTypes.map<DropdownMenuItem<MapPoint>>(
-                (MapPoint value) {
-              return DropdownMenuItem<MapPoint>(
-                value: value,
-                child: Text(value.name),
-              );
+        Expanded(
+          child: DropdownButton<MapPoint>(
+            value: _subType,
+            hint: const Text('Select sub-type'),
+            icon: const Icon(Icons.arrow_drop_down),
+            elevation: 15,
+            underline: Container(
+              height: 2,
+              color: Colors.tealAccent,
+            ),
+            items: _subPointTypes.map<DropdownMenuItem<MapPoint>>(
+              (MapPoint value) {
+                return DropdownMenuItem<MapPoint>(
+                  value: value,
+                  child: Text(value.name),
+                );
+              },
+            ).toList(),
+            onChanged: (MapPoint? value) {
+              setState(() {
+                _subType = value!;
+              });
             },
-          ).toList(),
-          onChanged: (MapPoint? value) {
-            setState(() {
-              _subType = value!;
-            });
-          },
+          ),
         ),
       ],
     );
@@ -179,8 +233,8 @@ class _DialogWindowState extends State<DialogWindow> {
     return TextFormField(
       controller: descriptionController,
       keyboardType: TextInputType.multiline,
-      minLines: 1,
-      maxLines: 5,
+      minLines: 3,
+      maxLines: 6,
       decoration: const InputDecoration(hintText: "Enter the Description"),
     );
   }
@@ -188,32 +242,63 @@ class _DialogWindowState extends State<DialogWindow> {
   // Submit Point Button
   // TODO: fix (after submitting the dialog is not closing)
   Widget _buildSubmitButton(BuildContext context) {
-    return InkWell(
-      splashColor: Colors.blue,
-      onTap: () {
-        if (formKey.currentState!.validate()) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Adding a ${_subType.name}...')),
-          );
-          manualPointsService.createAndSavePoint(
-            widget.latLng,
-            _mainType,
-            _subType,
-            titleController.value.text,
-            descriptionController.value.text,
-            widget.updateMarkers,
-            widget.onTapCallback,
-          ).then((_) {
-            // Close the dialog
-            Navigator.of(context).pop();
-          }).catchError((error) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Something went wrong...')),
-            );
-          });
-        }
-      },
-      child: const Text("Submit"),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: SizedBox(
+        height: 60.0,
+        width: 150.0,
+        child: GestureDetector(
+          onTap: () {
+            if (formKey.currentState!.validate()) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Adding a ${_subType.name}...')),
+              );
+              manualPointsService
+                  .createAndSavePoint(
+                widget.latLng,
+                _mainType,
+                _subType,
+                titleController.value.text,
+                descriptionController.value.text,
+                widget.updateMarkers,
+                widget.onTapCallback,
+              )
+                  .then((_) {
+                // Close the dialog
+                Navigator.of(context).pop();
+              }).catchError((error) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Something went wrong...')),
+                );
+              });
+            }
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.teal,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      Icon(Icons.add_circle, color: Colors.white),
+                      SizedBox(width: 10),
+                      Text("Create",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

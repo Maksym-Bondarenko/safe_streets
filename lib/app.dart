@@ -95,7 +95,7 @@ class _MyAppState extends State<MyApp> {
           routes: <String, WidgetBuilder> {
             '/intro': (context) => const IntroSlider(),
             '/auth': (context) => AuthGate(),
-            '/home': (context) => const HomePage(),
+            // '/home': (context) => const HomePage(),
             '/profile': (context) => const ProfilePage(),
             '/filterMap': (context) =>
                 FilterMap(googleMapController: mapController),
@@ -122,25 +122,22 @@ class _MyAppState extends State<MyApp> {
 
             switch (settings.name) {
               case '/':
-              case '/home':
-                // setIndex of the BottomNavigationBar from AppState
+              case '/filterMap':
                 appState.setIndex(0);
-                return MaterialPageRoute(builder: (_) => const HomePage());
+                return MaterialPageRoute(builder: (_) => FilterMap(googleMapController: mapController));
+              // case '/home':
+              //   // setIndex of the BottomNavigationBar from AppState
+              //   appState.setIndex(0);
+              //   return MaterialPageRoute(builder: (_) => const HomePage());
               case '/support':
                 appState.setIndex(1);
                 return MaterialPageRoute(builder: (_) => const SupportPage());
               case '/channels':
                 appState.setIndex(2);
                 return MaterialPageRoute(builder: (_) => const NewsChannelPage());
-              case '/filterMap':
-                appState.setIndex(3);
-                return MaterialPageRoute(builder: (_) => FilterMap(googleMapController: mapController));
               case '/profile':
-                appState.setIndex(4);
+                appState.setIndex(3);
                 return MaterialPageRoute(builder: (_) => const ProfilePage());
-              case '/settings':
-                appState.setIndex(5);
-                return MaterialPageRoute(builder: (_) => const SettingsPage());
               default:
                 // Handle 404 - Page Not Found
                 return MaterialPageRoute(builder: (_) => const NotFoundPage());

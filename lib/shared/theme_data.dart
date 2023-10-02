@@ -9,10 +9,10 @@ class Styles {
         TextTheme? textTheme,
         Color? dividerColor,
       }) {
-    final primarySwatch = isDarkTheme ? Colors.indigo
-        : Colors.blue;
-    final primaryColor = isDarkTheme ? Colors.lightBlue
-        : Colors.lightBlueAccent;
+    final primarySwatch = isDarkTheme ? Colors.teal
+        : Colors.teal;
+    final primaryColor = isDarkTheme ? Colors.tealAccent
+        : Colors.tealAccent;
     final backgroundColor = isDarkTheme ? Colors.black
         : Colors.grey[50];
     const scaffoldBackgroundColor = Colors.white;
@@ -28,12 +28,12 @@ class Styles {
       primaryColor: primaryColor,
       backgroundColor: backgroundColor,
       scaffoldBackgroundColor: scaffoldBackgroundColor,
-      indicatorColor: isDarkTheme ? const Color(0xff0E1D36)
-          : const Color(0xffCBDCF8),
-      hintColor: isDarkTheme ? const Color(0xff280C0B)
-          : const Color(0xffEECED3),
-      highlightColor: isDarkTheme ? const Color(0xff372901)
-          : const Color(0xffFCE192),
+      indicatorColor: isDarkTheme ? const Color(0xff3c503c)
+          : const Color(0xffa0e6a0),
+      hintColor: isDarkTheme ? const Color(0xff3c503c)
+          : const Color(0xffa0e6a0),
+      highlightColor: isDarkTheme ? const Color(0xff465046)
+          : const Color(0xffb4e1b4),
       focusColor: isDarkTheme ? const Color(0xff0B2512)
           : const Color(0xffA8DAB5),
       disabledColor: Colors.grey,

@@ -34,7 +34,7 @@ class NotFoundPage extends StatelessWidget {
                 Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.teal,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 shape: RoundedRectangleBorder(
@@ -52,8 +52,8 @@ class NotFoundPage extends StatelessWidget {
             const SizedBox(height: 10),
             ElevatedButton(
               onPressed: () {
-                // Navigate to HomePage
-                Navigator.pushNamed(context, '/home');
+                // Navigate to Map
+                Navigator.pushNamed(context, '/filterMap');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,

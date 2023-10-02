@@ -302,7 +302,7 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
     required VoidCallback onTap,
   }) {
     String badgeText = toggled ? toggleText : text;
-    Color badgeColor = toggled ? Colors.blue : Colors.grey;
+    Color badgeColor = toggled ? Colors.teal : Colors.grey;
     IconData badgeIcon = toggled ? toggledIcon : icon;
 
     return GestureDetector(

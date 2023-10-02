@@ -107,6 +107,15 @@ class _ProfilePageState extends State<ProfilePage> {
       body: ProfileScreen(
         appBar: AppBar(
           title: const Text('User Profile'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () {
+                // Navigate to the settings page when the button is tapped
+                Navigator.pushNamed(context, '/settings');
+              },
+            ),
+          ],
         ),
         actions: [
           SignedOutAction((context) {
@@ -119,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
             );
           }),
         ],
-        avatarPlaceholderColor: Colors.lightBlue,
+        avatarPlaceholderColor: Colors.tealAccent,
         children: <Widget> [
           const Divider(),
           _buildButtonsRow(context),
@@ -150,7 +159,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.pushNamed(context, '/account_activity');
               },
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.blue,
+                foregroundColor: Colors.teal,
                 backgroundColor: Colors.white,
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(12.0),
@@ -177,7 +186,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 _shareProfile();
               },
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.blue,
+                foregroundColor: Colors.teal,
                 backgroundColor: Colors.white,
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(12.0),
@@ -204,7 +213,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.pushNamed(context, '/newsletter');
               },
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.blue,
+                foregroundColor: Colors.teal,
                 backgroundColor: Colors.white,
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(12.0),
@@ -232,7 +241,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.pushNamed(context, '/ai_camera');
               },
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.blue,
+                foregroundColor: Colors.teal,
                 backgroundColor: Colors.white,
                 shape: const CircleBorder(),
                 padding: const EdgeInsets.all(12.0),

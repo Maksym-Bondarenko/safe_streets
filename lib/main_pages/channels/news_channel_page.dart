@@ -267,8 +267,8 @@ class RoundedToggleButton extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: isAllButton
-              ? (isSelected ? Colors.blue : Colors.grey)
-              : (isSelected ? Colors.blue : Colors.grey),
+              ? (isSelected ? Colors.teal : Colors.grey)
+              : (isSelected ? Colors.teal : Colors.grey),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),

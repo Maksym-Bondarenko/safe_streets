@@ -49,7 +49,7 @@ class _SupportPage extends State<SupportPage> {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.blue, width: 2),
+                border: Border.all(color: Colors.teal, width: 2),
               ),
               child: DropdownButton<CountryData>(
                 value: selectedCountry,
@@ -82,15 +82,15 @@ class _SupportPage extends State<SupportPage> {
                 underline: Container(),
                 icon: const Icon(
                   Icons.arrow_drop_down,
-                  color: Colors.blue,
+                  color: Colors.teal,
                 ),
                 iconSize: 30,
-                focusColor: Colors.blue,
+                focusColor: Colors.teal,
 
               ),
             ),
             const Divider(
-              color: Colors.blue,
+              color: Colors.teal,
               thickness: 2,
               height: 40,
               indent: 20,
@@ -103,7 +103,7 @@ class _SupportPage extends State<SupportPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                   side: const BorderSide(
-                    color: Colors.blue,
+                    color: Colors.teal,
                     width: 2.0,
                     style: BorderStyle.solid,
                   ),
@@ -155,7 +155,7 @@ class _SupportPage extends State<SupportPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                   side: const BorderSide(
-                    color: Colors.blue,
+                    color: Colors.teal,
                     width: 2.0,
                     style: BorderStyle.solid,
                   ),
@@ -213,7 +213,7 @@ Widget _buildSkeletonCard(BuildContext context) {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
         side: const BorderSide(
-          color: Colors.blue,
+          color: Colors.teal,
           width: 2.0,
           style: BorderStyle.solid,
         ),

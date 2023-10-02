@@ -33,7 +33,7 @@ class SettingsBottomBar extends StatelessWidget {
               onPressed: hasChanges ? onSave : null,
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
-                  hasChanges ? Colors.blue : Colors.grey,
+                  hasChanges ? Colors.teal : Colors.grey,
                 ),
                 foregroundColor: MaterialStateProperty.all<Color>(
                   Colors.white,

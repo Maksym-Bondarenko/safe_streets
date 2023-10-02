@@ -149,9 +149,9 @@ class _PointApproaching extends State<PointApproaching> {
   Widget build(BuildContext context) {
     return ClipOval(
       child: Material(
-        color: Colors.purple.shade200,
+        color: Colors.teal.shade200,
         child: InkWell(
-          splashColor: Colors.purple, // inkwell color
+          splashColor: Colors.teal, // inkwell color
           child: SizedBox(
             width: 50,
             height: 50,

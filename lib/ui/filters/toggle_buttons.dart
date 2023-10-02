@@ -115,7 +115,7 @@ class ToggleButton extends StatelessWidget {
     Color buttonColor = Colors.transparent;
     if (isSelected) {
       if (text == 'All') {
-        buttonColor = Colors.blue;
+        buttonColor = Colors.teal;
       } else if (text == 'Danger') {
         buttonColor = Colors.red;
       } else if (text == 'Recommendation') {

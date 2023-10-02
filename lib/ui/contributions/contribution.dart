@@ -14,7 +14,7 @@ class ContributionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     // set the right icon and title-color
     String icon;
-    Color titleColor = Colors.blue;
+    Color titleColor = Colors.teal;
     MapPoint mapPoint = RecommendationPoint.other;
     if (contribution.pointType == MainType.dangerPoint) {
       icon = DangerPoint.other.markerSrc;
@@ -59,14 +59,14 @@ class ContributionCard extends StatelessWidget {
                   children: [
                     const Icon(
                       Icons.place,
-                      color: Colors.blue,
+                      color: Colors.teal,
                       size: 14.0,
                     ),
                     const SizedBox(width: 4.0),
                     Text(
                       contribution.place,
                       style: const TextStyle(
-                        color: Colors.blue,
+                        color: Colors.teal,
                       ),
                     ),
                   ],

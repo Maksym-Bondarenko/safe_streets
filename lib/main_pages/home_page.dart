@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontSize: 32,
-                    color: Colors.blue,
+                    color: Colors.teal,
                   ),
                 ),
               ),
@@ -126,13 +126,13 @@ class ForumCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: const BorderSide(
-          color: Colors.blue,
+          color: Colors.teal,
           width: 2.0,
           style: BorderStyle.solid,
         ),
       ),
       child: InkWell(
-        splashColor: Colors.blue.withAlpha(30),
+        splashColor: Colors.teal.withAlpha(30),
         onTap: onTap,
         child: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,13 +174,13 @@ class SupportCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
         side: const BorderSide(
-          color: Colors.blue,
+          color: Colors.teal,
           width: 2.0,
           style: BorderStyle.solid,
         ),
       ),
       child: InkWell(
-        splashColor: Colors.blue.withAlpha(30),
+        splashColor: Colors.teal.withAlpha(30),
         onTap: onTap,
         child: const Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

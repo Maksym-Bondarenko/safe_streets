@@ -18,36 +18,30 @@ class BottomNavigationBarWidget extends StatelessWidget {
         appState.setIndex(index);
         switch (index) {
           case 0:
-            Navigator.pushNamed(context, '/home');
+            Navigator.pushNamed(context, '/filterMap');
             break;
           case 1:
             Navigator.pushNamed(context, '/support');
             break;
           case 2:
-            Navigator.pushNamed(context, '/channels');
+            // Navigator.pushNamed(context, '/channels');
+            Navigator.pushNamed(context, '/newsletter');
             break;
           case 3:
-            Navigator.pushNamed(context, '/filterMap');
-            break;
-          case 4:
             Navigator.pushNamed(context, '/profile');
             break;
-          case 5:
-            Navigator.pushNamed(context, '/settings');
+          default:
+            Navigator.pushNamed(context, '/filterMap');
             break;
         }
       },
       backgroundColor: Colors.white,
-      selectedItemColor: Colors.blue,
+      selectedItemColor: Colors.teal,
       unselectedItemColor: Colors.grey,
       elevation: 4.0,
       iconSize: 30.0,
       showSelectedLabels: true,
       items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Home',
-        ),
         BottomNavigationBarItem(
           icon: Icon(Icons.support),
           label: 'Support',
@@ -63,10 +57,6 @@ class BottomNavigationBarWidget extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: 'Profile',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
-          label: 'Settings',
         ),
       ],
     );

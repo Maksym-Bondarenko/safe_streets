@@ -145,7 +145,7 @@ class NotificationsService extends BaseService {
     //   enableVibration: true,
     //   playSound: true,
     //   showBadge: true,
-    //   ledColor: Colors.blue
+    //   ledColor: Colors.teal
     // );
     //
     // await flutterLocalNotificationsPlugin

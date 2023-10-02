@@ -46,7 +46,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             : null,
         flexibleSpace: Container(
           decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.5),
+            color: Colors.teal.withOpacity(0.5),
           ),
           child: Image.asset(
             'lib/assets/logos/logo_long_horizontal.png',

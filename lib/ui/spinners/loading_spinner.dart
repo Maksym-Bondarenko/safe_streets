@@ -62,13 +62,13 @@ class _LoadingSpinnerState extends State<LoadingSpinner>
               RotationTransition(
                 turns: _animation,
                 child: const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.teal),
                 ),
               ),
               Text(
                 widget.loadingProperty,
                 style: const TextStyle(
-                    color: Colors.blue,
+                    color: Colors.teal,
                     fontWeight: FontWeight.bold,
                     fontSize: 12
                 ),

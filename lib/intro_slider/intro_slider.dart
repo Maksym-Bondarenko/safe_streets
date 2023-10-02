@@ -27,7 +27,7 @@ class _IntroSliderRulesState extends State<IntroSliderRules> {
   }
 
   void _navigateToHome() {
-    Navigator.pushNamed(context, '/home');
+    Navigator.pushNamed(context, '/filterMap');
   }
 
   @override
@@ -117,8 +117,8 @@ class SlideTemplate extends Slide {
     description: description,
     pathImage: image,
     backgroundImageFit: BoxFit.fitHeight,
-    backgroundColor: Colors.blueAccent,
-    colorBegin: Colors.blueAccent,
+    backgroundColor: Colors.tealAccent,
+    colorBegin: Colors.tealAccent,
     colorEnd: Colors.white,
     maxLineTextDescription: 3,
     styleTitle: IntroStyling.titleStyle,
