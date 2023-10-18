@@ -1,9 +1,13 @@
+import 'dart:convert';
+import 'dart:core';
 import 'dart:math';
 
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:http/http.dart' as http;
 
+import '../ui/path_search/routes_models.dart';
 import 'base_service.dart';
 
 /// Service for building a path between two geopoints via Google API
@@ -44,6 +48,8 @@ class PathService extends BaseService {
     return result.toList();
   }
 
+  // returns a list of coordinates to build polylines
+  // as in standard google maps walking path
   Future<List<LatLng>> getPolylineCoordinates(
       double startLatitude,
       double startLongitude,
@@ -66,6 +72,35 @@ class PathService extends BaseService {
     }
 
     return polylineCoordinates;
+  }
+
+  Future<SafestRouteResponse?> getSafestPath(
+      double startLat,
+      double startLon,
+      double goalLat,
+      double goalLon) async {
+
+    final apiUrl = Uri.parse('https://routing-jua5hzcdma-vp.a.run.app/api/route?goal_lat=$goalLat&goal_lon=$goalLon&start_lat=$startLat&start_lon=$startLon');
+
+    try {
+      final response = await http.get(apiUrl);
+
+      if (response.statusCode == 200) {
+        // Parse the response data
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        final SafestRouteResponse routeResponse = SafestRouteResponse.fromJson(responseData);
+
+        return routeResponse;
+      } else {
+        // Handle errors or display a message
+        print('Failed to fetch polylines. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle network errors or exceptions
+      print('Error fetching polylines: $e');
+    }
+
+    return null;
   }
 
   double calculateDistance(List<LatLng> polylineCoordinates) {

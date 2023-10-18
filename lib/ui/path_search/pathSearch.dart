@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geocoding_platform_interface/src/models/location.dart'
@@ -8,6 +10,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:provider/provider.dart';
 import 'package:safe_streets/services/path_service.dart';
+import 'package:safe_streets/ui/path_search/routes_models.dart';
 
 import '../../shared/app_state.dart';
 import '../../shared/global_functions.dart';
@@ -56,6 +59,11 @@ class _PathSearch extends State<PathSearch> {
   Set<Marker> markers = {};
   PolylinePoints polylinePoints = PolylinePoints();
   Set<Polyline> _polylines = {};
+  SafestRouteResponse response = SafestRouteResponse(
+      totalCrimeLikelihood: 0.0,
+      totalLength: 0.0,
+      edgesList: []
+  );
   List<LatLng> polylineCoordinates = [];
 
   bool isPathSearchShown = false;
@@ -101,39 +109,45 @@ class _PathSearch extends State<PathSearch> {
   }
 
   void setSourceAndDestinationIcons() async {
-    getBytesFromAsset("lib/assets/markers/path_points/start_marker.png", 200)
-        .then((onValue) {
-      sourceIcon = BitmapDescriptor.fromBytes(onValue!);
-    });
-    getBytesFromAsset("lib/assets/markers/path_points/finish_marker.png", 200)
-        .then((onValue) {
-      destinationIcon = BitmapDescriptor.fromBytes(onValue!);
-    });
+    // getBytesFromAsset("lib/assets/markers/path_points/start_marker.png", 200)
+    //     .then((onValue) {
+    //   sourceIcon = BitmapDescriptor.fromBytes(onValue!);
+    // });
+    // getBytesFromAsset("lib/assets/markers/path_points/finish_marker.png", 200)
+    //     .then((onValue) {
+    //   destinationIcon = BitmapDescriptor.fromBytes(onValue!);
+    // });
   }
 
   // Method for calculating the distance between two places
   Future<bool> _calculateDistance(
       GoogleMapController? googleMapController) async {
     try {
-      // Retrieving placemarks from addresses
-      List<GeocodingLocation.Location> startPlacemark =
-          await locationFromAddress(_startAddress);
-      List<GeocodingLocation.Location> destinationPlacemark =
-          await locationFromAddress(_destinationAddress);
+      // // Retrieving placemarks from addresses
+      // List<GeocodingLocation.Location> startPlacemark =
+      //     await locationFromAddress(_startAddress);
+      // List<GeocodingLocation.Location> destinationPlacemark =
+      //     await locationFromAddress(_destinationAddress);
 
       // Use the retrieved coordinates of the current position,
       // instead of the address if the start position is user's
       // current position, as it results in better accuracy.
-      double startLatitude = _startAddress == _currentAddress
-          ? _currentPosition.latitude
-          : startPlacemark[0].latitude;
+      // double startLatitude = _startAddress == _currentAddress
+      //     ? _currentPosition.latitude
+      //     : startPlacemark[0].latitude;
+      //
+      // double startLongitude = _startAddress == _currentAddress
+      //     ? _currentPosition.longitude
+      //     : startPlacemark[0].longitude;
+      //
+      // double destinationLatitude = destinationPlacemark[0].latitude;
+      // double destinationLongitude = destinationPlacemark[0].longitude;
 
-      double startLongitude = _startAddress == _currentAddress
-          ? _currentPosition.longitude
-          : startPlacemark[0].longitude;
+      double startLatitude = 19.420343046001982;
+      double startLongitude = -99.13602615649843;
 
-      double destinationLatitude = destinationPlacemark[0].latitude;
-      double destinationLongitude = destinationPlacemark[0].longitude;
+      double destinationLatitude = 19.420343046009982;
+      double destinationLongitude = -99.19247234027884;
 
       String startCoordinatesString = '($startLatitude, $startLongitude)';
       String destinationCoordinatesString =
@@ -211,7 +225,8 @@ class _PathSearch extends State<PathSearch> {
 
       // Calculating the total distance by adding the distance
       // between small segments
-      totalDistance = pathService.calculateDistance(polylineCoordinates);
+      //totalDistance = pathService.calculateDistance(polylineCoordinates);
+      totalDistance = response.totalLength; // length is already coming from endpoint
 
       setState(() {
         _placeDistance = totalDistance.toStringAsFixed(2);
@@ -228,18 +243,36 @@ class _PathSearch extends State<PathSearch> {
   // creates the set of polylines from the start point to the destination point
   setPolylines(double startLatitude, double startLongitude,
       double destinationLatitude, double destinationLongitude) async {
-    polylineCoordinates = await pathService.getPolylineCoordinates(
+    // standard google maps path
+    // polylineCoordinates = await pathService.getPolylineCoordinates(
+    //     startLatitude,
+    //     startLongitude,
+    //     destinationLatitude,
+    //     destinationLongitude);
+
+    // safest path (ML)
+    response = (await pathService.getSafestPath(
         startLatitude,
         startLongitude,
         destinationLatitude,
-        destinationLongitude);
+        destinationLongitude))!;
+
+    // extract polylines to show them on map
+    for (final edge in response.edgesList) {
+      for (final coordinates in edge.geometry) {
+        polylineCoordinates.add(LatLng(coordinates[0], coordinates[1]));
+      }
+    }
+
+    print(response.totalCrimeLikelihood);
+    print(response.totalLength);
 
     setState(() {
       // create a Polyline instance
       // with an id, an RGB color and the list of LatLng pairs
       Polyline polyline = Polyline(
           polylineId: const PolylineId("poly"),
-          color: const Color.fromARGB(255, 40, 122, 198),
+          color: const Color.fromARGB(200, 0, 170, 136),
           points: polylineCoordinates);
 
       // add the constructed polyline as a set of points
@@ -248,6 +281,92 @@ class _PathSearch extends State<PathSearch> {
       _polylines.add(polyline);
 
       _updatePathData();
+    });
+
+    // setState(() {
+    //   // create polylines one-by-one with own id and color
+    //   for(final edge in response.edgesList) {
+    //     // parse coordinates into 1 pair of LatLng
+    //     List<LatLng> polyCoordinates = [];
+    //     // start (x and y)
+    //     polyCoordinates.add(LatLng(edge.geometry[0][0], edge.geometry[0][1]));
+    //     // end (x and y)
+    //     polyCoordinates.add(LatLng(edge.geometry[1][0], edge.geometry[1][1]));
+    //
+    //     // create a single polyline
+    //     Polyline polyline = Polyline(
+    //         polylineId: PolylineId(edge.osmid),
+    //         color: _getColorByCrimeRate(edge.predCrimeLikelihood),
+    //         points: polyCoordinates,
+    //         jointType: JointType.bevel,
+    //         width: 10,
+    //         zIndex: 0,
+    //         onTap: () {
+    //           print('predCrimeLikelihood: ${edge.predCrimeLikelihood}');
+    //           _showCrimeLikelihoodTooltip(edge.predCrimeLikelihood.toString());
+    //         },
+    //     );
+    //
+    //     // add polyline to the map
+    //     _polylines.add(polyline);
+    //   }
+    //
+    //   _updatePathData();
+    // });
+  }
+
+  // returns a color based on given predictive crime likelihood
+  // @param predCrimeLikelihood is a double number from 0.0 to 10.0 only
+  Color _getColorByCrimeRate(double predCrimeLikelihood) {
+    if (predCrimeLikelihood <= 1.0) {
+      return Colors.red;
+    } else if (predCrimeLikelihood <= 2.0) {
+      return Colors.deepOrange;
+    } else if (predCrimeLikelihood <= 3.0) {
+      return Colors.orange;
+    } else if (predCrimeLikelihood <= 4.0) {
+      return Colors.amber;
+    } else if (predCrimeLikelihood <= 5.0) {
+      return Colors.yellow;
+    } else if (predCrimeLikelihood <= 6.0) {
+      return Colors.lime;
+    } else if (predCrimeLikelihood <= 7.0) {
+      return Colors.lightGreen;
+    } else if (predCrimeLikelihood <= 8.0) {
+      return Colors.green;
+    } else if (predCrimeLikelihood <= 9.0) {
+      return Colors.lightBlue;
+    } else {
+      return Colors.blue;       // <= 10.0
+    }
+  }
+
+  void _showCrimeLikelihoodTooltip(String crimeLikelihood) {
+    const duration = Duration(seconds: 2);
+    OverlayEntry overlayEntry;
+    overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 100.0,
+        left: 100.0,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.7),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Text(
+              'Crime Likelihood: $crimeLikelihood',
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ),
+    );
+    Overlay.of(context)!.insert(overlayEntry);
+    Timer(duration, () {
+      overlayEntry.remove();
     });
   }
 
@@ -436,6 +555,13 @@ class _PathSearch extends State<PathSearch> {
                     children: [
                       Text(
                         'DISTANCE: $_placeDistance km',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'SAFETY: ${response.totalCrimeLikelihood}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,

@@ -43,16 +43,16 @@ class BottomNavigationBarWidget extends StatelessWidget {
       showSelectedLabels: true,
       items: const [
         BottomNavigationBarItem(
+          icon: Icon(Icons.map),
+          label: 'Map',
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.support),
           label: 'Support',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.forum),
           label: 'Channels',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.map),
-          label: 'Map',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
