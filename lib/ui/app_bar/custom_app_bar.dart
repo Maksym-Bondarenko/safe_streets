@@ -49,7 +49,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             color: Colors.teal.withOpacity(0.5),
           ),
           child: Image.asset(
-            'lib/assets/logos/logo_long_horizontal.png',
+            'lib/assets/logos/logo4.png',
             fit: BoxFit.cover,
           ),
         ),

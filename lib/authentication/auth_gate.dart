@@ -46,7 +46,7 @@ class AuthGate extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: Image.asset('lib/assets/images/logo_big.png'),
+                  child: Image.asset('lib/assets/logos/logo4.png'),
                 ),
               );
             },
@@ -91,7 +91,7 @@ class AuthGate extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: Image.asset('lib/assets/images/logo_big.png'),
+                  child: Image.asset('lib/assets/logos/logo4.png'),
                 ),
               );
             },

@@ -76,9 +76,9 @@ class _PointInfoWindowState extends State<PointInfoWindow> {
 
   Future<void> _fetchComments() async {
     comments = <Comment>[
-      Comment('${imagePath}logo_small.png', 'John', 'This is a great place!'),
-      Comment('${imagePath}logo_small.png', 'Emma', 'I love this spot.'),
-      Comment('${imagePath}logo_small.png', 'Eve', 'Do not go there!'),
+      Comment('${imagePath}logo2.png', 'John', 'This is a great place!'),
+      Comment('${imagePath}logo3.png', 'Emma', 'I love this spot.'),
+      Comment('${imagePath}logo2.png', 'Eve', 'Do not go there!'),
     ];
   }
 

@@ -139,7 +139,7 @@ class _ProfilePageState extends State<ProfilePage> {
           // Display app logo
           AspectRatio(
             aspectRatio: 1,
-            child: Image.asset('lib/assets/images/logo_big.png'),
+            child: Image.asset('lib/assets/logos/logo4.png'),
           ),
         ],
       ),

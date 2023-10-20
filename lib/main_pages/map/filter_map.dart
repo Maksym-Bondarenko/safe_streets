@@ -7,19 +7,19 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:safe_streets/main_pages/map/path_search/components/pathSearch.dart';
 //import 'package:safe_streets/ui/spinners/loading_spinner.dart';
 
-import '../services/point_approaching.dart';
-import '../services/safe_points_service.dart';
-import '../shared/app_state.dart';
-import '../shared/global_functions.dart';
-import '../shared/points_types.dart';
-import '../ui/bottom_menu/bottom_navigation_bar.dart';
-import '../ui/fake_call/fake_call.dart';
-import '../ui/infowindow/point_infowindow.dart';
-import '../ui/path_search/pathSearch.dart';
-import '../ui/dialog/dialog_window.dart';
-import '../ui/sos/sos_window.dart';
+import '../../services/point_approaching.dart';
+import '../../services/safe_points_service.dart';
+import '../../shared/app_state.dart';
+import '../../shared/global_functions.dart';
+import '../../shared/points_types.dart';
+import '../../ui/bottom_menu/bottom_navigation_bar.dart';
+import '../../ui/fake_call/fake_call.dart';
+import '../../ui/infowindow/point_infowindow.dart';
+import '../../ui/dialog/dialog_window.dart';
+import '../../ui/sos/sos_window.dart';
 
 /// Main Page with the FilterMarkers-Map, including 3 types of Points
 class FilterMap extends StatefulWidget {

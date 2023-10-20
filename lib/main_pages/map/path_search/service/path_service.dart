@@ -7,8 +7,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 
-import '../ui/path_search/routes_models.dart';
-import 'base_service.dart';
+import '../../../../services/base_service.dart';
+import '../models/response.dart';
 
 /// Service for building a path between two geopoints via Google API
 class PathService extends BaseService {
@@ -74,7 +74,8 @@ class PathService extends BaseService {
     return polylineCoordinates;
   }
 
-  Future<SafestRouteResponse?> getSafestPath(
+  // returns the safest (AI-based) and fastest paths
+  Future<Response?> getSafestAndFastestPath(
       double startLat,
       double startLon,
       double goalLat,
@@ -82,13 +83,14 @@ class PathService extends BaseService {
 
     final apiUrl = Uri.parse('https://routing-jua5hzcdma-vp.a.run.app/api/route?goal_lat=$goalLat&goal_lon=$goalLon&start_lat=$startLat&start_lon=$startLon');
 
+    // TODO: add loading-spinner when getting the coordinates
     try {
       final response = await http.get(apiUrl);
 
       if (response.statusCode == 200) {
         // Parse the response data
         final Map<String, dynamic> responseData = json.decode(response.body);
-        final SafestRouteResponse routeResponse = SafestRouteResponse.fromJson(responseData);
+        final Response routeResponse = Response.fromJson(responseData);
 
         return routeResponse;
       } else {
@@ -103,6 +105,7 @@ class PathService extends BaseService {
     return null;
   }
 
+  // custom method for distance-calculation from the polyline coordinates
   double calculateDistance(List<LatLng> polylineCoordinates) {
     double totalDistance = 0.0;
 

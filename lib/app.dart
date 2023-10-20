@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:safe_streets/other_pages/dds_map.dart';
 import 'package:safe_streets/other_pages/legal/privacy_policy.dart';
 import 'package:safe_streets/other_pages/settings/settings_page.dart';
-import 'package:safe_streets/main_pages/filter_map.dart';
+import 'package:safe_streets/main_pages/map/filter_map.dart';
 import 'package:safe_streets/main_pages/support_page.dart';
 import 'package:safe_streets/shared/app_state.dart';
 import 'package:safe_streets/shared/theme_data.dart';
