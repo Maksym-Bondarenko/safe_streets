@@ -20,6 +20,7 @@ import '../../ui/fake_call/fake_call.dart';
 import '../../ui/infowindow/point_infowindow.dart';
 import '../../ui/dialog/dialog_window.dart';
 import '../../ui/sos/sos_window.dart';
+import 'current_place_information/current_place_info.dart';
 
 /// Main Page with the FilterMarkers-Map, including 3 types of Points
 class FilterMap extends StatefulWidget {
@@ -360,11 +361,36 @@ class _FilterMap extends State<FilterMap> {
               visible: _areControllersVisible,
               child: Positioned(
                 bottom: 30,
-                right: 10,
+                left: 10,
                 child: _buildCustomMapButtons(),
               ),
             ),
 
+            // SOS-button
+            Positioned(
+              bottom: 30,
+              right: 10,
+              child: ClipRect(
+                child: Material(
+                  color: Colors.red,
+                  child: InkWell(
+                    splashColor: Colors.white,
+                    onTap: sosPressed,
+                    child: const SizedBox(
+                      width: 80,
+                      height: 80,
+                      child: Icon(Icons.sos, color: Colors.white, size: 40),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            CurrentPlaceInfo(
+                place: "Freimann",
+                safetyIndex: 2.1,
+                overview:
+                    "A lot of pickpocketing happens in this area. Make sure to keep eye on your belongings."),
 
             // // speed-dial for actions: fake-call, sos, location-sharing
             // Visibility(
@@ -375,25 +401,6 @@ class _FilterMap extends State<FilterMap> {
             //     child: _buildSpeedDial(),
             //   ),
             // ),
-
-            Positioned(
-              bottom: 30,
-              left: 10,
-              child: ClipOval(
-                child: Material(
-                  color: Colors.red,
-                  child: InkWell(
-                    splashColor: Colors.white,
-                    onTap: sosPressed,
-                    child: const SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: Icon(Icons.sos, color: Colors.white, size: 30),
-                    ),
-                  ),
-                ),
-              ),
-            ),
 
             // Custom Info Window
             Visibility(
