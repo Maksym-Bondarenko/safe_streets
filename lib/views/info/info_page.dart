@@ -44,7 +44,7 @@ class InfoPage extends StatelessWidget {
                       child: ForumCard(
                         onTap: () {
                           // Navigate to the forum page
-                          context.goNamed(AppRoutes.forum);
+                          context.pushNamed(AppRoutes.forum);
                         },
                       ),
                     ),
@@ -53,8 +53,8 @@ class InfoPage extends StatelessWidget {
                       flex: 1,
                       child: SupportCard(
                         onTap: () {
-                          // Navigate to the contact support page
-                          context.goNamed(AppRoutes.contactSupport);
+                          // Navigate to the support page
+                          context.pushNamed(AppRoutes.support);
                         },
                       ),
                     ),

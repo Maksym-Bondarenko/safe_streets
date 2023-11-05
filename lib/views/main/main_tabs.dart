@@ -36,10 +36,6 @@ class MainTabs extends StatelessWidget {
             label: 'Info',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.forum_outlined),
-            label: 'Forum',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
             label: 'Profile',
           ),

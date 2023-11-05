@@ -3,8 +3,9 @@ import 'package:go_router/go_router.dart';
 
 import 'package:safe_streets/views/auth/auth_page.dart';
 import 'package:safe_streets/views/auth/terms_and_conditions_page.dart';
-import 'package:safe_streets/views/forum/forum_page.dart';
+import 'package:safe_streets/views/info/forum_page.dart';
 import 'package:safe_streets/views/info/info_page.dart';
+import 'package:safe_streets/views/info/support_page.dart';
 // import 'package:safe_streets/main/dds_map.dart';
 import 'package:safe_streets/views/map/map_page.dart';
 import 'package:safe_streets/views/map/route_page.dart';
@@ -22,7 +23,6 @@ class AppRouter {
   final _appNavigatorKey = GlobalKey<NavigatorState>();
   final _mapTabNavigatorKey = GlobalKey<NavigatorState>();
   final _infoTabNavigatorKey = GlobalKey<NavigatorState>();
-  final _forumTabNavigatorKey = GlobalKey<NavigatorState>();
   final _profileTabNavigatorKey = GlobalKey<NavigatorState>();
 
   factory AppRouter() {
@@ -62,18 +62,18 @@ class AppRouter {
                 pageBuilder: (context, state) => const NoTransitionPage(
                   child: InfoPage(),
                 ),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            navigatorKey: _forumTabNavigatorKey,
-            routes: [
-              GoRoute(
-                path: '/forum',
-                name: AppRoutes.forum,
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: ForumPage(),
-                ),
+                routes: [
+                  GoRoute(
+                    path: 'support',
+                    name: AppRoutes.support,
+                    builder: (context, state) => const SupportPage(),
+                  ),
+                  GoRoute(
+                    path: 'forum',
+                    name: AppRoutes.forum,
+                    builder: (context, state) => const ForumPage(),
+                  ),
+                ],
               ),
             ],
           ),
@@ -159,6 +159,7 @@ class AppRoutes {
   static const info = 'info';
   static const map = 'map';
   static const profile = 'profile';
+  static const support = 'support';
   static const settings = 'settings';
   static const route = 'route';
   // static const signUp = 'signUp';
@@ -193,4 +194,3 @@ class AppRoutes {
 // // Set AuthGate as the initial screen of application
 // home: const AuthGate(),
 // // Disable the debug mode banner
-
