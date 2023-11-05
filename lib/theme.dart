@@ -6,5 +6,4 @@ final theme = ThemeData(
   primaryColorDark: Colors.indigo,
   primaryColor: Colors.lightBlue,
   scaffoldBackgroundColor: Colors.white,
-  useMaterial3: false,
 );
