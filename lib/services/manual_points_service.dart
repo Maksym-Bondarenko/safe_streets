@@ -3,25 +3,24 @@ import 'dart:convert';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:safe_streets/services/base_service.dart';
 import 'package:http/http.dart' as http;
 
-import '../shared/global_functions.dart';
-import '../shared/points_types.dart';
-import '../ui/infowindow/point_infowindow.dart';
+import 'package:safe_streets/services/base_service.dart';
+import 'package:safe_streets/utils/global_functions.dart';
+import 'package:safe_streets/utils/points_types.dart';
+import 'package:safe_streets/widgets/point_info_window.dart';
 
 /// Service for fetching the manual (Danger- and Recommendations-) points
 class ManualPointsService extends BaseService {
-
   Future<void> createAndSavePoint(
-      LatLng latLng,
-      MainType mainType,
-      MapPoint subType,
-      String title,
-      String description,
-      CustomInfoWindowController customInfoWindowController,
-      Function(Marker) updateMarkers,
-      ) async {
+    LatLng latLng,
+    MainType mainType,
+    MapPoint subType,
+    String title,
+    String description,
+    CustomInfoWindowController customInfoWindowController,
+    Function(Marker) updateMarkers,
+  ) async {
     var latitude = latLng.latitude;
     var longitude = latLng.longitude;
     var markerId = "$mainType-$subType-$latitude-$longitude-$title";

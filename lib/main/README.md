@@ -1,1 +1,0 @@
-TODO: write readme about 'main'-folder

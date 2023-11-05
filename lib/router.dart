@@ -118,15 +118,6 @@ class AppRouter {
           );
         },
       ),
-      // GoRoute(
-      //   path: homeRoute,
-      //   pageBuilder: (context, state) {
-      //     return _buildPage(
-      //       child: const HomeScreen(),
-      //       state: state,
-      //     );
-      //   },
-      // ),
       GoRoute(
         path: '/auth',
         name: AppRoutes.auth,
