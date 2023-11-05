@@ -2,9 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'package:go_router/go_router.dart';
-import 'package:safe_streets/router.dart';
 
+import 'package:safe_streets/router.dart';
 import 'package:safe_streets/views/intro/intro_page.dart';
 
 /// Authentication page (via mail or Google SSI)
@@ -60,7 +59,8 @@ class AuthPage extends StatelessWidget {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             // Navigate to the Terms and Conditions page
-                            context.pushNamed(AppRoutes.termsAndConditions);
+                            AppRouter.router
+                                .pushNamed(AppRoutes.termsAndConditions);
                           },
                       ),
                     ],

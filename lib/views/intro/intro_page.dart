@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:intro_slider/intro_slider.dart';
 import 'package:safe_streets/router.dart';
 
@@ -30,7 +30,7 @@ class _IntroPageState extends State<IntroPage> {
 
   // TODO: Navigates to the home screen
   void _navigateToHome(BuildContext context) {
-    context.goNamed(AppRoutes.info);
+    AppRouter.router.goNamed(AppRoutes.info);
   }
 
   @override

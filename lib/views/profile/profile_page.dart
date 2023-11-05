@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:safe_streets/router.dart';
 
 /// Profile settings page of the main tabs
@@ -18,7 +18,7 @@ class ProfilePage extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         SignedOutAction((context) {
-          context.goNamed(AppRoutes.auth);
+          AppRouter.router.goNamed(AppRoutes.auth);
         }),
       ],
       children: [
@@ -118,7 +118,7 @@ class ProfilePage extends StatelessWidget implements PreferredSizeWidget {
                   style: TextStyle(color: Colors.black),
                 ),
                 onPressed: () {
-                  context.pushNamed(AppRoutes.settings);
+                  AppRouter.router.pushNamed(AppRoutes.settings);
                 },
               ),
               ElevatedButton(
@@ -127,7 +127,7 @@ class ProfilePage extends StatelessWidget implements PreferredSizeWidget {
                   style: TextStyle(color: Colors.black),
                 ),
                 onPressed: () {
-                  context.pushNamed(AppRoutes.editProfile);
+                  AppRouter.router.pushNamed(AppRoutes.editProfile);
                 },
               ),
               ElevatedButton(
@@ -136,7 +136,7 @@ class ProfilePage extends StatelessWidget implements PreferredSizeWidget {
                   style: TextStyle(color: Colors.black),
                 ),
                 onPressed: () {
-                  context.pushNamed(AppRoutes.contactSupport);
+                  AppRouter.router.pushNamed(AppRoutes.contactSupport);
                 },
               ),
               ElevatedButton(
@@ -145,7 +145,7 @@ class ProfilePage extends StatelessWidget implements PreferredSizeWidget {
                   style: TextStyle(color: Colors.black),
                 ),
                 onPressed: () {
-                  context.pushNamed(AppRoutes.faq);
+                  AppRouter.router.pushNamed(AppRoutes.faq);
                 },
               ),
               const Divider(),

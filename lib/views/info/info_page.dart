@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:safe_streets/router.dart';
 
@@ -44,7 +43,7 @@ class InfoPage extends StatelessWidget {
                       child: ForumCard(
                         onTap: () {
                           // Navigate to the forum page
-                          context.pushNamed(AppRoutes.forum);
+                          AppRouter.router.pushNamed(AppRoutes.forum);
                         },
                       ),
                     ),
@@ -54,7 +53,7 @@ class InfoPage extends StatelessWidget {
                       child: SupportCard(
                         onTap: () {
                           // Navigate to the support page
-                          context.pushNamed(AppRoutes.support);
+                          AppRouter.router.pushNamed(AppRoutes.support);
                         },
                       ),
                     ),
@@ -69,7 +68,7 @@ class InfoPage extends StatelessWidget {
                 ),
                 onPressed: () {
                   // Navigate to the FilterPoints-map
-                  context.goNamed(AppRoutes.map);
+                  AppRouter.router.goNamed(AppRoutes.map);
                 },
               ),
               // Rank-based Map button
@@ -95,7 +94,7 @@ class InfoPage extends StatelessWidget {
                   style: TextStyle(color: Colors.black),
                 ),
                 onPressed: () {
-                  context.goNamed(AppRoutes.map);
+                  AppRouter.router.goNamed(AppRoutes.map);
                 },
               ),
             ],
