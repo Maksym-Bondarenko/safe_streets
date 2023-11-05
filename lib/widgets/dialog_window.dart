@@ -12,11 +12,12 @@ class DialogWindow extends StatefulWidget {
   final CustomInfoWindowController customInfoWindowController;
   final Function(Marker) updateMarkers;
 
-  const DialogWindow(
-      {super.key,
-      required this.latLng,
-      required this.customInfoWindowController,
-      required this.updateMarkers});
+  const DialogWindow({
+    Key? key,
+    required this.latLng,
+    required this.customInfoWindowController,
+    required this.updateMarkers,
+  }) : super(key: key);
 
   @override
   State<DialogWindow> createState() => _DialogWindowState();

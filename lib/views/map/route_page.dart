@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RoutePage extends StatefulWidget {
-  const RoutePage({super.key});
+  const RoutePage({Key? key}) : super(key: key);
 
   @override
   State<RoutePage> createState() => _RoutePageState();

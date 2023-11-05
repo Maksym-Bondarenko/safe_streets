@@ -7,7 +7,7 @@ import 'package:safe_streets/router.dart';
 // Info-screen after authentication, containing dashboard with main information,
 // settings, and navigation to further pages
 class InfoPage extends StatelessWidget {
-  const InfoPage({super.key});
+  const InfoPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +109,10 @@ class InfoPage extends StatelessWidget {
 class ForumCard extends StatelessWidget {
   final VoidCallback onTap;
 
-  const ForumCard({Key? key, required this.onTap}) : super(key: key);
+  const ForumCard({
+    Key? key,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +160,10 @@ class ForumCard extends StatelessWidget {
 class SupportCard extends StatelessWidget {
   final VoidCallback onTap;
 
-  const SupportCard({Key? key, required this.onTap}) : super(key: key);
+  const SupportCard({
+    Key? key,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -7,9 +7,10 @@ class MainTabs extends StatelessWidget {
   final StatefulNavigationShell _navigationShell;
 
   const MainTabs({
-    super.key,
+    Key? key,
     required navigationShell,
-  }) : _navigationShell = navigationShell;
+  })  : _navigationShell = navigationShell,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {

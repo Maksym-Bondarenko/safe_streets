@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SupportPage extends StatelessWidget {
-  const SupportPage({super.key});
+  const SupportPage({Key? key}) : super(key: key);
 
   final String policeNumber = "110";
   final String fireServiceNumber = "112";

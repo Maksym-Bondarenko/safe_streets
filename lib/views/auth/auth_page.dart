@@ -8,7 +8,7 @@ import 'package:safe_streets/views/intro/intro_page.dart';
 
 /// Authentication page (via mail or Google SSI)
 class AuthPage extends StatelessWidget {
-  const AuthPage({super.key});
+  const AuthPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

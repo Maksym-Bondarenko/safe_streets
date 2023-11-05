@@ -6,7 +6,7 @@ import 'package:safe_streets/router.dart';
 import 'package:safe_streets/theme.dart';
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key}) {
+  MyApp({Key? key}) : super(key: key) {
     AppRouter();
   }
 
