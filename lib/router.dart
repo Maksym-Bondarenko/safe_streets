@@ -6,6 +6,8 @@ import 'package:safe_streets/views/auth/terms_and_conditions_page.dart';
 import 'package:safe_streets/views/info/forum_page.dart';
 import 'package:safe_streets/views/info/info_page.dart';
 import 'package:safe_streets/views/info/support_page.dart';
+import 'package:safe_streets/views/map/active_call_page.dart';
+import 'package:safe_streets/views/map/incoming_call_page.dart';
 // import 'package:safe_streets/main/dds_map.dart';
 import 'package:safe_streets/views/map/map_page.dart';
 import 'package:safe_streets/views/map/route_page.dart';
@@ -29,6 +31,13 @@ class AppRouter {
     return _instance;
   }
 
+  static void popUntil(BuildContext context, String pathName) {
+    while (GoRouterState.of(context).name != pathName && router.canPop()) {
+      debugPrint('Popping ${GoRouterState.of(context).name}');
+      router.pop();
+    }
+  }
+
   AppRouter._internal() {
     final routes = [
       StatefulShellRoute.indexedStack(
@@ -48,7 +57,25 @@ class AppRouter {
                     path: 'route',
                     name: AppRoutes.route,
                     builder: (context, state) => const RoutePage(),
-                  )
+                  ),
+                  GoRoute(
+                    path: 'incoming-call',
+                    name: AppRoutes.incomingCall,
+                    builder: (context, state) => const IncomingCallPage(),
+                    routes: [
+                      GoRoute(
+                        path: 'active-call',
+                        name: AppRoutes.activeCall,
+                        builder: (context, state) {
+                          final callInfo = state.extra as IActiveCallPageProps;
+                          return ActiveCallPage(
+                            name: callInfo.name,
+                            duration: callInfo.duration,
+                          );
+                        },
+                      )
+                    ],
+                  ),
                 ],
               ),
             ],
@@ -151,12 +178,14 @@ class AppRoutes {
   AppRoutes();
 
   static const auth = 'auth';
+  static const activeCall = 'activeCall';
   static const contactSupport = 'contactSupport';
   // static const detail = 'detail';
   static const editProfile = 'editProfile';
   static const faq = 'faq';
   static const forum = 'forum';
   static const info = 'info';
+  static const incomingCall = 'incomingCall';
   static const map = 'map';
   static const profile = 'profile';
   static const support = 'support';

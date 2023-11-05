@@ -1,16 +1,32 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:safe_streets/router.dart';
 
-class CallPage extends StatelessWidget {
-  final String callerName;
-  final Duration callDuration;
-  final String audioFilePath;
+class IActiveCallPageProps {
+  final String name;
+  final Duration duration;
+  // final String audioFilePath;
 
-  const CallPage({
+  const IActiveCallPageProps({
+    required this.name,
+    required this.duration,
+    // required this.audioFilePath,
+  });
+}
+
+class ActiveCallPage extends StatelessWidget implements IActiveCallPageProps {
+  @override
+  final String name;
+  @override
+  final Duration duration;
+  // final String audioFilePath;
+
+  const ActiveCallPage({
     Key? key,
-    required this.callerName,
-    required this.callDuration,
-    required this.audioFilePath,
+    required this.name,
+    required this.duration,
+    // required this.audioFilePath,
   }) : super(key: key);
 
   @override
@@ -42,12 +58,12 @@ class CallPage extends StatelessWidget {
             // ),
             const SizedBox(height: 16),
             Text(
-              callerName,
+              name,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             Text(
-              'Call Duration: ${callDuration.inMinutes}:${(callDuration.inSeconds % 60).toString().padLeft(2, '0')}',
+              'Call Duration: ${duration.inMinutes}:${(duration.inSeconds % 60).toString().padLeft(2, '0')}',
               style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 32),
@@ -69,9 +85,8 @@ class CallPage extends StatelessWidget {
                 FloatingActionButton(
                   onPressed: () {
                     stopAudio();
-                    // Close all widgets until the filter-map
-                    Navigator.popUntil(
-                        context, ModalRoute.withName('/filterMap'));
+                    // Close all widgets until the map
+                    AppRouter.popUntil(context, AppRoutes.map);
                   },
                   backgroundColor: Colors.red,
                   child: const Icon(Icons.call_end),

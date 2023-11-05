@@ -28,16 +28,16 @@ class MainTabs extends StatelessWidget {
         currentIndex: _navigationShell.currentIndex,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.map_outlined),
             label: 'Map',
+            icon: Icon(Icons.map_outlined),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.info_outlined),
             label: 'Info',
+            icon: Icon(Icons.info_outlined),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
             label: 'Profile',
+            icon: Icon(Icons.person_outline),
           ),
         ],
         onTap: (index) {

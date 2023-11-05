@@ -2,23 +2,23 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:safe_streets/router.dart';
+import 'package:safe_streets/views/map/active_call_page.dart';
 
-import 'package:safe_streets/views/map/call_page.dart';
+class IncomingCallPage extends StatefulWidget {
+  final String callerName = 'John Doe';
 
-class FakeCallPage extends StatefulWidget {
-  final String callerName;
-
-  const FakeCallPage({Key? key, required this.callerName}) : super(key: key);
+  const IncomingCallPage({Key? key}) : super(key: key);
 
   @override
-  State<FakeCallPage> createState() => _FakeCallPageState();
+  State<IncomingCallPage> createState() => _IncomingCallPageState();
 }
 
-class _FakeCallPageState extends State<FakeCallPage> {
+class _IncomingCallPageState extends State<IncomingCallPage> {
+  final audioFilePath = "assets/audio/beep.mp3";
   Timer? _timer;
   Duration _callDuration = const Duration();
   late Timer _callDurationTimer;
-  final audioFilePath = "assets/audio/beep.mp3";
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _FakeCallPageState extends State<FakeCallPage> {
   final audioPlayer = AudioPlayer();
 
   void playAudio() async {
-    //await audioPlayer.play(AssetSource(audioFilePath));
+    await audioPlayer.play(AssetSource(audioFilePath));
   }
 
   void stopAudio() async {
@@ -75,8 +75,8 @@ class _FakeCallPageState extends State<FakeCallPage> {
             const SizedBox(height: 16),
             const CircleAvatar(
               radius: 60,
-              backgroundImage:
-                  AssetImage('assets/fake_call/profile_picture.png'),
+              // backgroundImage:
+              //     AssetImage('assets/fake_call/profile_picture.png'),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -108,7 +108,7 @@ class _FakeCallPageState extends State<FakeCallPage> {
                   onPressed: () {
                     _timer?.cancel();
                     stopAudio();
-                    Navigator.pop(context);
+                    AppRouter.router.pop();
                   },
                 ),
                 IconButton(
@@ -122,16 +122,12 @@ class _FakeCallPageState extends State<FakeCallPage> {
                     stopAudio();
                     // Start a new timer to track call duration
                     _startCallDurationTimer();
-
-                    // Navigate to the CallScreen with relevant data
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CallPage(
-                          callerName: widget.callerName,
-                          callDuration: _callDuration,
-                          audioFilePath: 'assets/audio/spoken_language.mp3',
-                        ),
+                    // Navigate to the ActiveCallPage with relevant data
+                    AppRouter.router.pushNamed(
+                      AppRoutes.activeCall,
+                      extra: IActiveCallPageProps(
+                        name: widget.callerName,
+                        duration: _callDuration,
                       ),
                     );
                   },

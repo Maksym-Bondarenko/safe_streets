@@ -11,3 +11,9 @@ const kBlack = Colors.black;
 
 // Sizes
 const double kIcon = 28;
+const double kButton = 50;
+const double kLargeButton = 70;
+
+// Spacings
+const double kSpacingS = 10;
+const double kSpacingM = 20;
