@@ -1,6 +1,6 @@
 # 🗺️ safeStreets
 
-<img src="/lib/assets/logos/main_logo_inverted.png" alt="logo" width="250">
+<img src="/assets/logos/main_logo_inverted.png" alt="logo" width="250">
 
 > From Safe Streets to safe cities, countries and the world!
 
@@ -51,10 +51,10 @@ the [Flutter website](https://flutter.dev/docs/get-started/install).
 
 You'll also need to have the following software installed:
 
-* [Android Studio](https://developer.android.com/studio)
+- [Android Studio](https://developer.android.com/studio)
   or [Visual Studio Code](https://code.visualstudio.com/) (with Flutter and Dart plugins) for
   development
-* A [Google Cloud Platform](https://cloud.google.com/) account with the
+- A [Google Cloud Platform](https://cloud.google.com/) account with the
   [Maps API](https://developers.google.com/maps) and [Firebase](https://firebase.google.com/)
   services enabled
 
@@ -119,23 +119,23 @@ Before deploying an application to production, we are going to transfer the back
 Kubernetes Engine. Since users will update danger points frequently, we will deploy an in-memory
 database for the points.
 
-* [Flutter](https://flutter.dev/) - The framework used
-* [Dart](https://dart.dev/) - The language used
-* [Flask Python](https://flask.palletsprojects.com) - For backend
-* [PostgreSQL](https://www.postgresql.org/) - For Database
-* [Docker](https://www.docker.com/) - For running Server in a container
-* [Google Maps API](https://cloud.google.com/maps-platform/) - For maps and location services
-* [Firebase](https://firebase.google.com/) - For authentication
-* [Google Cloud Platform](https://cloud.google.com/) - For cloud services
+- [Flutter](https://flutter.dev/) - The framework used
+- [Dart](https://dart.dev/) - The language used
+- [Flask Python](https://flask.palletsprojects.com) - For backend
+- [PostgreSQL](https://www.postgresql.org/) - For Database
+- [Docker](https://www.docker.com/) - For running Server in a container
+- [Google Maps API](https://cloud.google.com/maps-platform/) - For maps and location services
+- [Firebase](https://firebase.google.com/) - For authentication
+- [Google Cloud Platform](https://cloud.google.com/) - For cloud services
 
 ### 🚫 Limitations:
 
-* Currently following pages are placeholders with dummy data and with no
+- Currently following pages are placeholders with dummy data and with no
   functionality: `dds_map.dart`, `edit_user_details_page.dart`, `forum_page.dart`
   and `settings_page.dart`
-* As Data Driven Styling (DDS) by Google Maps for Flutter Applications is currently under
+- As Data Driven Styling (DDS) by Google Maps for Flutter Applications is currently under
   development, we could not implement it into our maps
-* Also, currently we faced problems with fetching data from the backend (markers of custom user
+- Also, currently we faced problems with fetching data from the backend (markers of custom user
   points: DangerPoints and RecommendationPoints) on Android. On iOS it works on other hand. It
   should be a problem on
   Google-side ([Google Issue Tracker](https://issuetracker.google.com/issues/228091313?pli=1)
@@ -144,62 +144,62 @@ database for the points.
 
 ### 🔮 Future Work:
 
-* [ ] Updating the current placeholders for the settings-page, change-user-details-page, and
-  forum-page
-  to provide a better user experience and more functionality.
-* [ ] On the settings-page, add options for changing user preferences such as language, time zone,
-  and
-  notification settings.
-* [ ] Restructure the source code by dividing it into multiple files and extracting it into reusable
-  components
-* [ ] Implement voting for points (dangerPoint, recommendationPoint and safePoint) and logic for
-  their
-  auto-deletion.
-* [ ] Add overall information for regions from DDS, containing report details, such as: last
-  criminal
-  rate, amount of thefts; touristic advices for countries.
-* [ ] On the change-user-details-page, allow users to update their profile information such as name,
-  email address, and profile picture.
-* [ ] On the forum-page, add features such as upvoting and downvoting posts, write own posts, and
-  sorting posts by popularity, date, or relevance.
-* [ ] Improve the user interface and design of all three pages to make them more visually appealing
-  and
-  easier to navigate.
-* [ ] Provide clustering of map-markers by zoom-out.
-* [ ] Add unit and integration tests for these pages to ensure that they are functioning correctly
-  and
-  to prevent any regressions in functionality.
-* [ ] Consider adding support for additional languages to make the website accessible to a wider
-  audience.
+- [ ] Updating the current placeholders for the settings-page, change-user-details-page, and
+      forum-page
+      to provide a better user experience and more functionality.
+- [ ] On the settings-page, add options for changing user preferences such as language, time zone,
+      and
+      notification settings.
+- [ ] Restructure the source code by dividing it into multiple files and extracting it into reusable
+      components
+- [ ] Implement voting for points (dangerPoint, recommendationPoint and safePoint) and logic for
+      their
+      auto-deletion.
+- [ ] Add overall information for regions from DDS, containing report details, such as: last
+      criminal
+      rate, amount of thefts; touristic advices for countries.
+- [ ] On the change-user-details-page, allow users to update their profile information such as name,
+      email address, and profile picture.
+- [ ] On the forum-page, add features such as upvoting and downvoting posts, write own posts, and
+      sorting posts by popularity, date, or relevance.
+- [ ] Improve the user interface and design of all three pages to make them more visually appealing
+      and
+      easier to navigate.
+- [ ] Provide clustering of map-markers by zoom-out.
+- [ ] Add unit and integration tests for these pages to ensure that they are functioning correctly
+      and
+      to prevent any regressions in functionality.
+- [ ] Consider adding support for additional languages to make the website accessible to a wider
+      audience.
 
 ### 🧪 Tested on:
 
 The application was tested on mobile devices with Android and iOS:
 
-* Android 13 (Xiaomi 11T) - physical device
-* iOS 16.2 (iPhone 12) - emulator
+- Android 13 (Xiaomi 11T) - physical device
+- iOS 16.2 (iPhone 12) - emulator
 
 ## 👥 Authors
 
-* [Maksym Bondarenko](https://github.com/Maksym-Bondarenko)
-* [Chernov Andrey](https://github.com/ChernovAndrey)
-* [Ekaterina Erofeeva](https://github.com/ekaterina-erofeeva)
-* [Kira Dianova](https://github.com/keira-d)
+- [Maksym Bondarenko](https://github.com/Maksym-Bondarenko)
+- [Chernov Andrey](https://github.com/ChernovAndrey)
+- [Ekaterina Erofeeva](https://github.com/ekaterina-erofeeva)
+- [Kira Dianova](https://github.com/keira-d)
 
 ## 📷 App-Screenshots
 
 There are some of screenshots of our SafeStreets-App:
 
-| Title          | Screenshot                                                                                             |
-|----------------|--------------------------------------------------------------------------------------------------------|
-| Intro-slider   | ![Screenshot of SafeStreets1](/lib/assets/screenshots/screenshot1_intro-slider.jpg "Intro-slider")     |
-| Main screen    | ![Screenshot of SafeStreets2](/lib/assets/screenshots/screenshot2_main-screen.jpg "Main screen")       |
-| DDS map        | ![Screenshot of SafeStreets3](/lib/assets/screenshots/screenshot3_dds-map.jpg "DDS map")               |
-| User profile   | ![Screenshot of SafeStreets4](/lib/assets/screenshots/screenshot4_user-profile.jpg "User profile")     |
-| User profile   | ![Screenshot of SafeStreets5](/lib/assets/screenshots/screenshot5_user-profile.jpg "User profile")     |
-| Filter map     | ![Screenshot of SafeStreets6](/lib/assets/screenshots/screenshot6_filter-map.jpg "Filter map")         |
-| Safe point     | ![Screenshot of SafeStreets7](/lib/assets/screenshots/screenshot7_safe-point.jpg "Safe point")         |
-| point creation | ![Screenshot of SafeStreets8](/lib/assets/screenshots/screenshot8_point-creation.jpg "point creation") |
+| Title          | Screenshot                                                                                         |
+| -------------- | -------------------------------------------------------------------------------------------------- |
+| Intro-slider   | ![Screenshot of SafeStreets1](/assets/screenshots/screenshot1_intro-slider.jpg "Intro-slider")     |
+| Main screen    | ![Screenshot of SafeStreets2](/assets/screenshots/screenshot2_main-screen.jpg "Main screen")       |
+| DDS map        | ![Screenshot of SafeStreets3](/assets/screenshots/screenshot3_dds-map.jpg "DDS map")               |
+| User profile   | ![Screenshot of SafeStreets4](/assets/screenshots/screenshot4_user-profile.jpg "User profile")     |
+| User profile   | ![Screenshot of SafeStreets5](/assets/screenshots/screenshot5_user-profile.jpg "User profile")     |
+| Filter map     | ![Screenshot of SafeStreets6](/assets/screenshots/screenshot6_filter-map.jpg "Filter map")         |
+| Safe point     | ![Screenshot of SafeStreets7](/assets/screenshots/screenshot7_safe-point.jpg "Safe point")         |
+| point creation | ![Screenshot of SafeStreets8](/assets/screenshots/screenshot8_point-creation.jpg "point creation") |
 
 ## ⚖ License
 

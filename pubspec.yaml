@@ -101,19 +101,19 @@ flutter:
 
   assets:
     - api_keys.env
-    - lib/assets/
-    - lib/assets/audio/
-    - lib/assets/data/
-    - lib/assets/dds/
-    - lib/assets/fake_call/
-    - lib/assets/images/
-    - lib/assets/intro/
-    - lib/assets/logos/
-    - lib/assets/markers/
-    - lib/assets/markers/danger_points/
-    - lib/assets/markers/recommendation_points/
-    - lib/assets/markers/safe_points/
-    - lib/assets/screenshots/
+    - assets/
+    - assets/audio/
+    - assets/data/
+    - assets/dds/
+    - assets/fake_call/
+    - assets/images/
+    - assets/intro/
+    - assets/logos/
+    - assets/markers/
+    - assets/markers/danger_points/
+    - assets/markers/recommendation_points/
+    - assets/markers/safe_points/
+    - assets/screenshots/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
