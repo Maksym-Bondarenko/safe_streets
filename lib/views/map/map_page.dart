@@ -8,10 +8,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:safe_streets/utils/global_functions.dart';
 import 'package:safe_streets/views/map/widgets/base_map.dart';
 import 'package:safe_streets/views/map/widgets/map_control_buttons.dart';
+import 'package:safe_streets/views/map/widgets/map_search_bar.dart';
 import 'package:safe_streets/views/map/widgets/safety_info_sheet.dart';
 import 'package:safe_streets/views/map/widgets/sos_menu.dart';
-// import 'package:safe_streets/widgets/dialog_window.dart';
-// import 'package:safe_streets/widgets/loading_spinner.dart';
+// import 'package:safe_streets/widgets/dialog_window.dart';// import 'package:safe_streets/widgets/loading_spinner.dart';
 
 /// Main Page with the FilterMarkers-Map, including 3 types of Points
 class MapPage extends StatefulWidget {
@@ -37,12 +37,20 @@ class _MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     final screen = MediaQuery.of(context).size;
     final marginHorizontal = screen.width * 0.05;
-    final marginBottom = screen.height * 0.1;
+    final marginBottom = screen.height * 0.21;
     return Scaffold(
       body: SafeArea(
         child: Stack(
           children: [
             BaseMap(setMapController: _setMapController),
+            Positioned(
+              left: marginHorizontal,
+              right: marginHorizontal,
+              top: marginHorizontal,
+              child: MapSearchBar(
+                onSubmit: (query) {},
+              ),
+            ),
             Positioned(
               bottom: marginBottom,
               right: marginHorizontal,

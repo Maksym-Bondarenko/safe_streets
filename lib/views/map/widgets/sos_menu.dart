@@ -22,35 +22,23 @@ class SOSMenu extends StatelessWidget {
       curve: Curves.fastOutSlowIn,
       switchLabelPosition: true,
       children: [
-        // Fake-Call Button
         SpeedDialChild(
-            child: const Icon(Icons.call, color: Colors.white),
-            backgroundColor: Colors.blue,
-            onTap: _fakeCallPressed,
-            label: 'Fake-Call',
-            labelStyle: const TextStyle(
-                fontWeight: FontWeight.w500, color: Colors.white),
-            labelBackgroundColor: Colors.black),
-        // SOS Button
+          child: const Icon(Icons.call, color: Colors.white),
+          labelWidget: const _Label('Fake-Call'),
+          backgroundColor: kBlack,
+          onTap: _fakeCallPressed,
+        ),
         SpeedDialChild(
           child: const Icon(Icons.sos, color: Colors.white),
-          backgroundColor: Colors.blue,
+          labelWidget: const _Label('SOS'),
+          backgroundColor: kBlack,
           onTap: _sosPressed,
-          label: 'SOS',
-          labelStyle:
-              const TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
-          labelBackgroundColor: Colors.black,
         ),
-
-        // Share Location Button
         SpeedDialChild(
           child: const Icon(Icons.share_location, color: Colors.white),
-          backgroundColor: Colors.blue,
+          labelWidget: const _Label('Share Location'),
+          backgroundColor: kBlack,
           onTap: _shareLocation,
-          label: 'Share Location',
-          labelStyle:
-              const TextStyle(fontWeight: FontWeight.w500, color: Colors.white),
-          labelBackgroundColor: Colors.black,
         ),
       ],
     );
@@ -68,5 +56,29 @@ class SOSMenu extends StatelessWidget {
 // TODO: implement share location functionality
   void _shareLocation() {
     print('Pressed Share Location');
+  }
+}
+
+class _Label extends StatelessWidget {
+  final String _text;
+
+  const _Label(
+    String label, {
+    Key? key,
+  })  : _text = label,
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: kSpacingSM),
+      child: Text(
+        _text,
+        style: const TextStyle(
+          fontSize: kTextS,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
   }
 }

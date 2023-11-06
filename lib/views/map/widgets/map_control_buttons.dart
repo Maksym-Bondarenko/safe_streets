@@ -3,7 +3,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:safe_streets/constants.dart';
-import 'package:safe_streets/router.dart';
 import 'package:safe_streets/utils/global_functions.dart';
 import 'package:safe_streets/widgets/filled_icon_button.dart';
 
@@ -20,11 +19,6 @@ class MapControlButtons extends StatelessWidget {
   Widget build(context) {
     return Column(
       children: <Widget>[
-        FilledIconButton(
-          onPressed: () => AppRouter.router.pushNamed(AppRoutes.route),
-          icon: const Icon(Icons.add_alert),
-        ),
-        const SizedBox(height: kSpacingM),
         FilledIconButton(
           onPressed: _zoomIn,
           icon: const Icon(Icons.add),

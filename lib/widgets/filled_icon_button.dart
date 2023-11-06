@@ -4,7 +4,7 @@ import 'package:safe_streets/constants.dart';
 
 class FilledIconButton extends StatelessWidget {
   final Icon _icon;
-  final Function() _onPressed;
+  final void Function() _onPressed;
   final double _size;
   final Color _color;
   final Color _backgroundColor;
@@ -23,9 +23,9 @@ class FilledIconButton extends StatelessWidget {
   })  : _icon = icon,
         _onPressed = onPressed,
         _size = size ?? kButton,
-        _color = color ?? Colors.white,
-        _backgroundColor = backgroundColor ?? Colors.blueAccent,
-        _splashColor = splashColor ?? Colors.lightBlue,
+        _color = color ?? kWhite,
+        _backgroundColor = backgroundColor ?? kGreen,
+        _splashColor = splashColor ?? Colors.green,
         _border = border ?? const CircleBorder(),
         super(key: key);
 

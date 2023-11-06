@@ -9,6 +9,7 @@ const kBlue = Color(0xFFB2D0FB);
 const kLightGrey = Color(0xFFEEEEEE);
 const kGrey = Color(0xFF777777);
 const kBlack = Colors.black;
+const kWhite = Colors.white;
 
 // Text sizes
 const double kTextXS = 16;

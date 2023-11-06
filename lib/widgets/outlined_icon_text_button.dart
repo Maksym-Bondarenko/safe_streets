@@ -5,7 +5,7 @@ import 'package:safe_streets/constants.dart';
 class OutlinedIconTextButton extends StatelessWidget {
   final Icon _icon;
   final String _label;
-  final Function() _onPressed;
+  final void Function() _onPressed;
   final double _size;
   final Color _color;
   final Color _borderColor;
@@ -26,21 +26,17 @@ class OutlinedIconTextButton extends StatelessWidget {
         _onPressed = onPressed,
         _size = size ?? kButton,
         _color = color ?? kBlack,
-        _borderColor = borderColor ?? kBlack,
+        _borderColor = borderColor ?? color ?? kBlack,
         _splashColor = splashColor ?? kLightGrey,
         super(key: key);
 
   @override
   Widget build(context) {
     return OutlinedButton(
-      // shape: _border,
-      // color: _backgroundColor,
       onPressed: _onPressed,
       style: OutlinedButton.styleFrom(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(kButton),
-        ),
-        side: BorderSide(width: kBorder, color: _color),
+        shape: const StadiumBorder(),
+        side: BorderSide(width: kBorder, color: _borderColor),
       ),
       child: Row(
         children: [
