@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 // Colors
-const kRed = Color(0xFFC92A2A);
-const kOrange = Color(0xFFFE4C00);
-const kYellow = Colors.yellow;
-const kGreen = Color(0xFF00AA88);
 const kBlue = Color(0xFFB2D0FB);
+const kGreen = Color(0xFF00AA88);
+const kYellow = Color(0xFFFDD835);
+const kOrange = Color(0xFFFE4C00);
+const kRed = Color(0xFFC92A2A);
 const kLightGrey = Color(0xFFEEEEEE);
 const kGrey = Color(0xFF777777);
 const kBlack = Colors.black;
@@ -21,7 +21,7 @@ const double kTextL = 30;
 // Element sizes
 const double kBorder = 2;
 const double kBar = 4;
-const double kRatingScale = 5;
+const double kSafetyScale = 5;
 const double kIcon = 28;
 const double kButton = 50;
 const double kLargeButton = 70;

@@ -8,11 +8,14 @@ import 'package:safe_streets/widgets/filled_icon_button.dart';
 
 class MapControlButtons extends StatelessWidget {
   final GoogleMapController? _googleMapController;
+  final void Function(Position) _onUpdateCurrentLocation;
 
   const MapControlButtons({
     Key? key,
     GoogleMapController? googleMapController,
+    required void Function(Position) onUpdateCurrentLocation,
   })  : _googleMapController = googleMapController,
+        _onUpdateCurrentLocation = onUpdateCurrentLocation,
         super(key: key);
 
   @override
@@ -60,6 +63,7 @@ class MapControlButtons extends StatelessWidget {
           ),
         ),
       );
+      _onUpdateCurrentLocation(currentPosition);
     } catch (e) {
       print(e);
     }

@@ -10,7 +10,7 @@ import 'package:safe_streets/utils/points_types.dart';
 class DialogWindow extends StatefulWidget {
   final LatLng latLng;
   final CustomInfoWindowController customInfoWindowController;
-  final Function(Marker) updateMarkers;
+  final void Function(Marker) updateMarkers;
 
   const DialogWindow({
     Key? key,
