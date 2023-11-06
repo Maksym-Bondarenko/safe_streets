@@ -12,13 +12,14 @@ import 'package:safe_streets/utils/global_functions.dart';
 /// between two points on the map
 class PathSearch extends StatefulWidget {
   final GoogleMapController? googleMapController;
-  final Function(Set<Marker> markers, Set<Polyline> polylines)
+  final Function(Set<Marker> markers, Set<Polyline> polylines)?
       onPathDataReceived;
 
-  const PathSearch(
-      {super.key,
-      required this.googleMapController,
-      required this.onPathDataReceived});
+  const PathSearch({
+    Key? key,
+    required this.googleMapController,
+    this.onPathDataReceived,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _PathSearch();
@@ -53,7 +54,7 @@ class _PathSearch extends State<PathSearch> {
 
   // pass the markers and polylines to the callback function
   void _updatePathData() {
-    widget.onPathDataReceived(markers, _polylines);
+    // widget.onPathDataReceived(markers, _polylines);
   }
 
   void _getCurrentLocation() async {

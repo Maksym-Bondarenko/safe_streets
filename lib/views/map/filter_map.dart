@@ -6,24 +6,24 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import 'package:safe_streets/router.dart';
 import 'package:safe_streets/services/safe_points_service.dart';
 import 'package:safe_streets/utils/global_functions.dart';
-import 'package:safe_streets/views/map/fake_call_page.dart';
 import 'package:safe_streets/views/map/widgets/path_search.dart';
 import 'package:safe_streets/widgets/dialog_window.dart';
 // import 'package:safe_streets/widgets/spinners/loading_spinner.dart';
 
 /// Main Page with the FilterMarkers-Map, including 3 types of Points
 class FilterMap extends StatefulWidget {
-  final GoogleMapController? googleMapController;
-
-  const FilterMap({super.key, required this.googleMapController});
+  const FilterMap({Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _FilterMap();
 }
 
 class _FilterMap extends State<FilterMap> {
+  GoogleMapController? _googleMapController;
+
   // service for retrieving (fetch, post, http) the safe points by map-initialisation
   final safePointsService = SafePointsService();
 
@@ -36,8 +36,6 @@ class _FilterMap extends State<FilterMap> {
       CustomInfoWindowController();
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  GoogleMapController? _googleMapController;
 
   late Position _currentPosition;
 
@@ -68,9 +66,9 @@ class _FilterMap extends State<FilterMap> {
   initState() {
     super.initState();
     // set GoogleMapController to the global one across the components
-    _googleMapController = widget.googleMapController;
-    _getCurrentLocation();
-    updatePointsVisibility();
+    // _googleMapController = widget.googleMapController;
+    // _getCurrentLocation();
+    // updatePointsVisibility();
   }
 
   void _getCurrentLocation() async {
@@ -248,11 +246,7 @@ class _FilterMap extends State<FilterMap> {
   }
 
   void fakeCallPressed() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => const FakeCallPage(callerName: 'Bob')),
-    );
+    AppRouter.router.pushNamed(AppRoutes.incomingCall);
   }
 
   // TODO: implement SOS-functionality
@@ -342,6 +336,8 @@ class _FilterMap extends State<FilterMap> {
         setState(() {
           _googleMapController = controller;
           customInfoWindowController.googleMapController = _googleMapController;
+          _getCurrentLocation();
+          updatePointsVisibility();
         });
         // get the places with markers on the map
         fetchPlaces();

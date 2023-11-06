@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:safe_streets/router.dart';
 
-// import '../../main/dds_map.dart';
-
 // Info-screen after authentication, containing dashboard with main information,
 // settings, and navigation to further pages
 class InfoPage extends StatelessWidget {
@@ -68,34 +66,19 @@ class InfoPage extends StatelessWidget {
                 ),
                 onPressed: () {
                   // Navigate to the FilterPoints-map
-                  AppRouter.router.goNamed(AppRoutes.map);
+                  AppRouter.router.goNamed(AppRoutes.filterMap);
                 },
               ),
               // Rank-based Map button
-              // ElevatedButton(
-              //   onPressed: () {
-              //     // Navigate to the DDS-map
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => const DDSMap(),
-              //       ),
-              //     );
-              //   },
-              //   child: const Text(
-              //     "Rank-based Map",
-              //     style: TextStyle(color: Colors.black),
-              //   ),
-              // ),
-              // main map button
               ElevatedButton(
+                onPressed: () {
+                  // Navigate to the DDS-map
+                  AppRouter.router.goNamed(AppRoutes.ddsMap);
+                },
                 child: const Text(
-                  "Main Map",
+                  "Rank-based Map",
                   style: TextStyle(color: Colors.black),
                 ),
-                onPressed: () {
-                  AppRouter.router.goNamed(AppRoutes.map);
-                },
               ),
             ],
           ),

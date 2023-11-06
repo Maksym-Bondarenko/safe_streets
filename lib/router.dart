@@ -7,6 +7,8 @@ import 'package:safe_streets/views/info/forum_page.dart';
 import 'package:safe_streets/views/info/info_page.dart';
 import 'package:safe_streets/views/info/support_page.dart';
 import 'package:safe_streets/views/map/active_call_page.dart';
+import 'package:safe_streets/views/map/dds_map.dart';
+import 'package:safe_streets/views/map/filter_map.dart';
 import 'package:safe_streets/views/map/incoming_call_page.dart';
 // import 'package:safe_streets/main/dds_map.dart';
 import 'package:safe_streets/views/map/map_page.dart';
@@ -100,6 +102,16 @@ class AppRouter {
                     name: AppRoutes.forum,
                     builder: (context, state) => const ForumPage(),
                   ),
+                  GoRoute(
+                    path: 'filter-map',
+                    name: AppRoutes.filterMap,
+                    builder: (context, state) => const FilterMap(),
+                  ),
+                  GoRoute(
+                    path: 'dds-map',
+                    name: AppRoutes.ddsMap,
+                    builder: (context, state) => const DDSMap(),
+                  ),
                 ],
               ),
             ],
@@ -180,10 +192,12 @@ class AppRoutes {
   static const auth = 'auth';
   static const activeCall = 'activeCall';
   static const contactSupport = 'contactSupport';
+  static const ddsMap = 'ddsMap';
   // static const detail = 'detail';
   static const editProfile = 'editProfile';
   static const faq = 'faq';
   static const forum = 'forum';
+  static const filterMap = 'filterMap';
   static const info = 'info';
   static const incomingCall = 'incomingCall';
   static const map = 'map';
