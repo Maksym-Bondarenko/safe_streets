@@ -26,7 +26,7 @@ class SOSMenu extends StatelessWidget {
           child: const Icon(Icons.call, color: Colors.white),
           labelWidget: const _Label('Fake-Call'),
           backgroundColor: kBlack,
-          onTap: () => CallRoute().push(context),
+          onTap: () => const CallRoute().push(context),
         ),
         SpeedDialChild(
           child: const Icon(Icons.sos, color: Colors.white),

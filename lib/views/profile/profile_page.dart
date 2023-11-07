@@ -114,28 +114,28 @@ class ProfilePage extends StatelessWidget implements PreferredSizeWidget {
                   "Settings",
                   style: TextStyle(color: Colors.black),
                 ),
-                onPressed: () => SettingsRoute().push(context),
+                onPressed: () => const SettingsRoute().push(context),
               ),
               ElevatedButton(
                 child: const Text(
                   "Change User Details",
                   style: TextStyle(color: Colors.black),
                 ),
-                onPressed: () => EditProfileRoute().push(context),
+                onPressed: () => const EditProfileRoute().push(context),
               ),
               ElevatedButton(
                 child: const Text(
                   "Contact Support",
                   style: TextStyle(color: Colors.black),
                 ),
-                onPressed: () => ContactSupportRoute().push(context),
+                onPressed: () => const ContactSupportRoute().push(context),
               ),
               ElevatedButton(
                 child: const Text(
                   "FAQs",
                   style: TextStyle(color: Colors.black),
                 ),
-                onPressed: () => FAQRoute().push(context),
+                onPressed: () => const FAQRoute().push(context),
               ),
               const Divider(),
               AspectRatio(

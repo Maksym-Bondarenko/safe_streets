@@ -32,7 +32,6 @@ final router = GoRouter(
           path: '/map',
           routes: [
             TypedGoRoute<RouteRoute>(path: 'route'),
-            TypedGoRoute<CallRoute>(path: 'call'),
           ],
         ),
       ],
@@ -74,14 +73,23 @@ class MainTabsRoute extends StatefulShellRouteData {
 
 @TypedGoRoute<AuthRoute>(path: '/auth')
 class AuthRoute extends GoRouteData {
+  const AuthRoute();
   @override
   build(context, state) => const AuthPage();
 }
 
 @TypedGoRoute<TermsAndConditionsRoute>(path: '/terms-and-conditions')
 class TermsAndConditionsRoute extends GoRouteData {
+  const TermsAndConditionsRoute();
   @override
   build(context, state) => const TermsAndConditionsPage();
+}
+
+@TypedGoRoute<CallRoute>(path: '/call')
+class CallRoute extends GoRouteData {
+  const CallRoute();
+  @override
+  build(context, state) => const CallPage();
 }
 
 class MapBranch extends StatefulShellBranchData {
@@ -94,12 +102,6 @@ class InfoBranch extends StatefulShellBranchData {
 
 class ProfileBranch extends StatefulShellBranchData {
   const ProfileBranch();
-}
-
-class CallRoute extends GoRouteData {
-  const CallRoute();
-  @override
-  build(context, state) => const CallPage();
 }
 
 class ContactSupportRoute extends GoRouteData {

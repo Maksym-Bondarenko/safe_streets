@@ -1,5 +1,6 @@
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:safe_streets/services/manual_points_service.dart';
@@ -206,7 +207,7 @@ class _DialogWindowState extends State<DialogWindow> {
           )
               .then((_) {
             // Close the dialog
-            Navigator.of(context).pop();
+            GoRouter.of(context).pop();
           }).catchError((error) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Something went wrong...')),

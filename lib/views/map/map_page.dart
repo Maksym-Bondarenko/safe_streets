@@ -86,7 +86,7 @@ class _MapPageState extends State<MapPage> {
             SafetyInfoSheet(
               locationName: _locationName,
               safetyInfo: _safetyInfo,
-              onPressed: () => RouteRoute().push(context),
+              onPressed: () => const RouteRoute().push(context),
             ),
             CustomInfoWindow(
               controller: customInfoWindowController,

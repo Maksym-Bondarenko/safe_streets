@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:go_router/go_router.dart';
 
 class CallPage extends StatefulWidget {
   const CallPage({super.key});
@@ -13,11 +14,21 @@ class CallPage extends StatefulWidget {
 class _CallPageState extends State<CallPage> {
   final _interval = const Duration(seconds: 1);
   final _name = 'John Doe';
-  final _audioPlayer = AudioPlayer();
-  final _audioFilePath = "assets/audio/beep.mp3";
 
   Duration _duration = const Duration();
   Timer? _timer;
+
+  @override
+  initState() {
+    super.initState();
+    // FlutterRingtonePlayer.playRingtone();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +51,7 @@ class _CallPageState extends State<CallPage> {
             const CircleAvatar(
               radius: 60,
               backgroundImage: AssetImage(
-                'assets/fake_call/profile_picture.png',
+                'assets/images/call_profile_picture.png',
               ),
             ),
             const SizedBox(height: 16),
@@ -54,8 +65,11 @@ class _CallPageState extends State<CallPage> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Call Duration: ${_duration.inMinutes % 60}:${_duration.inSeconds % 60}',
-              style: const TextStyle(fontSize: 20),
+              'Call Duration: $_formattedCallDuration',
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 32),
             Row(
@@ -67,7 +81,7 @@ class _CallPageState extends State<CallPage> {
                     color: Colors.red,
                     size: 32,
                   ),
-                  onPressed: () => _endCall(context),
+                  onPressed: () => _cancelCall(context),
                 ),
                 IconButton(
                   icon: const Icon(
@@ -85,23 +99,28 @@ class _CallPageState extends State<CallPage> {
     );
   }
 
-  // TODO implement cancel call functionality
   void _cancelCall(BuildContext context) {
-    // context.pop();
+    FlutterRingtonePlayer.stop();
+    GoRouter.of(context).pop();
   }
 
-  void _startCall() async {
+  void _startCall() {
+    FlutterRingtonePlayer.stop();
+    // TODO play audio call file
     _timer = Timer.periodic(_interval, (Timer timer) {
       setState(() {
         _duration += _interval;
       });
     });
-    await _audioPlayer.play(AssetSource(_audioFilePath));
   }
 
-  void _endCall(BuildContext context) async {
+  void _endCall(BuildContext context) {
+    // TODO stop audio call file
     _timer?.cancel();
-    await _audioPlayer.stop();
-    // context.pop();
+    GoRouter.of(context).pop();
+  }
+
+  String get _formattedCallDuration {
+    return '${_duration.inMinutes.toString().padLeft(2, '0')}:${(_duration.inSeconds % 60).toString().padLeft(2, '0')}';
   }
 }

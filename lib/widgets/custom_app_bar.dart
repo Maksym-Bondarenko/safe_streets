@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// Custom AppBar (heading of pages) with back-button and wide logo
 /// usage in other components:
@@ -39,8 +40,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   if (leadingOnPressed != null) {
                     leadingOnPressed!();
                   } else {
-                    navigator
-                        .pop(); // Navigate back if leadingOnPressed is not provided
+                    GoRouter.of(context).pop();
                   }
                 },
               )

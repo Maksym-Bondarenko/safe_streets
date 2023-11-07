@@ -59,7 +59,7 @@ class AuthPage extends StatelessWidget {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             // Navigate to the Terms and Conditions page
-                            TermsAndConditionsRoute().push(context);
+                            const TermsAndConditionsRoute().push(context);
                           },
                       ),
                     ],
@@ -81,7 +81,7 @@ class AuthPage extends StatelessWidget {
         }
 
         // If user is authenticated, show the IntroPage widget
-        return const IntroPage();
+        return IntroPage();
       },
     );
   }

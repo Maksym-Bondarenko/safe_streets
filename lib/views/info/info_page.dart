@@ -39,14 +39,14 @@ class InfoPage extends StatelessWidget {
                     Expanded(
                       flex: 1,
                       child: ForumCard(
-                        onTap: () => ForumRoute().push(context),
+                        onTap: () => const ForumRoute().push(context),
                       ),
                     ),
                     const SizedBox(width: 5),
                     Expanded(
                       flex: 1,
                       child: SupportCard(
-                        onTap: () => SupportRoute().push(context),
+                        onTap: () => const SupportRoute().push(context),
                       ),
                     ),
                   ],
@@ -54,7 +54,7 @@ class InfoPage extends StatelessWidget {
               ),
               // Rank-based Map button
               ElevatedButton(
-                onPressed: () => DDSMapRoute().push(context),
+                onPressed: () => const DDSMapRoute().push(context),
                 child: const Text(
                   "Rank-based Map",
                   style: TextStyle(color: Colors.black),

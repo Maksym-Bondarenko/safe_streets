@@ -10,6 +10,7 @@ List<RouteBase> get $appRoutes => [
       $mainTabsRoute,
       $authRoute,
       $termsAndConditionsRoute,
+      $callRoute,
     ];
 
 RouteBase get $mainTabsRoute => StatefulShellRouteData.$route(
@@ -24,10 +25,6 @@ RouteBase get $mainTabsRoute => StatefulShellRouteData.$route(
                 GoRouteData.$route(
                   path: 'route',
                   factory: $RouteRouteExtension._fromState,
-                ),
-                GoRouteData.$route(
-                  path: 'call',
-                  factory: $CallRouteExtension._fromState,
                 ),
               ],
             ),
@@ -110,23 +107,6 @@ extension $RouteRouteExtension on RouteRoute {
 
   String get location => GoRouteData.$location(
         '/map/route',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
-extension $CallRouteExtension on CallRoute {
-  static CallRoute _fromState(GoRouterState state) => const CallRoute();
-
-  String get location => GoRouteData.$location(
-        '/map/call',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -300,7 +280,7 @@ RouteBase get $authRoute => GoRouteData.$route(
     );
 
 extension $AuthRouteExtension on AuthRoute {
-  static AuthRoute _fromState(GoRouterState state) => AuthRoute();
+  static AuthRoute _fromState(GoRouterState state) => const AuthRoute();
 
   String get location => GoRouteData.$location(
         '/auth',
@@ -323,10 +303,32 @@ RouteBase get $termsAndConditionsRoute => GoRouteData.$route(
 
 extension $TermsAndConditionsRouteExtension on TermsAndConditionsRoute {
   static TermsAndConditionsRoute _fromState(GoRouterState state) =>
-      TermsAndConditionsRoute();
+      const TermsAndConditionsRoute();
 
   String get location => GoRouteData.$location(
         '/terms-and-conditions',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $callRoute => GoRouteData.$route(
+      path: '/call',
+      factory: $CallRouteExtension._fromState,
+    );
+
+extension $CallRouteExtension on CallRoute {
+  static CallRoute _fromState(GoRouterState state) => const CallRoute();
+
+  String get location => GoRouteData.$location(
+        '/call',
       );
 
   void go(BuildContext context) => context.go(location);
