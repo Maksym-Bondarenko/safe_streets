@@ -14,7 +14,7 @@ class SafetyInfoSheet extends StatelessWidget {
   final void Function() _onPressed;
 
   SafetyInfoSheet({
-    Key? key,
+    super.key,
     String? locationName,
     SafetyInfo? safetyInfo,
     Function()? onPressed,
@@ -23,8 +23,7 @@ class SafetyInfoSheet extends StatelessWidget {
         _safetyLabel = safetyInfo?.label ?? '--',
         _safetyDescription = safetyInfo?.description ?? '',
         _safetyColor = safetyInfo?.color ?? kGrey,
-        _onPressed = onPressed ?? (() {}),
-        super(key: key);
+        _onPressed = onPressed ?? (() {});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +31,6 @@ class SafetyInfoSheet extends StatelessWidget {
       alignment: Alignment.topCenter,
       child: FractionallySizedBox(
         child: DraggableScrollableSheet(
-          // TODO stop drag from hitting Bottom Tabs
           initialChildSize: 0.2,
           minChildSize: 0.2,
           maxChildSize: 0.5,
@@ -124,7 +122,7 @@ class SafetyInfoSheet extends StatelessWidget {
 }
 
 class _BottomSheetHandle extends StatelessWidget {
-  const _BottomSheetHandle({Key? key}) : super(key: key);
+  const _BottomSheetHandle({super.key});
 
   @override
   Widget build(BuildContext context) {

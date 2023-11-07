@@ -5,7 +5,7 @@ import 'package:safe_streets/router.dart';
 
 /// Intro-Slider, giving overview of the app
 class IntroPage extends StatefulWidget {
-  const IntroPage({Key? key}) : super(key: key);
+  const IntroPage({super.key});
 
   @override
   State<IntroPage> createState() => _IntroPageState();

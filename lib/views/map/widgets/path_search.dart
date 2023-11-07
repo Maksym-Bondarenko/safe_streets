@@ -16,10 +16,10 @@ class PathSearch extends StatefulWidget {
       onPathDataReceived;
 
   const PathSearch({
-    Key? key,
+    super.key,
     required this.googleMapController,
     this.onPathDataReceived,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _PathSearch();

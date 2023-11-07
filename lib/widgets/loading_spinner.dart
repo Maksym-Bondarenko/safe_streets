@@ -10,12 +10,12 @@ class LoadingSpinner extends StatefulWidget {
   final Duration animationDuration;
 
   const LoadingSpinner({
-    Key? key,
+    super.key,
     this.color = Colors.blue,
     this.size = 50.0,
     this.strokeWidth = 2.0,
     this.animationDuration = const Duration(seconds: 3),
-  }) : super(key: key);
+  });
 
   @override
   State<LoadingSpinner> createState() => _LoadingSpinnerState();

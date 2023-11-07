@@ -15,7 +15,7 @@ import 'package:safe_streets/widgets/dialog_window.dart';
 
 /// Main Page with the FilterMarkers-Map, including 3 types of Points
 class FilterMap extends StatefulWidget {
-  const FilterMap({Key? key}) : super(key: key);
+  const FilterMap({super.key});
 
   @override
   State<StatefulWidget> createState() => _FilterMap();
@@ -246,7 +246,7 @@ class _FilterMap extends State<FilterMap> {
   }
 
   void fakeCallPressed() {
-    AppRouter.router.pushNamed(AppRoutes.incomingCall);
+    // AppRouter.router.pushNamed(AppRoutes.incomingCall);
   }
 
   // TODO: implement SOS-functionality

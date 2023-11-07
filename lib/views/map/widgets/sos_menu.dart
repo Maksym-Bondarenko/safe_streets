@@ -5,7 +5,7 @@ import 'package:safe_streets/constants.dart';
 import 'package:safe_streets/router.dart';
 
 class SOSMenu extends StatelessWidget {
-  const SOSMenu({Key? key}) : super(key: key);
+  const SOSMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class SOSMenu extends StatelessWidget {
           child: const Icon(Icons.call, color: Colors.white),
           labelWidget: const _Label('Fake-Call'),
           backgroundColor: kBlack,
-          onTap: _fakeCallPressed,
+          onTap: () => CallRoute().push(context),
         ),
         SpeedDialChild(
           child: const Icon(Icons.sos, color: Colors.white),
@@ -42,10 +42,6 @@ class SOSMenu extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  void _fakeCallPressed() {
-    AppRouter.router.pushNamed(AppRoutes.incomingCall);
   }
 
 // TODO: implement SOS-functionality
@@ -64,9 +60,8 @@ class _Label extends StatelessWidget {
 
   const _Label(
     String label, {
-    Key? key,
-  })  : _text = label,
-        super(key: key);
+    super.key,
+  }) : _text = label;
 
   @override
   Widget build(BuildContext context) {

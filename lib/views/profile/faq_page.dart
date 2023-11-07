@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class FaqPage extends StatefulWidget {
-  const FaqPage({Key? key}) : super(key: key);
+class FAQPage extends StatefulWidget {
+  const FAQPage({super.key});
 
   @override
-  State<FaqPage> createState() => _FaqPageState();
+  State<FAQPage> createState() => _FAQPageState();
 }
 
-class _FaqPageState extends State<FaqPage> {
+class _FAQPageState extends State<FAQPage> {
   // List of questions
   List<String> questions = [
     'How can the app help you feel safer?',

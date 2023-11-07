@@ -3,9 +3,9 @@ import 'package:flutterfire_ui/auth.dart';
 
 import 'package:safe_streets/router.dart';
 
-/// Profile settings page of the main tabs
+// Profile settings page of the main tabs
 class ProfilePage extends StatelessWidget implements PreferredSizeWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);

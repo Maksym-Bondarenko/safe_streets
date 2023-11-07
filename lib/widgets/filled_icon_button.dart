@@ -12,7 +12,7 @@ class FilledIconButton extends StatelessWidget {
   final ShapeBorder _border;
 
   const FilledIconButton({
-    Key? key,
+    super.key,
     required Icon icon,
     required Function() onPressed,
     double? size,
@@ -26,8 +26,7 @@ class FilledIconButton extends StatelessWidget {
         _color = color ?? kWhite,
         _backgroundColor = backgroundColor ?? kGreen,
         _splashColor = splashColor ?? Colors.green,
-        _border = border ?? const CircleBorder(),
-        super(key: key);
+        _border = border ?? const CircleBorder();
 
   @override
   Widget build(context) {

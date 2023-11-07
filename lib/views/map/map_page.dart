@@ -18,7 +18,7 @@ import 'package:safe_streets/views/map/widgets/sos_menu.dart';
 
 /// Main Page with the FilterMarkers-Map, including 3 types of Points
 class MapPage extends StatefulWidget {
-  const MapPage({Key? key}) : super(key: key);
+  const MapPage({super.key});
 
   @override
   State<MapPage> createState() => _MapPageState();

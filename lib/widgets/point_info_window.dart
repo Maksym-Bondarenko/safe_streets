@@ -11,13 +11,13 @@ class PointInfoWindow extends StatefulWidget {
   late int votes;
 
   PointInfoWindow({
-    Key? key,
+    super.key,
     required this.mainType,
     required this.subType,
     required this.title,
     required this.description,
     required this.votes,
-  }) : super(key: key);
+  });
 
   @override
   State<PointInfoWindow> createState() => _PointInfoWindowState();

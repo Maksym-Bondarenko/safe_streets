@@ -6,9 +6,7 @@ import 'package:safe_streets/router.dart';
 import 'package:safe_streets/theme.dart';
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key) {
-    AppRouter();
-  }
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: "SafeStreets",
       theme: theme,
       debugShowCheckedModeBanner: false,
-      routerConfig: AppRouter.router,
+      routerConfig: router,
       // ),
     );
   }

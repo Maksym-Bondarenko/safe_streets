@@ -8,7 +8,7 @@ import 'package:safe_streets/views/intro/intro_page.dart';
 
 /// Authentication page (via mail or Google SSI)
 class AuthPage extends StatelessWidget {
-  const AuthPage({Key? key}) : super(key: key);
+  const AuthPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -59,8 +59,7 @@ class AuthPage extends StatelessWidget {
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
                             // Navigate to the Terms and Conditions page
-                            AppRouter.router
-                                .pushNamed(AppRoutes.termsAndConditions);
+                            TermsAndConditionsRoute().push(context);
                           },
                       ),
                     ],

@@ -11,12 +11,11 @@ class MapControlButtons extends StatelessWidget {
   final void Function(Position) _onUpdateCurrentLocation;
 
   const MapControlButtons({
-    Key? key,
+    super.key,
     GoogleMapController? googleMapController,
     required void Function(Position) onUpdateCurrentLocation,
   })  : _googleMapController = googleMapController,
-        _onUpdateCurrentLocation = onUpdateCurrentLocation,
-        super(key: key);
+        _onUpdateCurrentLocation = onUpdateCurrentLocation;
 
   @override
   Widget build(context) {

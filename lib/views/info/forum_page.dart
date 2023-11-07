@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Page with forum for community
 class ForumPage extends StatefulWidget {
-  const ForumPage({Key? key}) : super(key: key);
+  const ForumPage({super.key});
 
   @override
   State<ForumPage> createState() => _ForumPageState();

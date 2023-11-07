@@ -12,7 +12,7 @@ class OutlinedIconTextButton extends StatelessWidget {
   final Color _splashColor;
 
   const OutlinedIconTextButton({
-    Key? key,
+    super.key,
     required Icon icon,
     required String label,
     required Function() onPressed,
@@ -27,8 +27,7 @@ class OutlinedIconTextButton extends StatelessWidget {
         _size = size ?? kButton,
         _color = color ?? kBlack,
         _borderColor = borderColor ?? color ?? kBlack,
-        _splashColor = splashColor ?? kLightGrey,
-        super(key: key);
+        _splashColor = splashColor ?? kLightGrey;
 
   @override
   Widget build(context) {

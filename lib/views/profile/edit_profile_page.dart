@@ -5,7 +5,7 @@ class EditProfilePage extends StatefulWidget {
   final String email = "kiralovessmile@gmail.com";
   final String phoneNumber = "1234567890";
 
-  const EditProfilePage({Key? key}) : super(key: key);
+  const EditProfilePage({super.key});
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();

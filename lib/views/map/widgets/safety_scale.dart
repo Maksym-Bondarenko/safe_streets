@@ -7,10 +7,9 @@ class SafetyScale extends StatelessWidget {
   final double _rating;
   final Color _color;
 
-  SafetyScale({Key? key, required double rating})
+  SafetyScale({super.key, required double rating})
       : _rating = rating,
-        _color = getSafetyColor(rating),
-        super(key: key);
+        _color = getSafetyColor(rating);
 
   @override
   Widget build(BuildContext context) {

@@ -13,7 +13,7 @@ class SettingsPage extends StatefulWidget {
     print("Theme was changed to: $themeIndex");
   }
 
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();

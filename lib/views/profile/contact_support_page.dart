@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
 class ContactSupportPage extends StatefulWidget {
-  const ContactSupportPage({Key? key}) : super(key: key);
+  const ContactSupportPage({super.key});
 
   @override
   State<ContactSupportPage> createState() => _ContactSupportPageState();

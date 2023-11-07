@@ -17,12 +17,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget content;
 
   const CustomAppBar({
-    Key? key,
+    super.key,
     required this.title,
     required this.navigator,
     required this.content,
     this.leadingOnPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

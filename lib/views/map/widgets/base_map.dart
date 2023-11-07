@@ -6,9 +6,9 @@ class BaseMap extends StatefulWidget {
   final void Function(GoogleMapController) setMapController;
 
   const BaseMap({
-    Key? key,
+    super.key,
     required this.setMapController,
-  }) : super(key: key);
+  });
 
   @override
   State<BaseMap> createState() => _BaseMapState();

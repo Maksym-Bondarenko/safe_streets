@@ -8,14 +8,13 @@ class MapSearchBar extends StatefulWidget {
   final void Function()? _onOpenMenu;
 
   const MapSearchBar({
-    Key? key,
+    super.key,
     required void Function(String) onSubmit,
     void Function(String)? onChange,
     void Function()? onOpenMenu,
   })  : _onSubmit = onSubmit,
         _onChange = onChange,
-        _onOpenMenu = onOpenMenu,
-        super(key: key);
+        _onOpenMenu = onOpenMenu;
 
   @override
   State<StatefulWidget> createState() => _MapSearchBarState();
