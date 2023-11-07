@@ -66,7 +66,7 @@ You'll also need to have the following software installed:
    using `git clone https://github.com/Maksym-Bondarenko/safe_streets.git`.
 2. Run `flutter pub get` to install the required dependencies.
 3. Run the app using `flutter run` on emulator or your connected device.
-4. Run the conde generator using `dart un build_runner watch --delete-conflicting-outputs` during development, since the project uses [go_router_builder](https://pub.dev/packages/go_router_builder)
+4. Run the conde generator using `dart un build_runner watch --delete-conflicting-outputs` during development, since the project uses [go_router_builder](https://pub.dev/packages/go_router_builder) and [riverpod_generator](https://pub.dev/packages/riverpod_generator)
 
 #### ⚙ Backend and Database
 
