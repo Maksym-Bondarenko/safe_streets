@@ -28,9 +28,8 @@ class _IntroPageState extends State<IntroPage> {
     );
   }
 
-  // TODO: Navigates to the home screen
   void _navigateToHome(BuildContext context) {
-    AppRouter.router.goNamed(AppRoutes.info);
+    const InfoRoute().go(context);
   }
 
   @override

@@ -17,9 +17,7 @@ class ProfilePage extends StatelessWidget implements PreferredSizeWidget {
         title: const Text('User Profile'),
       ),
       actions: [
-        SignedOutAction((context) {
-          AppRouter.router.goNamed(AppRoutes.auth);
-        }),
+        SignedOutAction((context) => AuthRoute().go(context)),
       ],
       children: [
         Padding(
@@ -111,45 +109,35 @@ class ProfilePage extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               const Divider(),
-              // Buttons for various actions
               ElevatedButton(
                 child: const Text(
                   "Settings",
                   style: TextStyle(color: Colors.black),
                 ),
-                onPressed: () {
-                  AppRouter.router.pushNamed(AppRoutes.settings);
-                },
+                onPressed: () => SettingsRoute().push(context),
               ),
               ElevatedButton(
                 child: const Text(
                   "Change User Details",
                   style: TextStyle(color: Colors.black),
                 ),
-                onPressed: () {
-                  AppRouter.router.pushNamed(AppRoutes.editProfile);
-                },
+                onPressed: () => EditProfileRoute().push(context),
               ),
               ElevatedButton(
                 child: const Text(
                   "Contact Support",
                   style: TextStyle(color: Colors.black),
                 ),
-                onPressed: () {
-                  AppRouter.router.pushNamed(AppRoutes.contactSupport);
-                },
+                onPressed: () => ContactSupportRoute().push(context),
               ),
               ElevatedButton(
                 child: const Text(
                   "FAQs",
                   style: TextStyle(color: Colors.black),
                 ),
-                onPressed: () {
-                  AppRouter.router.pushNamed(AppRoutes.faq);
-                },
+                onPressed: () => FAQRoute().push(context),
               ),
               const Divider(),
-              // Display app logo
               AspectRatio(
                 aspectRatio: 1,
                 child: Image.asset('assets/images/logo_big.png'),

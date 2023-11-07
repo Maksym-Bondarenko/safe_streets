@@ -39,42 +39,22 @@ class InfoPage extends StatelessWidget {
                     Expanded(
                       flex: 1,
                       child: ForumCard(
-                        onTap: () {
-                          // Navigate to the forum page
-                          AppRouter.router.pushNamed(AppRoutes.forum);
-                        },
+                        onTap: () => ForumRoute().push(context),
                       ),
                     ),
                     const SizedBox(width: 5),
                     Expanded(
                       flex: 1,
                       child: SupportCard(
-                        onTap: () {
-                          // Navigate to the support page
-                          AppRouter.router.pushNamed(AppRoutes.support);
-                        },
+                        onTap: () => SupportRoute().push(context),
                       ),
                     ),
                   ],
                 ),
               ),
-              // Filter-based Map button
-              ElevatedButton(
-                child: const Text(
-                  "Filter-based Map",
-                  style: TextStyle(color: Colors.black),
-                ),
-                onPressed: () {
-                  // Navigate to the FilterPoints-map
-                  AppRouter.router.goNamed(AppRoutes.filterMap);
-                },
-              ),
               // Rank-based Map button
               ElevatedButton(
-                onPressed: () {
-                  // Navigate to the DDS-map
-                  AppRouter.router.goNamed(AppRoutes.ddsMap);
-                },
+                onPressed: () => DDSMapRoute().push(context),
                 child: const Text(
                   "Rank-based Map",
                   style: TextStyle(color: Colors.black),

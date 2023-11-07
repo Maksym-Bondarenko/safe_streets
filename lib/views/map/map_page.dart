@@ -86,7 +86,7 @@ class _MapPageState extends State<MapPage> {
             SafetyInfoSheet(
               locationName: _locationName,
               safetyInfo: _safetyInfo,
-              onPressed: _goToRoutePage,
+              onPressed: () => RouteRoute().push(context),
             ),
             CustomInfoWindow(
               controller: customInfoWindowController,
@@ -149,10 +149,6 @@ class _MapPageState extends State<MapPage> {
   Future<void> _onSearchSubmit(String query) async {
     // await locationFromAddress(query);
     // setState
-  }
-
-  void _goToRoutePage() {
-    AppRouter.router.pushNamed(AppRoutes.route);
   }
 
   // void onSearchSubmit(String query) async {

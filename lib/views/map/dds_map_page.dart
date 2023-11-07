@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class DDSMap extends StatelessWidget {
-  const DDSMap({Key? key}) : super(key: key);
+class DDSMapPage extends StatelessWidget {
+  const DDSMapPage({super.key});
 
   @override
   Widget build(BuildContext context) {
