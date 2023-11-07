@@ -21,7 +21,7 @@ class _CallPageState extends State<CallPage> {
   @override
   initState() {
     super.initState();
-    // FlutterRingtonePlayer.playRingtone();
+    FlutterRingtonePlayer.playRingtone();
   }
 
   @override

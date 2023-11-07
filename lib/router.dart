@@ -20,9 +20,11 @@ import 'package:safe_streets/views/profile/settings_page.dart';
 part 'router.g.dart';
 
 final router = GoRouter(
+  navigatorKey: _mainNavigatorKey,
   initialLocation: '/auth',
   routes: $appRoutes,
 );
+final _mainNavigatorKey = GlobalKey<NavigatorState>();
 
 @TypedStatefulShellRoute<MainTabsRoute>(
   branches: [
@@ -66,30 +68,37 @@ final router = GoRouter(
 class MainTabsRoute extends StatefulShellRouteData {
   const MainTabsRoute();
   @override
-  Widget builder(context, state, navigationShell) {
-    return MainTabs(navigationShell: navigationShell);
-  }
+  pageBuilder(context, state, navigationShell) => NoTransitionPage(
+        child: MainTabs(navigationShell: navigationShell),
+      );
 }
 
 @TypedGoRoute<AuthRoute>(path: '/auth')
 class AuthRoute extends GoRouteData {
   const AuthRoute();
   @override
-  build(context, state) => const AuthPage();
+  buildPage(context, state) => const NoTransitionPage(
+        child: AuthPage(),
+      );
 }
 
 @TypedGoRoute<TermsAndConditionsRoute>(path: '/terms-and-conditions')
 class TermsAndConditionsRoute extends GoRouteData {
   const TermsAndConditionsRoute();
   @override
-  build(context, state) => const TermsAndConditionsPage();
+  buildPage(context, state) => const NoTransitionPage(
+        child: TermsAndConditionsPage(),
+      );
 }
 
 @TypedGoRoute<CallRoute>(path: '/call')
 class CallRoute extends GoRouteData {
+  static final $parentNavigatorKey = _mainNavigatorKey;
   const CallRoute();
   @override
-  build(context, state) => const CallPage();
+  buildPage(context, state) => const NoTransitionPage(
+        child: CallPage(),
+      );
 }
 
 class MapBranch extends StatefulShellBranchData {

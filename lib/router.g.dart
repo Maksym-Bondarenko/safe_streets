@@ -321,6 +321,7 @@ extension $TermsAndConditionsRouteExtension on TermsAndConditionsRoute {
 
 RouteBase get $callRoute => GoRouteData.$route(
       path: '/call',
+      parentNavigatorKey: CallRoute.$parentNavigatorKey,
       factory: $CallRouteExtension._fromState,
     );
 
