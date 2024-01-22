@@ -5,11 +5,10 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'base_service.dart';
+import 'package:safe_streets/services/base_service.dart';
 
 /// Service for building a path between two geopoints via Google API
 class PathService extends BaseService {
-
   // TODO: replace some functionality in pathSearch.dart with this service
   Future<List<LatLng>> calculatePath(
       String startAddress, String destinationAddress) async {
@@ -18,7 +17,7 @@ class PathService extends BaseService {
     try {
       List<Location> startPlacemark = await locationFromAddress(startAddress);
       List<Location> destinationPlacemark =
-      await locationFromAddress(destinationAddress);
+          await locationFromAddress(destinationAddress);
 
       double startLatitude = startPlacemark[0].latitude;
       double startLongitude = startPlacemark[0].longitude;
@@ -46,7 +45,8 @@ class PathService extends BaseService {
 
   // Formula for calculating distance between two coordinates
   // https://stackoverflow.com/a/54138876/11910277
-  double coordinateDistance(double lat1, double lon1, double lat2, double lon2) {
+  double coordinateDistance(
+      double lat1, double lon1, double lat2, double lon2) {
     var p = 0.017453292519943295;
     var c = cos;
     var a = 0.5 -
