@@ -22,8 +22,7 @@ class AuthPage extends StatelessWidget {
             providerConfigs: const [
               EmailProviderConfiguration(),
               GoogleProviderConfiguration(
-                  clientId:
-                      "721653983645-tf0jcvomt95vakv9o6h8fome21d414bp.apps.googleusercontent.com"),
+                  clientId: "721653983645-tf0jcvomt95vakv9o6h8fome21d414bp.apps.googleusercontent.com"),
             ],
             // Header builder for the sign-in screen
             headerBuilder: (context, constraints, shrinkOffset) {
@@ -81,7 +80,7 @@ class AuthPage extends StatelessWidget {
         }
 
         // If user is authenticated, show the IntroPage widget
-        return IntroPage();
+        return const IntroPage();
       },
     );
   }

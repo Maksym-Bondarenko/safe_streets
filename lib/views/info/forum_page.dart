@@ -5,7 +5,7 @@ class ForumPage extends StatefulWidget {
   const ForumPage({super.key});
 
   @override
-  State<ForumPage> createState() => _ForumPageState();
+  State<StatefulWidget> createState() => _ForumPageState();
 }
 
 class _ForumPageState extends State<ForumPage> {

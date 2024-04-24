@@ -9,59 +9,57 @@ class InfoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Title
-              const Padding(
-                padding: EdgeInsets.only(bottom: 80.0),
-                child: Text(
-                  "From\nSafe Streets\nto safe cities,\ncountries, and\nthe world!",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: 32,
-                    color: Colors.blue,
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Title
+            const Padding(
+              padding: EdgeInsets.only(bottom: 80.0),
+              child: Text(
+                "From\nSafe Streets\nto safe cities,\ncountries, and\nthe world!",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: 32,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+            const Divider(),
+            // Forum card
+            IntrinsicHeight(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: ForumCard(
+                      onTap: () => const ForumRoute().push(context),
+                    ),
                   ),
-                ),
-              ),
-              const Divider(),
-              // Forum card
-              IntrinsicHeight(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: ForumCard(
-                        onTap: () => const ForumRoute().push(context),
-                      ),
+                  const SizedBox(width: 5),
+                  Expanded(
+                    flex: 1,
+                    child: SupportCard(
+                      onTap: () => const SupportRoute().push(context),
                     ),
-                    const SizedBox(width: 5),
-                    Expanded(
-                      flex: 1,
-                      child: SupportCard(
-                        onTap: () => const SupportRoute().push(context),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              // Rank-based Map button
-              ElevatedButton(
-                onPressed: () => const DDSMapRoute().push(context),
-                child: const Text(
-                  "Rank-based Map",
-                  style: TextStyle(color: Colors.black),
-                ),
+            ),
+            // Rank-based Map button
+            ElevatedButton(
+              onPressed: () => const DDSMapRoute().push(context),
+              child: const Text(
+                "Rank-based Map",
+                style: TextStyle(color: Colors.black),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
