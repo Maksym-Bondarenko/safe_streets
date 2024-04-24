@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 
 def googleMapsApiKey = localProperties.getProperty('googleMapsApiKey')
 if (googleMapsApiKey == null) {
-    googleMapsApiKey = System.getenv("GOOGLE_MAPS_API_KEY_ENVIRONMENT_VARIABLE")
+    googleMapsApiKey = System.getenv("GOOGLE_MAPS_API_KEY")
 }
 
 apply plugin: 'com.android.application'
