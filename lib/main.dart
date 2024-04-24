@@ -23,16 +23,15 @@ void main() async {
   runApp(const MyApp());
 }
 
-// !!! ATTENTION: cause an error on iOS !!!
 // Asking for all permissions
 Future<void> _requestPermissions() async {
-  // Request permission to access the device's location
-  await Permission.location.request();
-
-  // Request permission to access the device's storage
   await Permission.storage.request();
-
   await Permission.accessNotificationPolicy.request();
-
   await Permission.notification.request();
+
+  final status = await Permission.locationWhenInUse.request();
+
+  if (status.isPermanentlyDenied) {
+    await openAppSettings();
+  }
 }
