@@ -10,15 +10,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return ChangeNotifierProvider(
-    //   create: (_) => MapControllerProvider(),
-    //   child: MaterialApp.router(
     return MaterialApp.router(
       title: "SafeStreets",
       theme: theme,
       debugShowCheckedModeBanner: false,
       routerConfig: router,
-      // ),
     );
   }
 }

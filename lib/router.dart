@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:safe_streets/views/auth/auth_page.dart';
-import 'package:safe_streets/views/auth/terms_and_conditions_page.dart';
-import 'package:safe_streets/views/info/forum_page.dart';
-import 'package:safe_streets/views/info/info_page.dart';
-import 'package:safe_streets/views/info/support_page.dart';
-import 'package:safe_streets/views/map/dds_map_page.dart';
-import 'package:safe_streets/views/map/call_page.dart';
-import 'package:safe_streets/views/map/map_page.dart';
-import 'package:safe_streets/views/map/route_page.dart';
-import 'package:safe_streets/views/main/main_tabs.dart';
-import 'package:safe_streets/views/profile/contact_support_page.dart';
-import 'package:safe_streets/views/profile/edit_profile_page.dart';
-import 'package:safe_streets/views/profile/faq_page.dart';
-import 'package:safe_streets/views/profile/profile_page.dart';
-import 'package:safe_streets/views/profile/settings_page.dart';
+import 'package:safe_streets/screens/auth/auth.dart';
+import 'package:safe_streets/screens/auth/terms_and_conditions.dart';
+import 'package:safe_streets/screens/call/call.dart';
+import 'package:safe_streets/screens/common/main_tabs.dart';
+import 'package:safe_streets/screens/info/forum.dart';
+import 'package:safe_streets/screens/info/info.dart';
+import 'package:safe_streets/screens/info/support.dart';
+import 'package:safe_streets/screens/map/dds_map.dart';
+import 'package:safe_streets/screens/map/main_map.dart';
+import 'package:safe_streets/screens/map/route.dart';
+import 'package:safe_streets/screens/profile/contact_support.dart';
+import 'package:safe_streets/screens/profile/edit_profile.dart';
+import 'package:safe_streets/screens/profile/faq.dart';
+import 'package:safe_streets/screens/profile/profile.dart';
+import 'package:safe_streets/screens/profile/settings.dart';
 
 part 'router.g.dart';
 
@@ -69,7 +69,7 @@ class MainTabsRoute extends StatefulShellRouteData {
   const MainTabsRoute();
   @override
   pageBuilder(context, state, navigationShell) => NoTransitionPage(
-        child: MainTabs(navigationShell: navigationShell),
+        child: MainTabsScreen(navigationShell: navigationShell),
       );
 }
 
@@ -78,7 +78,7 @@ class AuthRoute extends GoRouteData {
   const AuthRoute();
   @override
   buildPage(context, state) => const NoTransitionPage(
-        child: AuthPage(),
+        child: AuthScreen(),
       );
 }
 
@@ -87,7 +87,7 @@ class TermsAndConditionsRoute extends GoRouteData {
   const TermsAndConditionsRoute();
   @override
   buildPage(context, state) => const NoTransitionPage(
-        child: TermsAndConditionsPage(),
+        child: TermsAndConditionsScreen(),
       );
 }
 
@@ -97,7 +97,7 @@ class CallRoute extends GoRouteData {
   const CallRoute();
   @override
   buildPage(context, state) => const NoTransitionPage(
-        child: CallPage(),
+        child: CallScreen(),
       );
 }
 
@@ -116,65 +116,65 @@ class ProfileBranch extends StatefulShellBranchData {
 class ContactSupportRoute extends GoRouteData {
   const ContactSupportRoute();
   @override
-  build(context, state) => const ContactSupportPage();
+  build(context, state) => const ContactSupportScreen();
 }
 
 class DDSMapRoute extends GoRouteData {
   const DDSMapRoute();
   @override
-  build(context, state) => const DDSMapPage();
+  build(context, state) => const DDSMapScreen();
 }
 
 class EditProfileRoute extends GoRouteData {
   const EditProfileRoute();
   @override
-  build(context, state) => const EditProfilePage();
+  build(context, state) => const EditProfileScreen();
 }
 
 class FAQRoute extends GoRouteData {
   const FAQRoute();
   @override
-  build(context, state) => const FAQPage();
+  build(context, state) => const FAQScreen();
 }
 
 class ForumRoute extends GoRouteData {
   const ForumRoute();
   @override
-  build(context, state) => const ForumPage();
+  build(context, state) => const ForumScreen();
 }
 
 class InfoRoute extends GoRouteData {
   const InfoRoute();
   @override
-  build(context, state) => const InfoPage();
+  build(context, state) => const InfoScreen();
 }
 
 class MapRoute extends GoRouteData {
   const MapRoute();
   @override
-  build(context, state) => const MapPage();
+  build(context, state) => const MainMapScreen();
 }
 
 class ProfileRoute extends GoRouteData {
   const ProfileRoute();
   @override
-  build(context, state) => const ProfilePage();
+  build(context, state) => const ProfileScreen();
 }
 
 class SupportRoute extends GoRouteData {
   const SupportRoute();
   @override
-  build(context, state) => const SupportPage();
+  build(context, state) => const SupportScreen();
 }
 
 class SettingsRoute extends GoRouteData {
   const SettingsRoute();
   @override
-  build(context, state) => const SettingsPage();
+  build(context, state) => const SettingsScreen();
 }
 
 class RouteRoute extends GoRouteData {
   const RouteRoute();
   @override
-  build(context, state) => const RoutePage();
+  build(context, state) => const RouteScreen();
 }
