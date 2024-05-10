@@ -11,6 +11,7 @@ class SOSMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return SpeedDial(
       icon: Icons.sos,
+      foregroundColor: kWhite,
       backgroundColor: kRed,
       spacing: kSpacingS,
       spaceBetweenChildren: kSpacingS,
@@ -24,18 +25,21 @@ class SOSMenu extends StatelessWidget {
       children: [
         SpeedDialChild(
           child: const Icon(Icons.call, color: Colors.white),
+          shape: const CircleBorder(),
           labelWidget: const _Label('Fake-Call'),
           backgroundColor: kBlack,
           onTap: () => const CallRoute().push(context),
         ),
         SpeedDialChild(
           child: const Icon(Icons.sos, color: Colors.white),
+          shape: const CircleBorder(),
           labelWidget: const _Label('SOS'),
           backgroundColor: kBlack,
           onTap: _sosPressed,
         ),
         SpeedDialChild(
           child: const Icon(Icons.share_location, color: Colors.white),
+          shape: const CircleBorder(),
           labelWidget: const _Label('Share Location'),
           backgroundColor: kBlack,
           onTap: _shareLocation,

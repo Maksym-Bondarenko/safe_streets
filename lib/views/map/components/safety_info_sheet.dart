@@ -1,32 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:safe_streets/constants.dart';
-import 'package:safe_streets/models/safety_info.dart';
-import 'package:safe_streets/views/map/widgets/safety_scale.dart';
+import 'package:safe_streets/router.dart';
+import 'package:safe_streets/views/map/providers/safety_info.dart';
+import 'package:safe_streets/views/map/providers/selected_place.dart';
 import 'package:safe_streets/widgets/outlined_icon_text_button.dart';
 
-class SafetyInfoSheet extends StatelessWidget {
-  final String _locationName;
-  final double _safetyRating;
-  final String _safetyLabel;
-  final String _safetyDescription;
-  final Color _safetyColor;
-  final void Function() _onPressed;
+import 'safety_scale.dart';
 
-  SafetyInfoSheet({
-    super.key,
-    String? locationName,
-    SafetyInfo? safetyInfo,
-    Function()? onPressed,
-  })  : _locationName = locationName ?? '----',
-        _safetyRating = safetyInfo?.rating ?? 0,
-        _safetyLabel = safetyInfo?.label ?? '--',
-        _safetyDescription = safetyInfo?.description ?? '',
-        _safetyColor = safetyInfo?.color ?? kGrey,
-        _onPressed = onPressed ?? (() {});
+class SafetyInfoSheet extends ConsumerWidget {
+  const SafetyInfoSheet({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(context, ref) {
+    final locationName = ref.watch(selectedPlaceNameProvider).valueOrNull ?? '----';
+    final info = ref.watch(safetyInfoProvider).valueOrNull;
+    final rating = info?.rating ?? 0;
+    final label = info?.label ?? '--';
+    final description = info?.description ?? '';
+    final color = info?.color ?? kGrey;
     return Align(
       alignment: Alignment.topCenter,
       child: FractionallySizedBox(
@@ -38,10 +31,10 @@ class SafetyInfoSheet extends StatelessWidget {
           builder: (BuildContext context, ScrollController scrollController) {
             return Container(
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: kWhite,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(kSpacingM),
-                  topRight: Radius.circular(kSpacingM),
+                  topLeft: Radius.circular(kRadiusL),
+                  topRight: Radius.circular(kRadiusL),
                 ),
               ),
               child: SingleChildScrollView(
@@ -58,53 +51,52 @@ class SafetyInfoSheet extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: kSpacingXXS),
+                        padding: const EdgeInsets.symmetric(vertical: kSpacingXXXS),
                         child: Text(
-                          _locationName,
+                          locationName,
                           textAlign: TextAlign.left,
-                          style: const TextStyle(fontSize: kTextL),
+                          style: const TextStyle(fontSize: kTextML),
                         ),
                       ),
                       Row(
                         children: [
                           Text(
-                            _safetyRating.toStringAsFixed(1),
-                            style: TextStyle(
-                                color: _safetyColor, fontSize: kTextML),
+                            rating.toStringAsFixed(1),
+                            style: TextStyle(color: color, fontSize: kTextM),
                           ),
                           const Text(
                             '/5',
-                            style: TextStyle(fontSize: kTextML, color: kGrey),
+                            style: TextStyle(fontSize: kTextM, color: kGrey),
                           ),
                           const SizedBox(width: kSpacingSM),
                           Text(
-                            _safetyLabel,
+                            label,
                             style: TextStyle(
-                              color: _safetyColor,
-                              fontSize: kTextML,
+                              color: color,
+                              fontSize: kTextM,
                             ),
                           ),
                           const Spacer(),
-                          OutlinedIconTextButton(
-                            onPressed: _onPressed,
-                            label: 'Find route',
-                            icon: const Icon(Icons.route_outlined),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: kSpacingXXXXS),
+                            child: OutlinedIconTextButton(
+                              onPressed: () => const RouteRoute().push(context),
+                              label: 'Find route',
+                              icon: const Icon(Icons.route_outlined),
+                            ),
                           )
                         ],
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: kSpacingXS),
-                        child: SafetyScale(rating: _safetyRating),
+                        padding: const EdgeInsets.symmetric(vertical: kSpacingXS),
+                        child: SafetyScale(rating: rating),
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsets.symmetric(vertical: kSpacingSM),
+                        padding: const EdgeInsets.symmetric(vertical: kSpacingSM),
                         child: Text(
-                          _safetyDescription,
+                          description,
                           style: const TextStyle(
-                            fontSize: kTextS,
+                            fontSize: kTextXS,
                             color: kGrey,
                           ),
                         ),
@@ -122,7 +114,7 @@ class SafetyInfoSheet extends StatelessWidget {
 }
 
 class _BottomSheetHandle extends StatelessWidget {
-  const _BottomSheetHandle({super.key});
+  const _BottomSheetHandle();
 
   @override
   Widget build(BuildContext context) {

@@ -6,14 +6,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:safe_streets/services/path_service.dart';
-import 'package:safe_streets/utils/global_functions.dart';
 
-/// Widget and Functionality for the calculating and showing safe path
-/// between two points on the map
+// Widget and Functionality for the calculating and showing safe path
+// between two points on the map
 class PathSearch extends StatefulWidget {
   final GoogleMapController? googleMapController;
-  final Function(Set<Marker> markers, Set<Polyline> polylines)?
-      onPathDataReceived;
+  final Function(Set<Marker> markers, Set<Polyline> polylines)? onPathDataReceived;
 
   const PathSearch({
     super.key,
@@ -59,11 +57,11 @@ class _PathSearch extends State<PathSearch> {
 
   void _getCurrentLocation() async {
     try {
-      Position position = await getCurrentLocation(googleMapController);
-      setState(() {
-        _currentPosition = position;
-      });
-      await _getAddress();
+      // Position position = await getCurrentLocation(googleMapController);
+      // setState(() {
+      //   _currentPosition = position;
+      // });
+      // await _getAddress();
     } catch (e) {
       print(e);
     }
@@ -72,14 +70,12 @@ class _PathSearch extends State<PathSearch> {
   // Method for retrieving the address
   Future<void> _getAddress() async {
     try {
-      List<Placemark> p = await placemarkFromCoordinates(
-          _currentPosition.latitude, _currentPosition.longitude);
+      List<Placemark> p = await placemarkFromCoordinates(_currentPosition.latitude, _currentPosition.longitude);
 
       Placemark place = p[0];
 
       setState(() {
-        _currentAddress =
-            "${place.name}, ${place.locality}, ${place.postalCode}, ${place.country}";
+        _currentAddress = "${place.name}, ${place.locality}, ${place.postalCode}, ${place.country}";
         startAddressController.text = _currentAddress;
         _startAddress = _currentAddress;
       });
@@ -90,39 +86,31 @@ class _PathSearch extends State<PathSearch> {
 
   void setSourceAndDestinationIcons() async {
     sourceIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 2.5),
-        "assets/markers/path/start_marker.png");
+        const ImageConfiguration(devicePixelRatio: 2.5), "assets/markers/path/start_marker.png");
     destinationIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 2.5),
-        "assets/markers/path/finish_marker.png");
+        const ImageConfiguration(devicePixelRatio: 2.5), "assets/markers/path/finish_marker.png");
   }
 
   // Method for calculating the distance between two places
-  Future<bool> _calculateDistance(
-      GoogleMapController? googleMapController) async {
+  Future<bool> _calculateDistance(GoogleMapController? googleMapController) async {
     try {
       // Retrieving placemarks from addresses
       List<Location> startPlacemark = await locationFromAddress(_startAddress);
-      List<Location> destinationPlacemark =
-          await locationFromAddress(_destinationAddress);
+      List<Location> destinationPlacemark = await locationFromAddress(_destinationAddress);
 
       // Use the retrieved coordinates of the current position,
       // instead of the address if the start position is user's
       // current position, as it results in better accuracy.
-      double startLatitude = _startAddress == _currentAddress
-          ? _currentPosition.latitude
-          : startPlacemark[0].latitude;
+      double startLatitude = _startAddress == _currentAddress ? _currentPosition.latitude : startPlacemark[0].latitude;
 
-      double startLongitude = _startAddress == _currentAddress
-          ? _currentPosition.longitude
-          : startPlacemark[0].longitude;
+      double startLongitude =
+          _startAddress == _currentAddress ? _currentPosition.longitude : startPlacemark[0].longitude;
 
       double destinationLatitude = destinationPlacemark[0].latitude;
       double destinationLongitude = destinationPlacemark[0].longitude;
 
       String startCoordinatesString = '($startLatitude, $startLongitude)';
-      String destinationCoordinatesString =
-          '($destinationLatitude, $destinationLongitude)';
+      String destinationCoordinatesString = '($destinationLatitude, $destinationLongitude)';
 
       // Start Location Marker
       Marker startMarker = Marker(
@@ -164,18 +152,10 @@ class _PathSearch extends State<PathSearch> {
 
       // Calculating to check that the position relative
       // to the frame, and pan & zoom the camera accordingly.
-      double miny = (startLatitude <= destinationLatitude)
-          ? startLatitude
-          : destinationLatitude;
-      double minx = (startLongitude <= destinationLongitude)
-          ? startLongitude
-          : destinationLongitude;
-      double maxy = (startLatitude <= destinationLatitude)
-          ? destinationLatitude
-          : startLatitude;
-      double maxx = (startLongitude <= destinationLongitude)
-          ? destinationLongitude
-          : startLongitude;
+      double miny = (startLatitude <= destinationLatitude) ? startLatitude : destinationLatitude;
+      double minx = (startLongitude <= destinationLongitude) ? startLongitude : destinationLongitude;
+      double maxy = (startLatitude <= destinationLatitude) ? destinationLatitude : startLatitude;
+      double maxx = (startLongitude <= destinationLongitude) ? destinationLongitude : startLongitude;
 
       double southWestLatitude = miny;
       double southWestLongitude = minx;
@@ -195,8 +175,7 @@ class _PathSearch extends State<PathSearch> {
         ),
       );
 
-      await setPolylines(startLatitude, startLongitude, destinationLatitude,
-          destinationLongitude);
+      await setPolylines(startLatitude, startLongitude, destinationLatitude, destinationLongitude);
 
       double totalDistance = 0.0;
 
@@ -227,13 +206,11 @@ class _PathSearch extends State<PathSearch> {
   }
 
   // creates the set of polylines from the start point to the destination point
-  setPolylines(double startLatitude, double startLongitude,
-      double destinationLatitude, double destinationLongitude) async {
+  setPolylines(
+      double startLatitude, double startLongitude, double destinationLatitude, double destinationLongitude) async {
     // TODO: move to service
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        dotenv.env['GOOGLE_MAPS_API_KEY']!,
-        PointLatLng(startLatitude, startLongitude),
-        PointLatLng(destinationLatitude, destinationLongitude),
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(dotenv.env['GOOGLE_MAPS_API_KEY']!,
+        PointLatLng(startLatitude, startLongitude), PointLatLng(destinationLatitude, destinationLongitude),
         travelMode: TravelMode.walking);
     if (result.points.isNotEmpty) {
       // loop through all PointLatLng points and convert them
@@ -371,45 +348,38 @@ class _PathSearch extends State<PathSearch> {
                         ),
                         const SizedBox(height: 5),
                         ElevatedButton(
-                          onPressed:
-                              (_startAddress != '' && _destinationAddress != '')
-                                  ? () async {
-                                      startAddressFocusNode.unfocus();
-                                      destinationAddressFocusNode.unfocus();
-                                      setState(() {
-                                        if (markers.isNotEmpty) markers.clear();
-                                        if (_polylines.isNotEmpty)
-                                          _polylines.clear();
-                                        if (polylineCoordinates.isNotEmpty) {
-                                          polylineCoordinates.clear();
-                                        }
-                                        _placeDistance = null;
-                                        // add to the main-map via callback function
-                                        _updatePathData();
-                                      });
-
-                                      _calculateDistance(googleMapController)
-                                          .then((isCalculated) {
-                                        if (isCalculated) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                  'Distance Calculated Successfully'),
-                                            ),
-                                          );
-                                        } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                              content: Text(
-                                                  'Error Calculating Distance'),
-                                            ),
-                                          );
-                                        }
-                                      });
+                          onPressed: (_startAddress.isNotEmpty && _destinationAddress.isNotEmpty)
+                              ? () async {
+                                  startAddressFocusNode.unfocus();
+                                  destinationAddressFocusNode.unfocus();
+                                  setState(() {
+                                    if (markers.isNotEmpty) markers.clear();
+                                    if (_polylines.isNotEmpty) _polylines.clear();
+                                    if (polylineCoordinates.isNotEmpty) {
+                                      polylineCoordinates.clear();
                                     }
-                                  : null,
+                                    _placeDistance = null;
+                                    // add to the main-map via callback function
+                                    _updatePathData();
+                                  });
+
+                                  _calculateDistance(googleMapController).then((isCalculated) {
+                                    if (isCalculated) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Distance Calculated Successfully'),
+                                        ),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Error Calculating Distance'),
+                                        ),
+                                      );
+                                    }
+                                  });
+                                }
+                              : null,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
                             shape: RoundedRectangleBorder(
