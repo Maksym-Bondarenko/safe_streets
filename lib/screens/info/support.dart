@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
+const String _policeNumber = "110";
+const String _fireServiceNumber = "112";
+const String _medicalServiceNumber = "112";
+const String _minorCrime = "0800 6 888 000";
+const String _medicalServices = "116 117";
+const String _cardCancellation = "116 116";
+const String _generalHelpline = "080011101 OR 1108001110122";
+
 class SupportScreen extends StatelessWidget {
   const SupportScreen({super.key});
-
-  final String policeNumber = "110";
-  final String fireServiceNumber = "112";
-  final String medicalServiceNumber = "112";
-  final String minorCrime = "0800 6 888 000";
-  final String medicalServices = "116 117";
-  final String cardCancellation = "116 116";
-  final String generalHelpline = "080011101 OR 1108001110122";
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class SupportScreen extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: policeNumber,
+                              text: _policeNumber,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -90,7 +90,7 @@ class SupportScreen extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: fireServiceNumber,
+                              text: _fireServiceNumber,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -114,7 +114,7 @@ class SupportScreen extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: medicalServiceNumber,
+                              text: _medicalServiceNumber,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -165,7 +165,7 @@ class SupportScreen extends StatelessWidget {
                                 ),
                               ),
                               TextSpan(
-                                text: minorCrime,
+                                text: _minorCrime,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -189,7 +189,7 @@ class SupportScreen extends StatelessWidget {
                                 ),
                               ),
                               TextSpan(
-                                text: medicalServices,
+                                text: _medicalServices,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -213,7 +213,7 @@ class SupportScreen extends StatelessWidget {
                                 ),
                               ),
                               TextSpan(
-                                text: cardCancellation,
+                                text: _cardCancellation,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -237,7 +237,7 @@ class SupportScreen extends StatelessWidget {
                                 ),
                               ),
                               TextSpan(
-                                text: generalHelpline,
+                                text: _generalHelpline,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
