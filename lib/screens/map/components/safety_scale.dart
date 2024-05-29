@@ -16,7 +16,7 @@ class SafetyScale extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          height: kSafetyScale,
+          height: kSizeSafetyScale,
           decoration: BoxDecoration(
             color: kGrey,
             borderRadius: BorderRadius.circular(kSpacingM),
@@ -25,7 +25,7 @@ class SafetyScale extends StatelessWidget {
         FractionallySizedBox(
           widthFactor: double.parse(_rating.toStringAsFixed(1)) / 5,
           child: Container(
-            height: kSafetyScale,
+            height: kSizeSafetyScale,
             decoration: BoxDecoration(
               color: _color,
               borderRadius: BorderRadius.circular(kSpacingM),

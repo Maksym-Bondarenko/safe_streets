@@ -22,7 +22,7 @@ class FilledIconButton extends StatelessWidget {
     ShapeBorder? border,
   })  : _icon = icon,
         _onPressed = onPressed,
-        _size = size ?? kButton,
+        _size = size ?? kSizeButton,
         _color = color ?? kWhite,
         _backgroundColor = backgroundColor ?? kGreen,
         _splashColor = splashColor ?? Colors.green,

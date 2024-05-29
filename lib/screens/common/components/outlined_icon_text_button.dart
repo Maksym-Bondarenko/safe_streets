@@ -24,7 +24,7 @@ class OutlinedIconTextButton extends StatelessWidget {
   })  : _icon = icon,
         _label = label,
         _onPressed = onPressed,
-        _size = size ?? kButton,
+        _size = size ?? kSizeButton,
         _color = color ?? kBlack,
         _borderColor = borderColor ?? color ?? kBlack,
         _splashColor = splashColor ?? kLightGrey;
@@ -36,7 +36,7 @@ class OutlinedIconTextButton extends StatelessWidget {
       style: OutlinedButton.styleFrom(
         minimumSize: Size.zero,
         shape: const StadiumBorder(),
-        side: BorderSide(width: kBorder, color: _borderColor),
+        side: BorderSide(width: kSizeBorder, color: _borderColor),
         padding: const EdgeInsets.symmetric(
           horizontal: kSpacingSM,
           vertical: kSpacingXS,

@@ -22,13 +22,13 @@ const double kTextML = 24;
 const double kTextL = 30;
 
 // Element sizes
-const double kBorder = 2;
-const double kBar = 4;
-const double kSafetyScale = 4;
-const double kIcon = 28;
-const double kButton = 50;
-const double kLargeButton = 70;
-const double kMarkerIcon = 180;
+const double kSizeBorder = 2;
+const double kSizeBar = 4;
+const double kSizeSafetyScale = 4;
+const double kSizeIcon = 28;
+const double kSizeButton = 50;
+const double kSizeLargeButton = 70;
+const double kSizeMarkerIcon = 180;
 
 // Spacings
 const double kSpacingXXXXS = 1;

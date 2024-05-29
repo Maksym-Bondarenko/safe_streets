@@ -25,7 +25,7 @@ class MainTabsScreen extends StatelessWidget {
         unselectedItemColor: kGrey,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        iconSize: kIcon,
+        iconSize: kSizeIcon,
         currentIndex: _navigationShell.currentIndex,
         items: const [
           BottomNavigationBarItem(

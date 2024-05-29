@@ -85,7 +85,7 @@ class MapFilterButton extends StatelessWidget {
         color: kWhite,
         child: Icon(
           _icon,
-          size: kIcon,
+          size: kSizeIcon,
           color: _isSelected ? _color : kGrey,
         ),
       ),

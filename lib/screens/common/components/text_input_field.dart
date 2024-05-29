@@ -16,7 +16,7 @@ class TextInputField extends TextFormField {
           decoration: InputDecoration(
             hintText: hintText,
             focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: kGreen, width: kBorder),
+              borderSide: BorderSide(color: kGreen, width: kSizeBorder),
             ),
           ),
         );

@@ -9,12 +9,14 @@ import 'package:safe_streets/screens/map/providers/selected_place.dart';
 
 import 'safety_scale.dart';
 
+const _fallbackLocationName = '----';
+
 class SafetyInfoSheet extends ConsumerWidget {
   const SafetyInfoSheet({super.key});
 
   @override
   Widget build(context, ref) {
-    final locationName = ref.watch(selectedPlaceNameProvider).valueOrNull ?? '----';
+    final locationName = ref.watch(selectedPlaceNameProvider).valueOrNull ?? _fallbackLocationName;
     final info = ref.watch(safetyInfoProvider).valueOrNull;
     final rating = info?.rating ?? 0;
     final label = info?.label ?? '--';
@@ -119,12 +121,12 @@ class _BottomSheetHandle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: kBar * 10,
-      height: kBar,
+      width: kSizeBar * 10,
+      height: kSizeBar,
       decoration: BoxDecoration(
         color: Colors.grey[300],
         borderRadius: const BorderRadius.all(
-          Radius.circular(kBar),
+          Radius.circular(kSizeBar),
         ),
       ),
     );

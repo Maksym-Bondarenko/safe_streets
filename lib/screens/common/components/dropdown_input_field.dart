@@ -16,7 +16,7 @@ class DropdownInputField<T> extends DropdownButtonFormField<T> {
           decoration: const InputDecoration(
             hintText: 'Title',
             focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: kGreen, width: kBorder),
+              borderSide: BorderSide(color: kGreen, width: kSizeBorder),
             ),
           ),
         );
