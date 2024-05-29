@@ -13,6 +13,7 @@ import 'package:safe_streets/services/position.dart';
 part 'places.g.dart';
 
 const _baseUrl = 'places.googleapis.com';
+const _defaultPageSize = 20;
 const _nearbySearchRadius = 20000.0;
 final _headers = {
   'Content-Type': 'application/json',
@@ -32,9 +33,13 @@ class PlacesService extends _$PlacesService {
   void build() {}
 
   Future<List<Place>> searchByText(
-    String query,
-  ) async {
-    final data = jsonEncode({"textQuery": query});
+    String query, {
+    int pageSize = _defaultPageSize,
+  }) async {
+    final data = jsonEncode({
+      "textQuery": query,
+      "pageSize": pageSize,
+    });
     final uri = Uri.https(_baseUrl, 'v1/places:searchText');
     final response = await http.post(uri, headers: _headersWithFieldMask, body: data);
     return PlacesResponse.fromJson(jsonDecode(response.body)).places;
@@ -61,16 +66,15 @@ class PlacesService extends _$PlacesService {
 
   // TODO maybe replace by Places API
   Future<List<Placemark>> searchByLatLng(double latitude, double longitude) async {
-    final response = await GeocodingPlatform.instance.placemarkFromCoordinates(latitude, longitude);
-    return response;
+    return GeocodingPlatform.instance == null
+        ? [const Placemark()]
+        : await GeocodingPlatform.instance!.placemarkFromCoordinates(latitude, longitude);
   }
 
   Future<List<Suggestion>> autocomplete(String query) async {
     if (query.isEmpty) {
-      print('## p - searchForQuery --------- EMPTY');
       return [];
     } else {
-      print('## p - searchForQuery --------- $query');
       final Position(:latitude, :longitude) = await ref.read(positionProvider.future);
       final data = jsonEncode({
         "input": query,
@@ -83,7 +87,7 @@ class PlacesService extends _$PlacesService {
       });
       final uri = Uri.https(_baseUrl, 'v1/places:autocomplete');
       final response = await http.post(uri, headers: _headers, body: data);
-      return AutocompleteResponse.fromJson(jsonDecode(response.body)).suggestions;
+      return AutocompleteResponse.fromJson(jsonDecode(response.body)).suggestions ?? [];
     }
   }
 }
