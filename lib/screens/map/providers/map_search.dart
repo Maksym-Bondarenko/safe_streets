@@ -9,6 +9,10 @@ part 'map_search.g.dart';
 class MapSearchQuery extends _$MapSearchQuery {
   @override
   String build() => '';
+
+  void set(String query) {
+    state = query;
+  }
 }
 
 @riverpod

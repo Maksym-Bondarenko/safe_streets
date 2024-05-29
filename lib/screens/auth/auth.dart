@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart' as auth;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterfire_ui/auth.dart';
 
 import 'package:safe_streets/router.dart';
 import 'package:safe_streets/screens/intro/intro.dart';
@@ -18,11 +18,12 @@ class AuthScreen extends StatelessWidget {
       builder: (context, snapshot) {
         // Check if user is not authenticated
         if (!snapshot.hasData) {
-          return SignInScreen(
-            providerConfigs: const [
-              EmailProviderConfiguration(),
-              GoogleProviderConfiguration(
-                  clientId: "721653983645-tf0jcvomt95vakv9o6h8fome21d414bp.apps.googleusercontent.com"),
+          return auth.SignInScreen(
+            providers: [
+              auth.EmailAuthProvider(),
+              // TODO repair google auth
+              // GoogleProviderConfiguration(
+              //     clientId: "721653983645-tf0jcvomt95vakv9o6h8fome21d414bp.apps.googleusercontent.com"),
             ],
             // Header builder for the sign-in screen
             headerBuilder: (context, constraints, shrinkOffset) {
@@ -38,7 +39,7 @@ class AuthScreen extends StatelessWidget {
             subtitleBuilder: (context, action) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: action == AuthAction.signIn
+                child: action == auth.AuthAction.signIn
                     ? const Text('Welcome to SafeStreets, please sign in!')
                     : const Text('Welcome to SafeStreets, please sign up!'),
               );

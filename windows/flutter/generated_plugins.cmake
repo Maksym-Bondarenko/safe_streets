@@ -4,7 +4,6 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
-  cloud_firestore
   connectivity_plus
   desktop_webview_auth
   file_selector_windows

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterfire_ui/auth.dart' as auth;
+import 'package:firebase_ui_auth/firebase_ui_auth.dart' as auth;
 
 import 'package:safe_streets/router.dart';
 
