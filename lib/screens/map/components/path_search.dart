@@ -5,7 +5,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:safe_streets/services/path_service.dart';
+import 'package:safe_streets/services/path.dart';
 
 // Widget and Functionality for the calculating and showing safe path
 // between two points on the map

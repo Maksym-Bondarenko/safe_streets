@@ -16,25 +16,6 @@ class MapFilter extends _$MapFilter {
   void toggleValue(MapFilterValue value) {
     state = state.contains(value) ? state.difference({value}) : state.union({value});
   }
-
-  // final places = await GeocodingPlatform.instance
-  //     .placemarkFromAddress(query)
-  //     .catchError((e) => print(e));
-
-  // if (places == null || places.isEmpty) {
-  //   return;
-  // }
-
-  // final place = places[0];
-
-  // _controller?.animateCamera(
-  //   CameraUpdate.newCameraPosition(
-  //     CameraPosition(
-  //       target: LatLng(place.position.latitude, place.position.longitude),
-  //       zoom: 18.0,
-  //     ),
-  //   ),
-  // );
 }
 
 enum MapFilterValue {

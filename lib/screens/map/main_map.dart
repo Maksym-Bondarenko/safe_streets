@@ -1,12 +1,15 @@
+import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:safe_streets/constants.dart';
 import 'package:safe_streets/screens/map/components/base_map.dart';
 import 'package:safe_streets/screens/map/components/map_control_buttons.dart';
 import 'package:safe_streets/screens/map/components/map_filter_buttons.dart';
 import 'package:safe_streets/screens/map/components/map_search_bar.dart';
 import 'package:safe_streets/screens/map/components/safety_info_sheet.dart';
 import 'package:safe_streets/screens/map/components/sos_menu.dart';
+import 'package:safe_streets/screens/map/providers/map_info_window_controller.dart';
 
 /// Main Map Screen with the FilterMarkers-Map, including 3 types of Points
 class MainMapScreen extends ConsumerWidget {
@@ -22,6 +25,12 @@ class MainMapScreen extends ConsumerWidget {
       alignment: Alignment.center,
       children: [
         const BaseMap(),
+        CustomInfoWindow(
+          controller: ref.watch(mapInfoWindowControllerProvider),
+          width: 300,
+          height: 300,
+          offset: kSpacingM,
+        ),
         Positioned(
           left: marginHorizontal,
           right: marginHorizontal,

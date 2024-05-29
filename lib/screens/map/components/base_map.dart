@@ -1,29 +1,24 @@
-import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:safe_streets/constants.dart';
-import 'package:safe_streets/screens/map/hooks/custom_info_window_controller.dart';
 import 'package:safe_streets/screens/map/components/add_custom_point_dialog.dart';
 import 'package:safe_streets/screens/map/providers/map_controller.dart';
+import 'package:safe_streets/screens/map/providers/map_info_window_controller.dart';
 import 'package:safe_streets/screens/map/providers/map_markers.dart';
 import 'package:safe_streets/services/position.dart';
 
 const _defaultCameraPosition = CameraPosition(target: LatLng(0, 0));
 
-class BaseMap extends HookConsumerWidget {
+class BaseMap extends ConsumerWidget {
   const BaseMap({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    print('# bm - BUILD');
-    final customInfoWindowController = useCustomInfoWindowController();
-    // final mapControllerNotifier = ref.watch(mapControllerProvider.notifier);
-    // mapControllerNotifier.setCustomInfoWindowController(customInfoWindowController);
-    ref.watch(mapControllerProvider);
     ref.watch(positionProvider);
+    ref.watch(mapControllerProvider);
     final markers = ref.watch(mapMarkersProvider).valueOrNull ?? {};
+    final mapInfoWindowControllerNotifier = ref.read(mapInfoWindowControllerProvider.notifier);
     return Stack(
       children: [
         GoogleMap(
@@ -45,22 +40,13 @@ class BaseMap extends HookConsumerWidget {
           zoomGesturesEnabled: true,
           tiltGesturesEnabled: true,
           onMapCreated: (controller) {
-            customInfoWindowController.googleMapController = controller;
             ref.read(mapControllerProvider.notifier)
               ..set(controller)
               ..centerOnCurrentPosition();
           },
-          // onTap: (latLng) => mapControllerNotifier.closeInfoWindow(),
-          // onCameraMove: (position) => mapControllerNotifier.onCameraMove(),
-          onTap: (latLng) => customInfoWindowController.hideInfoWindow?.call(),
-          onCameraMove: (position) => customInfoWindowController.onCameraMove?.call(),
+          onTap: (latLng) => mapInfoWindowControllerNotifier.closeInfoWindow(),
+          onCameraMove: (position) => mapInfoWindowControllerNotifier.onCameraMove(),
           onLongPress: (latLng) => showDialog(context: context, builder: (context) => AddCustomPointDialog(latLng)),
-        ),
-        CustomInfoWindow(
-          controller: customInfoWindowController,
-          width: 300,
-          height: 300,
-          offset: kSpacingM,
         ),
       ],
     );

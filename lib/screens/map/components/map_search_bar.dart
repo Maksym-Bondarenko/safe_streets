@@ -8,29 +8,6 @@ import 'package:safe_streets/screens/map/providers/map_controller.dart';
 import 'package:safe_streets/screens/map/providers/map_search.dart';
 import 'package:safe_streets/screens/map/providers/selected_place.dart';
 
-//--- onBack - close keyboard
-// make back fill search bar with last content
-//--- onType - get search results
-//--- onMarker (in SearchBar) - recenter on selection
-//--- onSelect - set selection, prefill search bar text, close search bar, center map, set marker
-//--- onClear (closed) - reset query, unset selection, remove all custom markers
-//--- onClick (closed) - show list
-//--- onSubmit () - close keyboard, close search bar, set marker for results
-//--- onClickMarker - select place (evtl new request)
-
-//-------------- TODOS
-// implement InfoWindowController (in marker provider)
-// remove print statements
-// remove unused imports
-// theming
-// testing
-
-//-------------- MAYBE
-// aithentication
-// safe route
-
-// TODO fix test overflow for large results
-
 class MapSearchBar extends HookConsumerWidget {
   const MapSearchBar({super.key});
 
@@ -59,7 +36,6 @@ class MapSearchBar extends HookConsumerWidget {
       searchController.clear();
     }
 
-    print('# msb - BUILD');
     return FocusScope(
       node: focusNode,
       onFocusChange: (isFocused) {
@@ -107,9 +83,7 @@ class MapSearchBar extends HookConsumerWidget {
           ],
         ),
         suggestionsBuilder: (context, controller) async {
-          // TODO fix bug here _TypeError (Null check operator used on a null value)
           final suggestions = await ref.read(mapSearchAutocompleteProvider(searchController.text).future);
-          print('SUGGESTIONS $suggestions');
           return suggestions.map(
             (suggestion) => _Suggestion(
               suggestion: suggestion,
@@ -133,28 +107,31 @@ class _Suggestion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final secondardText = suggestion.structuredFormat.secondaryText;
+    final mainText = suggestion.structuredFormat.mainText.text;
+    final secondardText = suggestion.structuredFormat.secondaryText?.text;
     return ListTile(
-      title: Row(
-        children: [
-          Expanded(
-            flex: 0,
-            child: Text(
-              suggestion.structuredFormat.mainText.text,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          if (secondardText != null) ...[
-            const Text(', '),
-            Expanded(
-              child: Text(
-                secondardText.text,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: Colors.grey),
+      title: LayoutBuilder(
+        builder: (context, constraints) {
+          return Row(
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: constraints.maxWidth),
+                child: Text(
+                  mainText,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            ),
-          ]
-        ],
+              if (secondardText != null)
+                Expanded(
+                  child: Text(
+                    ', $secondardText',
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                ),
+            ],
+          );
+        },
       ),
       onTap: onTap,
     );

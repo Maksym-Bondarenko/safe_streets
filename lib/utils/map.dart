@@ -1,4 +1,5 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:safe_streets/models/places.dart';
 
 LatLngBounds getLatLngBoundsOfPlaces(Iterable<Place> places) {

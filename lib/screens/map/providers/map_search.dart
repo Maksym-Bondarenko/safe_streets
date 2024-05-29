@@ -13,9 +13,7 @@ const _defaultMaxNumOfTextSearchResults = 10;
 @riverpod
 class MapSearchResults extends _$MapSearchResults {
   @override
-  FutureOr<List<Place>> build() {
-    return [];
-  }
+  FutureOr<List<Place>> build() => [];
 
   Future<void> searchByQuery(
     String query, {

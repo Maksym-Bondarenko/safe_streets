@@ -1,4 +1,4 @@
-import 'package:safe_streets/services/base_service.dart';
+import 'package:safe_streets/services/base.dart';
 
 /// Service for showing user push-up notifications
 /// (e.g. when coming close to the dangerPoint)
