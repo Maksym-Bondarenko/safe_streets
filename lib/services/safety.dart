@@ -31,7 +31,7 @@ class SafetyService extends _$SafetyService {
         );
     return places
         .map((place) => Point(
-              name: place.displayName.text,
+              name: place.displayName?.text ?? '',
               latitude: place.location.latitude,
               longitude: place.location.longitude,
               type: SafePointType.police,

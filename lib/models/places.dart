@@ -18,7 +18,7 @@ class PlacesResponse with _$PlacesResponse {
 class Place with _$Place {
   const factory Place({
     required Location location,
-    required TextData displayName,
+    TextData? displayName,
   }) = _Place;
 
   factory Place.fromJson(Map<String, dynamic> json) => _$PlaceFromJson(json);
@@ -36,7 +36,9 @@ class Location with _$Location {
 
 @freezed
 class AutocompleteResponse with _$AutocompleteResponse {
-  const factory AutocompleteResponse(@SuggestionConverter() List<Suggestion> suggestions) = AutocompleteResponseData;
+  const factory AutocompleteResponse(
+    @SuggestionConverter() List<Suggestion>? suggestions,
+  ) = AutocompleteResponseData;
 
   factory AutocompleteResponse.fromJson(Map<String, dynamic> json) => _$AutocompleteResponseFromJson(json);
 }
@@ -112,6 +114,7 @@ class TextData with _$TextData {
 class MatchData with _$MatchData {
   const factory MatchData({
     required int endOffset,
+    int? startOffset,
   }) = _MatchData;
 
   factory MatchData.fromJson(Map<String, dynamic> json) => _$MatchDataFromJson(json);
@@ -391,7 +394,10 @@ enum PlaceType {
   subpremise,
   townSquare;
 
-  factory PlaceType.fromJson(String json) => _$PlaceTypeEnumMap.map((key, value) => MapEntry(value, key))[json]!;
+  factory PlaceType.fromJson(String json) => _$PlaceTypeEnumMap.map((key, value) => MapEntry(
+        value.replaceAllMapped(RegExp(r'\d$'), (m) => '_${m[0]}'),
+        key,
+      ))[json]!;
 
-  String toJson() => _$PlaceTypeEnumMap[this]!.replaceFirstMapped(RegExp(r'\d'), (m) => '_${m[0]}');
+  String toJson() => _$PlaceTypeEnumMap[this]!.replaceAllMapped(RegExp(r'\d$'), (m) => '_${m[0]}');
 }
