@@ -1,239 +1,180 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:safe_streets/views/auth/auth_page.dart';
-import 'package:safe_streets/views/auth/terms_and_conditions_page.dart';
-import 'package:safe_streets/views/info/forum_page.dart';
-import 'package:safe_streets/views/info/info_page.dart';
-import 'package:safe_streets/views/info/support_page.dart';
-import 'package:safe_streets/views/map/active_call_page.dart';
-import 'package:safe_streets/views/map/dds_map.dart';
-import 'package:safe_streets/views/map/filter_map.dart';
-import 'package:safe_streets/views/map/incoming_call_page.dart';
-// import 'package:safe_streets/main/dds_map.dart';
-import 'package:safe_streets/views/map/map_page.dart';
-import 'package:safe_streets/views/map/route_page.dart';
-import 'package:safe_streets/views/main/main_tabs.dart';
-import 'package:safe_streets/views/profile/contact_support_page.dart';
-import 'package:safe_streets/views/profile/edit_profile_page.dart';
-import 'package:safe_streets/views/profile/faq_page.dart';
-import 'package:safe_streets/views/profile/profile_page.dart';
-import 'package:safe_streets/views/profile/settings_page.dart';
+import 'package:safe_streets/screens/auth/auth.dart';
+import 'package:safe_streets/screens/auth/terms_and_conditions.dart';
+import 'package:safe_streets/screens/call/call.dart';
+import 'package:safe_streets/screens/common/main_tabs.dart';
+import 'package:safe_streets/screens/info/forum.dart';
+import 'package:safe_streets/screens/info/info.dart';
+import 'package:safe_streets/screens/info/support.dart';
+import 'package:safe_streets/screens/map/dds_map.dart';
+import 'package:safe_streets/screens/map/main_map.dart';
+import 'package:safe_streets/screens/map/route.dart';
+import 'package:safe_streets/screens/profile/contact_support.dart';
+import 'package:safe_streets/screens/profile/edit_profile.dart';
+import 'package:safe_streets/screens/profile/faq.dart';
+import 'package:safe_streets/screens/profile/profile.dart';
+import 'package:safe_streets/screens/profile/settings.dart';
 
-class AppRouter {
-  static final AppRouter _instance = AppRouter._internal();
-  static late final GoRouter router;
+part 'router.g.dart';
 
-  final _appNavigatorKey = GlobalKey<NavigatorState>();
-  final _mapTabNavigatorKey = GlobalKey<NavigatorState>();
-  final _infoTabNavigatorKey = GlobalKey<NavigatorState>();
-  final _profileTabNavigatorKey = GlobalKey<NavigatorState>();
+final router = GoRouter(
+  navigatorKey: _mainNavigatorKey,
+  initialLocation: '/auth',
+  routes: $appRoutes,
+);
+final _mainNavigatorKey = GlobalKey<NavigatorState>();
 
-  factory AppRouter() {
-    return _instance;
-  }
-
-  static void popUntil(BuildContext context, String pathName) {
-    while (GoRouterState.of(context).name != pathName && router.canPop()) {
-      debugPrint('Popping ${GoRouterState.of(context).name}');
-      router.pop();
-    }
-  }
-
-  AppRouter._internal() {
-    final routes = [
-      StatefulShellRoute.indexedStack(
-        parentNavigatorKey: _appNavigatorKey,
-        branches: [
-          StatefulShellBranch(
-            navigatorKey: _mapTabNavigatorKey,
-            routes: [
-              GoRoute(
-                path: '/map',
-                name: AppRoutes.map,
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: MapPage(),
-                ),
-                routes: [
-                  GoRoute(
-                    path: 'route',
-                    name: AppRoutes.route,
-                    builder: (context, state) => const RoutePage(),
-                  ),
-                  GoRoute(
-                    path: 'incoming-call',
-                    name: AppRoutes.incomingCall,
-                    builder: (context, state) => const IncomingCallPage(),
-                    routes: [
-                      GoRoute(
-                        path: 'active-call',
-                        name: AppRoutes.activeCall,
-                        builder: (context, state) {
-                          final callInfo = state.extra as IActiveCallPageProps;
-                          return ActiveCallPage(
-                            name: callInfo.name,
-                            duration: callInfo.duration,
-                          );
-                        },
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            navigatorKey: _infoTabNavigatorKey,
-            routes: [
-              GoRoute(
-                path: '/info',
-                name: AppRoutes.info,
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: InfoPage(),
-                ),
-                routes: [
-                  GoRoute(
-                    path: 'support',
-                    name: AppRoutes.support,
-                    builder: (context, state) => const SupportPage(),
-                  ),
-                  GoRoute(
-                    path: 'forum',
-                    name: AppRoutes.forum,
-                    builder: (context, state) => const ForumPage(),
-                  ),
-                  GoRoute(
-                    path: 'filter-map',
-                    name: AppRoutes.filterMap,
-                    builder: (context, state) => const FilterMap(),
-                  ),
-                  GoRoute(
-                    path: 'dds-map',
-                    name: AppRoutes.ddsMap,
-                    builder: (context, state) => const DDSMap(),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            navigatorKey: _profileTabNavigatorKey,
-            routes: [
-              GoRoute(
-                path: '/profile',
-                name: AppRoutes.profile,
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: ProfilePage(),
-                ),
-                routes: [
-                  GoRoute(
-                    path: 'settings',
-                    name: AppRoutes.settings,
-                    builder: (context, state) => const SettingsPage(),
-                  ),
-                  GoRoute(
-                    path: 'edit-profile',
-                    name: AppRoutes.editProfile,
-                    builder: (context, state) => const EditProfilePage(),
-                  ),
-                  GoRoute(
-                    path: 'contact-support',
-                    name: AppRoutes.contactSupport,
-                    builder: (context, state) => const ContactSupportPage(),
-                  ),
-                  GoRoute(
-                    path: 'faq',
-                    name: AppRoutes.faq,
-                    builder: (context, state) => const FaqPage(),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-        builder: (context, state, navigationShell) {
-          return MainTabs(
-            navigationShell: navigationShell,
-          );
-        },
-      ),
-      GoRoute(
-        path: '/auth',
-        name: AppRoutes.auth,
-        pageBuilder: (context, state) => const NoTransitionPage(
-          child: AuthPage(),
+@TypedStatefulShellRoute<MainTabsRoute>(
+  branches: [
+    TypedStatefulShellBranch<MapBranch>(
+      routes: [
+        TypedGoRoute<MapRoute>(
+          path: '/map',
+          routes: [
+            TypedGoRoute<RouteRoute>(path: 'route'),
+          ],
         ),
-        parentNavigatorKey: _appNavigatorKey,
-      ),
-      GoRoute(
-        path: '/terms-and-conditions',
-        name: AppRoutes.termsAndConditions,
-        pageBuilder: (context, state) => const NoTransitionPage(
-          child: TermsAndConditionsPage(),
+      ],
+    ),
+    TypedStatefulShellBranch<InfoBranch>(
+      routes: [
+        TypedGoRoute<InfoRoute>(
+          path: '/info',
+          routes: [
+            TypedGoRoute<SupportRoute>(path: 'support'),
+            TypedGoRoute<ForumRoute>(path: 'forum'),
+            TypedGoRoute<DDSMapRoute>(path: 'dds-map'),
+          ],
         ),
-        parentNavigatorKey: _appNavigatorKey,
-      ),
-    ];
-
-    router = GoRouter(
-      navigatorKey: _appNavigatorKey,
-      initialLocation: '/auth',
-      routes: routes,
-    );
-  }
-
-  // BuildContext get context =>
-  //     router.routerDelegate.navigatorKey.currentContext!;
+      ],
+    ),
+    TypedStatefulShellBranch<ProfileBranch>(
+      routes: [
+        TypedGoRoute<ProfileRoute>(
+          path: '/profile',
+          routes: [
+            TypedGoRoute<SettingsRoute>(path: 'settings'),
+            TypedGoRoute<EditProfileRoute>(path: 'edit-profile'),
+            TypedGoRoute<ContactSupportRoute>(path: 'contact-support'),
+            TypedGoRoute<FAQRoute>(path: 'faq'),
+          ],
+        ),
+      ],
+    ),
+  ],
+)
+class MainTabsRoute extends StatefulShellRouteData {
+  const MainTabsRoute();
+  @override
+  pageBuilder(context, state, navigationShell) => NoTransitionPage(
+        child: MainTabsScreen(navigationShell: navigationShell),
+      );
 }
 
-class AppRoutes {
-  AppRoutes();
-
-  static const auth = 'auth';
-  static const activeCall = 'activeCall';
-  static const contactSupport = 'contactSupport';
-  static const ddsMap = 'ddsMap';
-  // static const detail = 'detail';
-  static const editProfile = 'editProfile';
-  static const faq = 'faq';
-  static const forum = 'forum';
-  static const filterMap = 'filterMap';
-  static const info = 'info';
-  static const incomingCall = 'incomingCall';
-  static const map = 'map';
-  static const profile = 'profile';
-  static const support = 'support';
-  static const settings = 'settings';
-  static const route = 'route';
-  // static const signUp = 'signUp';
-  // static const signIn = 'signIn';
-  static const termsAndConditions = 'termsAndConditions';
-  // static const rootDetail = 'rootDetail';
+@TypedGoRoute<AuthRoute>(path: '/auth')
+class AuthRoute extends GoRouteData {
+  const AuthRoute();
+  @override
+  buildPage(context, state) => const NoTransitionPage(
+        child: AuthScreen(),
+      );
 }
 
-// initialRoute: '/',
-// routes: {
-//   '/home': (context) => const HomeScreen(),
-//   '/auth': (context) => const AuthGate(),
-//   '/intro': (context) => const IntroSlider(),
-//   '/ddsMap': (context) => const DDSMap(),
-//   '/mainMap': (context) =>
-//       MapSceen(googleMapController: mapController),
-//   '/filterMap': (context) =>
-//       FilterMap(googleMapController: mapController),
-//   '/forum': (context) => const ForumPage(),
-// },
-// // handle the case where FilterMap is accessed from other places.
-// onGenerateRoute: (settings) {
-//   if (settings.name == '/filterMap') {
-//     return MaterialPageRoute(
-//       builder: (context) => FilterMap(
-//           googleMapController:
-//               mapController), // Pass the controller to FilterMap
-//     );
-//   }
-//   return null;
-// },
-// // Set AuthGate as the initial screen of application
-// home: const AuthGate(),
-// // Disable the debug mode banner
+@TypedGoRoute<TermsAndConditionsRoute>(path: '/terms-and-conditions')
+class TermsAndConditionsRoute extends GoRouteData {
+  const TermsAndConditionsRoute();
+  @override
+  buildPage(context, state) => const NoTransitionPage(
+        child: TermsAndConditionsScreen(),
+      );
+}
+
+@TypedGoRoute<CallRoute>(path: '/call')
+class CallRoute extends GoRouteData {
+  static final $parentNavigatorKey = _mainNavigatorKey;
+  const CallRoute();
+  @override
+  buildPage(context, state) => const NoTransitionPage(
+        child: CallScreen(),
+      );
+}
+
+class MapBranch extends StatefulShellBranchData {
+  const MapBranch();
+}
+
+class InfoBranch extends StatefulShellBranchData {
+  const InfoBranch();
+}
+
+class ProfileBranch extends StatefulShellBranchData {
+  const ProfileBranch();
+}
+
+class ContactSupportRoute extends GoRouteData {
+  const ContactSupportRoute();
+  @override
+  build(context, state) => const ContactSupportScreen();
+}
+
+class DDSMapRoute extends GoRouteData {
+  const DDSMapRoute();
+  @override
+  build(context, state) => const DDSMapScreen();
+}
+
+class EditProfileRoute extends GoRouteData {
+  const EditProfileRoute();
+  @override
+  build(context, state) => const EditProfileScreen();
+}
+
+class FAQRoute extends GoRouteData {
+  const FAQRoute();
+  @override
+  build(context, state) => const FAQScreen();
+}
+
+class ForumRoute extends GoRouteData {
+  const ForumRoute();
+  @override
+  build(context, state) => const ForumScreen();
+}
+
+class InfoRoute extends GoRouteData {
+  const InfoRoute();
+  @override
+  build(context, state) => const InfoScreen();
+}
+
+class MapRoute extends GoRouteData {
+  const MapRoute();
+  @override
+  build(context, state) => const MainMapScreen();
+}
+
+class ProfileRoute extends GoRouteData {
+  const ProfileRoute();
+  @override
+  build(context, state) => const ProfileScreen();
+}
+
+class SupportRoute extends GoRouteData {
+  const SupportRoute();
+  @override
+  build(context, state) => const SupportScreen();
+}
+
+class SettingsRoute extends GoRouteData {
+  const SettingsRoute();
+  @override
+  build(context, state) => const SettingsScreen();
+}
+
+class RouteRoute extends GoRouteData {
+  const RouteRoute();
+  @override
+  build(context, state) => const RouteScreen();
+}

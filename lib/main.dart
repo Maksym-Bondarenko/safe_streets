@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:safe_streets/app.dart';
@@ -20,19 +21,18 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-// !!! ATTENTION: cause an error on iOS !!!
 // Asking for all permissions
 Future<void> _requestPermissions() async {
-  // Request permission to access the device's location
-  await Permission.location.request();
-
-  // Request permission to access the device's storage
   await Permission.storage.request();
-
   await Permission.accessNotificationPolicy.request();
-
   await Permission.notification.request();
+
+  final status = await Permission.locationWhenInUse.request();
+
+  if (status.isPermanentlyDenied) {
+    await openAppSettings();
+  }
 }

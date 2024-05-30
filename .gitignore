@@ -47,3 +47,7 @@ app.*.map.json
 # to exclude files with API-keys to be published
 api_keys.env
 ios/Flutter/Debug.xcconfig
+
+# Ignoring generated files
+*.g.dart
+*.freezed.dart

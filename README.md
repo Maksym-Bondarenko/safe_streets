@@ -66,6 +66,7 @@ You'll also need to have the following software installed:
    using `git clone https://github.com/Maksym-Bondarenko/safe_streets.git`.
 2. Run `flutter pub get` to install the required dependencies.
 3. Run the app using `flutter run` on emulator or your connected device.
+4. Run the conde generator using `make generate` during development, since the project uses [go_router_builder](https://pub.dev/packages/go_router_builder), [riverpod_generator](https://pub.dev/packages/riverpod_generator) and [freezed](https://pub.dev/packages/freezed).
 
 #### ⚙ Backend and Database
 
@@ -144,7 +145,7 @@ database for the points.
 
 ### 🔮 Future Work:
 
-- [ ] Updating the current placeholders for the settings-page, change-user-details-page, and
+- [ ] Updating the current placeholders for the settings-page, edit-profile-details-page, and
       forum-page
       to provide a better user experience and more functionality.
 - [ ] On the settings-page, add options for changing user preferences such as language, time zone,
@@ -158,7 +159,7 @@ database for the points.
 - [ ] Add overall information for regions from DDS, containing report details, such as: last
       criminal
       rate, amount of thefts; touristic advices for countries.
-- [ ] On the change-user-details-page, allow users to update their profile information such as name,
+- [ ] On the edit-profile-details-page, allow users to update their profile information such as name,
       email address, and profile picture.
 - [ ] On the forum-page, add features such as upvoting and downvoting posts, write own posts, and
       sorting posts by popularity, date, or relevance.

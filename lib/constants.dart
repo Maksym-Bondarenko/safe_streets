@@ -10,6 +10,9 @@ const kLightGrey = Color(0xFFEEEEEE);
 const kGrey = Color(0xFF777777);
 const kBlack = Colors.black;
 const kWhite = Colors.white;
+const kColorSafe = Color(0xFF0D9D58);
+const kColorRecommendation = Color(0xFFF4B400);
+const kColorDanger = Color(0xFFDB4437);
 
 // Text sizes
 const double kTextXS = 16;
@@ -19,16 +22,27 @@ const double kTextML = 24;
 const double kTextL = 30;
 
 // Element sizes
-const double kBorder = 2;
-const double kBar = 4;
-const double kSafetyScale = 5;
-const double kIcon = 28;
-const double kButton = 50;
-const double kLargeButton = 70;
+const double kSizeBorder = 2;
+const double kSizeBar = 4;
+const double kSizeSafetyScale = 4;
+const double kSizeIcon = 28;
+const double kSizeButton = 50;
+const double kSizeLargeButton = 70;
+const double kSizeMarkerIcon = 180;
 
 // Spacings
-const double kSpacingXXS = 2;
-const double kSpacingXS = 4;
+const double kSpacingXXXXS = 1;
+const double kSpacingXXXS = 2;
+const double kSpacingXXS = 4;
+const double kSpacingXS = 6;
 const double kSpacingS = 8;
 const double kSpacingSM = 12;
 const double kSpacingM = 20;
+
+// Radius
+const double kRadiusS = 8;
+const double kRadiusM = 12;
+const double kRadiusL = 16;
+
+// Elevation
+const double kElevationS = 5;
